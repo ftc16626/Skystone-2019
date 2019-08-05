@@ -15,7 +15,7 @@ Most of the FTC `op modes` will be located in [TeamCode/src/main/java/org/firsti
 Further additions to the main FTC Robot activity will be located in [FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/internal/FtcRobotControllerActivity.java](FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/internal/FtcRobotControllerActivity.java)
 
 ## Contributing
-Please make sure to read the [Contributing Guide](CONTRIBUTION.md) before making a pull request. If you have any questions regarding the code base, feel free to message any of the contributors!
+Please make sure to read the [Contributing Guide](CONTRIBUTING.md) before making a pull request. If you have any questions regarding the code base, feel free to message any of the contributors!
 
 ### Contributors
 * Noah Bresler - [*@NoahBres*](https://github.com/NoahBres)
