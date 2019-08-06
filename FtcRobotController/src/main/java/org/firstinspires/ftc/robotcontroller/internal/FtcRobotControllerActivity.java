@@ -43,6 +43,7 @@ import android.content.res.Resources;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -60,6 +61,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.ftc16266.missioncontrol.MissionControl;
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeControllerImpl;
@@ -177,6 +179,8 @@ public class FtcRobotControllerActivity extends Activity {
   private static boolean permissionsValidated = false;
 
   private WifiDirectChannelChanger wifiDirectChannelChanger;
+
+  public MissionControl missionControl = new MissionControl(this, true);
 
   protected class RobotRestarter implements Restarter {
 
@@ -400,6 +404,8 @@ public class FtcRobotControllerActivity extends Activity {
     if (preferencesHelper.readBoolean(getString(R.string.pref_wifi_automute), false)) {
       initWifiMute(true);
     }
+
+    missionControl.start();
   }
 
   protected UpdateUI createUpdateUI() {
@@ -488,6 +494,8 @@ public class FtcRobotControllerActivity extends Activity {
       preferencesHelper.getSharedPreferences()
           .unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener);
     }
+
+    missionControl.stop();
 
     RobotLog.cancelWriteLogcatToDisk();
   }
