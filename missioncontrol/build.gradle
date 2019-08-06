@@ -34,9 +34,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation files('../libs/RobotCore-release.aar')
-    implementation 'org.java-websocket:java-websocket:1.3.3'
+    implementation(name: 'RobotCore-release', ext: 'aar')
+    implementation(name: 'RobotServer-release', ext: 'aar')
 }
 repositories {
     mavenCentral()
+
+    flatDir {
+        dirs '../libs'
+    }
 }
