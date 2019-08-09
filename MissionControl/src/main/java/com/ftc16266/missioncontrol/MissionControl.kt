@@ -13,7 +13,7 @@ import com.ftc16266.missioncontrol.websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import java.util.*
 
-class MissionControl(activity: Activity, sendSensorData: Boolean) : SocketListener,
+class MissionControl(activity: Activity) : SocketListener,
     SensorEventListener {
     companion object {
         const val TAG = "MissionControl"
@@ -24,7 +24,7 @@ class MissionControl(activity: Activity, sendSensorData: Boolean) : SocketListen
     private val webServer = WebServer()
     private val webSocket = WebSocket()
 
-    private var sendSensorData = sendSensorData
+    private var sendSensorData = false
 
 
     private var sensorManager: SensorManager? = null
