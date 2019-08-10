@@ -23,6 +23,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private val webSocket = WebSocket()
 
     private var sendSensorData = false
+    private var sendLogs = false
 
     private var sensorManager: SensorManager? = null
     private var sensorAccelerometer: Sensor? = null
@@ -41,10 +42,13 @@ class MissionControl(private val activity: Activity) : SocketListener,
         sensorManager = localSensorManager
         sensorAccelerometer = localSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
+        sendLogs = true
         if (sendSensorData) turnOnSensorReading()
     }
 
     fun stop() {
+        sendLogs = false
+
         webServer.stop()
         webSocket.stop()
     }
@@ -97,8 +101,27 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         val cmdSplit = cmd.split(' ')
         when (cmdSplit[0]) {
-            "logging-start" -> this.turnOnSensorReading()
-            "logging-stop" -> this.turnOffSensorReading()
+            "logging-start" -> {
+                this.sendLogs = true
+                this.turnOnSensorReading()
+                this.broadcastLoggingStatus()
+            }
+
+            "logging-stop" -> {
+                this.sendLogs = false
+                this.turnOffSensorReading()
+                this.broadcastLoggingStatus()
+            }
         }
+    }
+
+    private fun broadcastLoggingStatus() {
+        webSocket.broadcast(
+            LogModel(
+                "logging ${if (this.sendLogs) "on" else "off"}",
+                "status",
+                Date()
+            )
+        )
     }
 }
