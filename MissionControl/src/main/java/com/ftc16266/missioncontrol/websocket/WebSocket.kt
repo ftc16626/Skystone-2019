@@ -3,6 +3,7 @@ package com.ftc16266.missioncontrol.websocket
 import android.util.Log
 import com.google.gson.Gson
 import com.ftc16266.missioncontrol.LogModel
+import com.google.gson.JsonSyntaxException
 import org.java_websocket.WebSocket
 import org.java_websocket.exceptions.WebsocketNotConnectedException
 import org.java_websocket.handshake.ClientHandshake
@@ -96,11 +97,23 @@ class WebSocket : WebSocketServer(InetSocketAddress(PORT)) {
     }
 
     override fun onMessage(conn: WebSocket?, msg: String?) {
-        Log.i(TAG, "Message: $msg")
-
         for (listener in socketListenerList) {
             listener.onMessage(conn!!, msg)
         }
+
+        val gson = Gson()
+        try {
+            val log = gson.fromJson(msg!!, LogModel::class.java)
+
+            for (listener in socketListenerList) {
+                listener.onFormattedMessage(conn!!, log)
+            }
+        } catch (e: JsonSyntaxException) {
+            Log.i(TAG, "Message not formatted using JSON")
+        } catch (e: Exception) {
+            Log.e(TAG, "$e")
+        }
+
     }
 
     override fun onStart() {
