@@ -180,7 +180,7 @@ public class FtcRobotControllerActivity extends Activity {
 
   private WifiDirectChannelChanger wifiDirectChannelChanger;
 
-  public MissionControl missionControl = new MissionControl(this, true);
+  public MissionControl missionControl = new MissionControl(this);
 
   protected class RobotRestarter implements Restarter {
 

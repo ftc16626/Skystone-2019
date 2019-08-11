@@ -1,11 +1,13 @@
 package com.ftc16266.missioncontrol.websocket
 
+import com.ftc16266.missioncontrol.LogModel
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import java.nio.ByteBuffer
 
 interface SocketListener {
-    fun onMessage(conn: WebSocket?, msg: String?) {}
+    fun onMessage(conn: WebSocket, msg: String?) {}
+    fun onFormattedMessage(conn: WebSocket, msg: LogModel) {}
     fun onSend(conn: WebSocket, payload: String) {}
     fun onSend(conn: WebSocket, payload: ByteArray) {}
     fun onSend(conn: WebSocket, payload: ByteBuffer) {}

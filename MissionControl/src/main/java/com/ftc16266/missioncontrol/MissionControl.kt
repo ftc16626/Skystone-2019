@@ -13,28 +13,24 @@ import com.ftc16266.missioncontrol.websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import java.util.*
 
-class MissionControl(activity: Activity, sendSensorData: Boolean) : SocketListener,
+class MissionControl(private val activity: Activity) : SocketListener,
     SensorEventListener {
     companion object {
         const val TAG = "MissionControl"
     }
 
-    private val activity = activity
-
     private val webServer = WebServer()
     private val webSocket = WebSocket()
 
-    private var sendSensorData = sendSensorData
-
+    private var sendSensorData = false
+    private var sendLogs = false
 
     private var sensorManager: SensorManager? = null
     private var sensorAccelerometer: Sensor? = null
 
-
     init {
         webSocket.addSocketListener(this)
     }
-
 
     fun start() {
         Log.i(TAG, "Mission Control starting")
@@ -46,10 +42,13 @@ class MissionControl(activity: Activity, sendSensorData: Boolean) : SocketListen
         sensorManager = localSensorManager
         sensorAccelerometer = localSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
+        sendLogs = true
         if (sendSensorData) turnOnSensorReading()
     }
 
     fun stop() {
+        sendLogs = false
+
         webServer.stop()
         webSocket.stop()
     }
@@ -70,8 +69,14 @@ class MissionControl(activity: Activity, sendSensorData: Boolean) : SocketListen
         webSocket.sendMessage(conn, LogModel("testing ", "init", Date()))
     }
 
-    override fun onMessage(conn: org.java_websocket.WebSocket?, msg: String?) {
-        Log.i("MissionControl", "Message: $msg")
+//    override fun onMessage(conn: org.java_websocket.WebSocket, msg: String?) {
+//        Log.i("MissionControl", "Message: $msg")
+//    }
+
+    override fun onFormattedMessage(conn: org.java_websocket.WebSocket, msg: LogModel) {
+        when (msg.tag) {
+            "cmd" -> handleCommand(msg.msg)
+        }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -86,6 +91,35 @@ class MissionControl(activity: Activity, sendSensorData: Boolean) : SocketListen
             LogModel(
                 "${event.values[0]}, ${event.values[1]}",
                 "accelerometer",
+                Date()
+            )
+        )
+    }
+
+    private fun handleCommand(cmd: String) {
+        Log.i(TAG, cmd)
+
+        val cmdSplit = cmd.split(' ')
+        when (cmdSplit[0]) {
+            "logging-start" -> {
+                this.sendLogs = true
+                this.turnOnSensorReading()
+                this.broadcastLoggingStatus()
+            }
+
+            "logging-stop" -> {
+                this.sendLogs = false
+                this.turnOffSensorReading()
+                this.broadcastLoggingStatus()
+            }
+        }
+    }
+
+    private fun broadcastLoggingStatus() {
+        webSocket.broadcast(
+            LogModel(
+                "logging ${if (this.sendLogs) "on" else "off"}",
+                "status",
                 Date()
             )
         )
