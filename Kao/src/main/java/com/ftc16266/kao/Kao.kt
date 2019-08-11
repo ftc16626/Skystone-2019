@@ -4,18 +4,29 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import com.ftc16266.kao.parts.Head
 
 class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var faceRadius: Float = (0).toFloat()
 
-    private val head: Head
+    private var head: Head? = null
 
     private val colors = object {
-        var faceBg: Int = 0xffcc21
+        var faceBg: Int = ContextCompat.getColor(getContext(), R.color.faceBg)
+    }
+
+    private inline fun View.waitForLayout(crossinline f: () -> Unit) = with(viewTreeObserver) {
+        addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                f()
+            }
+        })
     }
 
     init {
@@ -32,12 +43,14 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
             }
         }
 
-        head = Head(100.toFloat(), 100.toFloat(), faceRadius, colors.faceBg)
+        waitForLayout {
+            head = Head((width / 2).toFloat(), (height / 2).toFloat(), faceRadius, colors.faceBg)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        head.draw(canvas)
+        head?.draw(canvas)
     }
 }
