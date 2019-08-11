@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
+              xmlns:custom="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               xmlns:style="http://schemas.android.com/apk/res-auto"
@@ -40,6 +41,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               android:focusable="true"
               android:id="@+id/entire_screen"
               android:orientation="vertical">
+
+    <com.ftc16266.kao.Kao
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        custom:faceRadius="180dp"/>
 
   <!-- black bar on top -->
   <RelativeLayout

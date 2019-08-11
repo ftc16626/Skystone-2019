@@ -89,7 +89,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
 //        webSocket.sendMessage()
         webSocket.broadcast(
             LogModel(
-                "${event.values[0]}, ${event.values[1]}",
+                "${event.values[0]}, ${event.values[1]}, ${event.values[2]}",
                 "accelerometer",
                 Date()
             )
