@@ -2,11 +2,13 @@ package com.ftc16266.kao.parts
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Build
 
-class Head(x: Float, y: Float, radius: Float, bgColor: Int): BodyPart {
+class Eye(x: Float, y: Float, width: Float, height: Float, bgColor: Int): BodyPart {
     override var x = x
     override var y = y
-    private var radius = radius
+    private var width = width
+    private var height = height
 
     private var bgColor = bgColor
 
@@ -21,6 +23,8 @@ class Head(x: Float, y: Float, radius: Float, bgColor: Int): BodyPart {
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawCircle(x, y, radius, paint)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            canvas.drawOval(x - width / 2, y - height / 2, x + width / 2, y + height / 2, paint)
+        }
     }
 }
