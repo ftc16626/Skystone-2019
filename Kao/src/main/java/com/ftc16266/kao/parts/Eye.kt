@@ -24,7 +24,7 @@ class Eye(x: Float, y: Float, width: Float, height: Float, bgColor: Int): BodyPa
 
     override fun draw(canvas: Canvas) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawOval(x - width / 2, y - height / 2, x + width, y + height, paint)
+            canvas.drawOval(x - width / 2, y - height / 2, x + width / 2, y + height / 2, paint)
         }
     }
 }
