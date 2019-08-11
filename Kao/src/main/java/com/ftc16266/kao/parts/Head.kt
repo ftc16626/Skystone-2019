@@ -21,7 +21,7 @@ class Head(x: Float, y: Float, radius: Float, bgColor: Int) {
         }
     }
 
-    public fun draw(canvas: Canvas) {
+    fun draw(canvas: Canvas) {
         canvas.drawCircle(x, y, radius, paint)
     }
 }
