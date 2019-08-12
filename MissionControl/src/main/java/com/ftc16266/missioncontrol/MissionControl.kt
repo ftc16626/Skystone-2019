@@ -11,6 +11,8 @@ import com.ftc16266.missioncontrol.webserver.WebServer
 import com.ftc16266.missioncontrol.websocket.SocketListener
 import com.ftc16266.missioncontrol.websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 
 class MissionControl(private val activity: Activity) : SocketListener,
@@ -66,7 +68,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     }
 
     override fun onOpen(conn: org.java_websocket.WebSocket, handshake: ClientHandshake) {
-        webSocket.sendMessage(conn, LogModel("testing ", "init", Date()))
+        webSocket.sendMessage(conn, LogModel(getInitPacket(), "init", Date()))
     }
 
 //    override fun onMessage(conn: org.java_websocket.WebSocket, msg: String?) {
@@ -124,4 +126,12 @@ class MissionControl(private val activity: Activity) : SocketListener,
             )
         )
     }
+
+    private fun getInitPacket(): String {
+        val packet = JSONObject()
+            .put("sensor-keys", JSONArray().put("accelerometer"))
+
+        return packet.toString()
+    }
+
 }
