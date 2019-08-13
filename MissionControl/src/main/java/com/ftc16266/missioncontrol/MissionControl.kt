@@ -7,6 +7,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
+import com.ftc16266.missioncontrol.util.CommandListener
 import com.ftc16266.missioncontrol.webserver.WebServer
 import com.ftc16266.missioncontrol.websocket.SocketListener
 import com.ftc16266.missioncontrol.websocket.WebSocket
@@ -30,6 +31,8 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private var sensorManager: SensorManager? = null
     private var sensorAccelerometer: Sensor? = null
 
+    private val commandList = mutableMapOf<String, CommandListener>()
+
     init {
         webSocket.addSocketListener(this)
     }
@@ -39,7 +42,6 @@ class MissionControl(private val activity: Activity) : SocketListener,
         webServer.start()
         webSocket.start()
 
-        //        sensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val localSensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorManager = localSensorManager
         sensorAccelerometer = localSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -87,8 +89,6 @@ class MissionControl(private val activity: Activity) : SocketListener,
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) return
 
-//        Log.i(TAG, "" + event.values[0] + ", " + event.values[1])
-//        webSocket.sendMessage()
         webSocket.broadcast(
             LogModel(
                 "${event.values[0]}, ${event.values[1]}, ${event.values[2]}",
@@ -115,6 +115,12 @@ class MissionControl(private val activity: Activity) : SocketListener,
                 this.broadcastLoggingStatus()
             }
         }
+
+        if(cmdSplit[0] in commandList) {
+            val x = commandList[cmdSplit[0]]
+
+            commandList[cmdSplit[0]]?.onCommand(cmdSplit.slice(IntRange(1, cmdSplit.size - 1)).joinToString(" " ))
+        }
     }
 
     private fun broadcastLoggingStatus() {
@@ -134,4 +140,10 @@ class MissionControl(private val activity: Activity) : SocketListener,
         return packet.toString()
     }
 
+    fun registerCommand(cmd: String, listener: CommandListener) {
+        if(cmd in commandList)
+            throw Exception("Command already exists")
+        else
+            commandList[cmd] = listener
+    }
 }
