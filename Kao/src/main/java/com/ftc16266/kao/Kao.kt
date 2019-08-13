@@ -89,4 +89,12 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
             e.draw(canvas)
         }
     }
+
+    fun hideView() {
+        visibility = GONE
+    }
+
+    fun showView() {
+        visibility = VISIBLE
+    }
 }
