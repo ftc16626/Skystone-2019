@@ -1,9 +1,11 @@
 package com.ftc16266.kao
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
@@ -42,14 +44,7 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val entities: ArrayList<BodyPart> = ArrayList()
 
-    private inline fun View.waitForLayout(crossinline f: () -> Unit) = with(viewTreeObserver) {
-        addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                viewTreeObserver.removeOnGlobalLayoutListener(this)
-                f()
-            }
-        })
-    }
+    private val displayMetrics = DisplayMetrics()
 
     init {
         context.theme.obtainStyledAttributes(
@@ -65,21 +60,38 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
             }
         }
 
-        waitForLayout {
-            centerX = (width / 2).toFloat()
-            centerY = (height / 2).toFloat()
-            head = Head(centerX, centerY, faceRadius, colors.faceBg)
+        setupMetrics()
 
-            eye1 = Eye(centerX - eyeCenterOffsetX, centerY + eyeCenterOffsetY, eyeWidth, eyeHeight, colors.eyeBg)
-            eye2 = Eye(centerX + eyeCenterOffsetX, centerY + eyeCenterOffsetY, eyeWidth, eyeHeight, colors.eyeBg)
+        head = Head(centerX, centerY, faceRadius, colors.faceBg)
 
-            mouth = Mouth(centerX, centerY + mouthCenterOffsetY, mouthWidth, mouthRadius, mouthLineWidth, colors.mouthBg)
+        eye1 = Eye(
+            centerX - eyeCenterOffsetX,
+            centerY + eyeCenterOffsetY,
+            eyeWidth,
+            eyeHeight,
+            colors.eyeBg
+        )
+        eye2 = Eye(
+            centerX + eyeCenterOffsetX,
+            centerY + eyeCenterOffsetY,
+            eyeWidth,
+            eyeHeight,
+            colors.eyeBg
+        )
 
-            entities.add(head!!)
-            entities.add(eye1!!)
-            entities.add(eye2!!)
-            entities.add(mouth!!)
-        }
+        mouth = Mouth(
+            centerX,
+            centerY + mouthCenterOffsetY,
+            mouthWidth,
+            mouthRadius,
+            mouthLineWidth,
+            colors.mouthBg
+        )
+
+        entities.add(head!!)
+        entities.add(eye1!!)
+        entities.add(eye2!!)
+        entities.add(mouth!!)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -89,4 +101,37 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
             e.draw(canvas)
         }
     }
+
+    fun hideView() {
+        visibility = GONE
+    }
+
+    fun showView() {
+        visibility = VISIBLE
+    }
+
+    private fun setupMetrics() {
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        val realHeight = displayMetrics.heightPixels + getStatusBarHeight()
+        val realWidth = displayMetrics.widthPixels
+        val density = displayMetrics.density
+
+        val width = realWidth / density
+        val height = realHeight / density
+
+//        centerX = width / 2
+//        centerY = height / 2
+        centerX = realWidth.toFloat() / 2
+        centerY = realHeight.toFloat() / 2
+    }
+
+    private fun getStatusBarHeight(): Int {
+        var result = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if(resourceId > 0) result = resources.getDimensionPixelOffset(resourceId)
+
+        return result * 2
+    }
+
 }

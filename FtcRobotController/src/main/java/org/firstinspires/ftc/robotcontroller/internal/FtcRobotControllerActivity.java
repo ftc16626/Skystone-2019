@@ -50,6 +50,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -61,7 +62,9 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.ftc16266.kao.Kao;
 import com.ftc16266.missioncontrol.MissionControl;
+import com.ftc16266.missioncontrol.util.CommandListener;
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeControllerImpl;
@@ -127,6 +130,7 @@ import org.firstinspires.inspection.RcInspectionActivity;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("WeakerAccess")
 public class FtcRobotControllerActivity extends Activity {
@@ -180,7 +184,8 @@ public class FtcRobotControllerActivity extends Activity {
 
   private WifiDirectChannelChanger wifiDirectChannelChanger;
 
-  public MissionControl missionControl = new MissionControl(this);
+  private MissionControl missionControl = new MissionControl(this);
+  private Kao kao;
 
   protected class RobotRestarter implements Restarter {
 
@@ -405,7 +410,33 @@ public class FtcRobotControllerActivity extends Activity {
       initWifiMute(true);
     }
 
+    // Start MissionControl
+    missionControl.registerCommand("face", new CommandListener() {
+      @Override
+      public void onCommand(@NotNull String argument) {
+        if(argument.equals("on")) {
+          runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              kao.showView();
+            }
+          });
+
+        } else if(argument.equals("off")) {
+          runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              kao.hideView();
+            }
+          });
+        }
+      }
+    });
     missionControl.start();
+
+    // Initialize Kao
+    kao = findViewById(R.id.face);
+    kao.hideView();
   }
 
   protected UpdateUI createUpdateUI() {
