@@ -500,6 +500,8 @@ public class FtcRobotControllerActivity extends Activity {
     // called surprisingly often. So, we don't actually do much here.
     super.onStop();
     RobotLog.vv(TAG, "onStop()");
+
+    missionControl.stop();
   }
 
   @Override
