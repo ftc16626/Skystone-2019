@@ -432,6 +432,17 @@ public class FtcRobotControllerActivity extends Activity {
         }
       }
     });
+    missionControl.registerCommand("breathing", new CommandListener() {
+      @Override
+      public void onCommand(@NotNull String argument) {
+        if(argument.equals("on")) {
+          kao.getCurrentFace().setSetting("breathing", true);
+        } else if(argument.equals("off")) {
+          kao.getCurrentFace().setSetting("breathing", false);
+        }
+      }
+    });
+
     missionControl.start();
 
     // Initialize Kao
