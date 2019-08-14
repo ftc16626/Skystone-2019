@@ -3,7 +3,7 @@ package com.ftc16266.kao.parts
 import android.graphics.Canvas
 import android.graphics.Paint
 
-class Head(x: Float, y: Float, radius: Float, bgColor: Int): BodyPart {
+class Head(x: Float, y: Float, radius: Float, bgColor: Int) : BodyPart {
     override var x = x
     override var y = y
     private var radius = radius

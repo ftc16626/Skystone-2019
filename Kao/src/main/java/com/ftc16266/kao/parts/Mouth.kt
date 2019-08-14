@@ -3,13 +3,20 @@ package com.ftc16266.kao.parts
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.util.Log
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class Mouth(x: Float, y: Float, width: Float, curveRadius: Float, lineWidth: Float, bgColor: Int): BodyPart {
+class Mouth(x: Float, y: Float, width: Float, curveRadius: Float, lineWidth: Float, bgColor: Int) :
+    BodyPart {
+    private var width = width
+
     override var x = x
     override var y = y
+
+    private var lastX = x
+    private var lastY = y
 
     private var x1 = x - width / 2
     private var x2 = x + width / 2
@@ -22,7 +29,7 @@ class Mouth(x: Float, y: Float, width: Float, curveRadius: Float, lineWidth: Flo
     private var bgColor = bgColor
 
     override val paint: Paint = Paint()
-    private val path = Path()
+    private var path = Path()
 
     init {
         paint.apply {
@@ -31,6 +38,28 @@ class Mouth(x: Float, y: Float, width: Float, curveRadius: Float, lineWidth: Flo
             style = Paint.Style.STROKE
             strokeWidth = lineWidth
         }
+
+        computePath()
+    }
+
+    override fun draw(canvas: Canvas) {
+        if (x != lastX || y != lastY) {
+            x1 = x - width / 2
+            x2 = x + width / 2
+            y1 = y
+            y2 = y
+
+            computePath()
+
+            lastX = x
+            lastY = y
+        }
+
+        canvas.drawPath(path, paint)
+    }
+
+    private fun computePath() {
+        path = Path()
 
         val midX = x1 + ((x2 - x1) / 2)
         val midY = y1 + ((y2 - y1) / 2)
@@ -44,9 +73,5 @@ class Mouth(x: Float, y: Float, width: Float, curveRadius: Float, lineWidth: Flo
 
         path.moveTo(x1, y1);
         path.cubicTo(x1, y1, pointX, pointY, x2, y2)
-    }
-
-    override fun draw(canvas: Canvas) {
-        canvas.drawPath(path, paint)
     }
 }

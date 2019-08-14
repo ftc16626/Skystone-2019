@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Build
 
-class Eye(x: Float, y: Float, width: Float, height: Float, bgColor: Int): BodyPart {
+class Eye(x: Float, y: Float, width: Float, height: Float, bgColor: Int) : BodyPart {
     override var x = x
     override var y = y
     private var width = width

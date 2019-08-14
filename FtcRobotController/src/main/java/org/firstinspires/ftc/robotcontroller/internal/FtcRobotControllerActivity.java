@@ -432,6 +432,17 @@ public class FtcRobotControllerActivity extends Activity {
         }
       }
     });
+    missionControl.registerCommand("breathing", new CommandListener() {
+      @Override
+      public void onCommand(@NotNull String argument) {
+        if(argument.equals("on")) {
+          kao.getCurrentFace().setSetting("breathing", true);
+        } else if(argument.equals("off")) {
+          kao.getCurrentFace().setSetting("breathing", false);
+        }
+      }
+    });
+
     missionControl.start();
 
     // Initialize Kao
@@ -500,6 +511,8 @@ public class FtcRobotControllerActivity extends Activity {
     // called surprisingly often. So, we don't actually do much here.
     super.onStop();
     RobotLog.vv(TAG, "onStop()");
+
+    missionControl.stop();
   }
 
   @Override

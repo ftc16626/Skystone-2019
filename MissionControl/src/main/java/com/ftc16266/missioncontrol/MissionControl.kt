@@ -116,10 +116,17 @@ class MissionControl(private val activity: Activity) : SocketListener,
             }
         }
 
-        if(cmdSplit[0] in commandList) {
+        if (cmdSplit[0] in commandList) {
             val x = commandList[cmdSplit[0]]
 
-            commandList[cmdSplit[0]]?.onCommand(cmdSplit.slice(IntRange(1, cmdSplit.size - 1)).joinToString(" " ))
+            commandList[cmdSplit[0]]?.onCommand(
+                cmdSplit.slice(
+                    IntRange(
+                        1,
+                        cmdSplit.size - 1
+                    )
+                ).joinToString(" ")
+            )
         }
     }
 
@@ -141,7 +148,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     }
 
     fun registerCommand(cmd: String, listener: CommandListener) {
-        if(cmd in commandList)
+        if (cmd in commandList)
             throw Exception("Command already exists")
         else
             commandList[cmd] = listener
