@@ -1,11 +1,14 @@
 package com.ftc16266.kao
 
 import android.graphics.Color
+import android.util.Log
+import android.view.View
 import com.ftc16266.kao.parts.Eye
 import com.ftc16266.kao.parts.Head
 import com.ftc16266.kao.parts.Mouth
+import kotlin.math.sin
 
-class DefaultFace(faceRadius: Float, width: Float, height: Float): Face() {
+class DefaultFace(faceRadius: Float, width: Float, height: Float, view: View) : Face(view = view) {
     // Percentages - Size
     private val eyeWidthPercent = 0.465f
     private val eyeHeightPercent = 0.613f
@@ -51,10 +54,10 @@ class DefaultFace(faceRadius: Float, width: Float, height: Float): Face() {
     private val headAnchorY = centerY + headCenterOffsetY
 
     private val eyeLeftAnchorX = centerX - eyeCenterOffsetXLeft
-    private val eyeLeftAnchorY = centerX + eyeCenterOffsetYLeft
+    private val eyeLeftAnchorY = centerY + eyeCenterOffsetYLeft
 
     private val eyeRightAnchorX = centerX + eyeCenterOffsetXRight
-    private val eyeRightAnchorY = centerX + eyeCenterOffsetYRight
+    private val eyeRightAnchorY = centerY + eyeCenterOffsetYRight
 
     private val mouthAnchorX = centerX + mouthCenterOffsetX
     private var mouthAnchorY = centerY + mouthCenterOffsetY
@@ -80,13 +83,48 @@ class DefaultFace(faceRadius: Float, width: Float, height: Float): Face() {
     // Entities
     private var head: Head = Head(headX, headY, faceRadius, faceColor)
     private var eyeLeft: Eye = Eye(eyeLeftX, eyeLeftY, eyeWidthLeft, eyeHeightLeft, eyeColor)
-    private var eyeRight: Eye = Eye(eyeLeftX, eyeLeftY, eyeWidthRight, eyeHeightRight, eyeColor)
-    private var mouth: Mouth = Mouth(mouthX, mouthY, mouthWidth, mouthRadius, mouthLineWidth, mouthColor)
+    private var eyeRight: Eye = Eye(eyeRightX, eyeRightY, eyeWidthRight, eyeHeightRight, eyeColor)
+    private var mouth: Mouth =
+        Mouth(mouthX, mouthY, mouthWidth, mouthRadius, mouthLineWidth, mouthColor)
+
+    // Misc
+    private var faceBreathingRate: Float = 1f / 100f
+    private var faceBreathingProgress: Float = 0f
+    private var faceBreathingAmplitude = 50
+    private var faceBreathingDelay = 0.35
+
+    private var eyesMouthBreathingRate: Float = 1f / 100f
+    private var eyesMouthBreathingProgress: Float = 0f
+    private var eyesMouthBreathingAmplitude = 50
+    private var eyesMouthBreathingDelay = 0
 
     init {
         bodyParts.add(head)
         bodyParts.add(eyeLeft)
         bodyParts.add(eyeRight)
         bodyParts.add(mouth)
+
+        // Settings
+        setSetting("breathing", false)
+        setSetting("abrupt-animation-cancel", false)
+    }
+
+    override fun loop() {
+        if (settings["breathing"] as Boolean) {
+            faceBreathingProgress += faceBreathingRate
+            if(faceBreathingProgress > faceBreathingDelay)
+                head.y = headAnchorY + (sin(faceBreathingProgress - faceBreathingDelay) * faceBreathingAmplitude).toFloat()
+
+            eyesMouthBreathingProgress += eyesMouthBreathingRate
+            if (eyesMouthBreathingProgress > eyesMouthBreathingDelay) {
+                val offset =
+                    +sin(eyesMouthBreathingProgress - eyesMouthBreathingDelay) * eyesMouthBreathingAmplitude
+                eyeLeft.y = eyeLeftAnchorY + offset
+                eyeRight.y = eyeRightAnchorY + offset
+                mouth.y = mouthAnchorY + offset
+            }
+
+            dirty = true
+        }
     }
 }
