@@ -36,7 +36,9 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
         width = dimen[0]
         height = dimen[1]
 
-        currentFace = DefaultFace(faceRadius, width, height)
+        currentFace = DefaultFace(faceRadius, width, height, this)
+        currentFace.setSetting("breathing", true)
+        currentFace.start()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -47,10 +49,12 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun hideView() {
         visibility = GONE
+        currentFace.stop()
     }
 
     fun showView() {
         visibility = VISIBLE
+        currentFace.start()
     }
 
     fun setFace(face: Face) {
