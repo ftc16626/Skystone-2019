@@ -53,6 +53,10 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
         visibility = VISIBLE
     }
 
+    fun setFace(face: Face) {
+        currentFace = face
+    }
+
     private fun getMetrics(): Array<Float> {
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
 
