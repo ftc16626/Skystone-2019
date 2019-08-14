@@ -1,11 +1,11 @@
 package com.ftc16266.kao
 
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import com.ftc16266.kao.parts.Eye
 import com.ftc16266.kao.parts.Head
 import com.ftc16266.kao.parts.Mouth
+import kotlin.math.PI
 import kotlin.math.sin
 
 class DefaultFace(faceRadius: Float, width: Float, height: Float, view: View) : Face(view = view) {
@@ -92,11 +92,19 @@ class DefaultFace(faceRadius: Float, width: Float, height: Float, view: View) : 
     private var faceBreathingProgress: Float = 0f
     private var faceBreathingAmplitude = 50
     private var faceBreathingDelay = 0.35
+    private var faceBreathingFinishCheckpoint = 0f
+
+    private var finishAnimationFaceBreathing = false
+    private var completelyFinishFaceBreathing = false
 
     private var eyesMouthBreathingRate: Float = 1f / 100f
     private var eyesMouthBreathingProgress: Float = 0f
     private var eyesMouthBreathingAmplitude = 50
     private var eyesMouthBreathingDelay = 0
+    private var eyesMouthBreathingFinishCheckpoint = 0f
+
+    private var finishAnimationEyesMouthBreathing = false
+    private var completelyFinishEyesMouthBreathing = false
 
     init {
         bodyParts.add(head)
@@ -110,11 +118,28 @@ class DefaultFace(faceRadius: Float, width: Float, height: Float, view: View) : 
     }
 
     override fun loop() {
-        if (settings["breathing"] as Boolean) {
+        if (settings["breathing"] as Boolean or finishAnimationFaceBreathing) {
             faceBreathingProgress += faceBreathingRate
-            if(faceBreathingProgress > faceBreathingDelay)
-                head.y = headAnchorY + (sin(faceBreathingProgress - faceBreathingDelay) * faceBreathingAmplitude).toFloat()
+            if (faceBreathingProgress > faceBreathingDelay)
+                head.y =
+                    headAnchorY + (sin(faceBreathingProgress - faceBreathingDelay) * faceBreathingAmplitude).toFloat()
 
+            if (finishAnimationFaceBreathing) {
+                if (faceBreathingProgress > faceBreathingFinishCheckpoint + PI) {
+                    finishAnimationFaceBreathing = false
+                    completelyFinishFaceBreathing = true
+                }
+            } else {
+                completelyFinishFaceBreathing = false
+            }
+
+            dirty = true
+        } else if (!(settings["breathing"] as Boolean) and !completelyFinishFaceBreathing and !(settings["abrupt-animation-cancel"] as Boolean)) {
+            finishAnimationFaceBreathing = true
+            faceBreathingFinishCheckpoint = faceBreathingProgress
+        }
+
+        if (settings["breathing"] as Boolean or finishAnimationEyesMouthBreathing) {
             eyesMouthBreathingProgress += eyesMouthBreathingRate
             if (eyesMouthBreathingProgress > eyesMouthBreathingDelay) {
                 val offset =
@@ -124,7 +149,19 @@ class DefaultFace(faceRadius: Float, width: Float, height: Float, view: View) : 
                 mouth.y = mouthAnchorY + offset
             }
 
+            if (finishAnimationEyesMouthBreathing) {
+                if (eyesMouthBreathingProgress > eyesMouthBreathingFinishCheckpoint + PI) {
+                    finishAnimationEyesMouthBreathing = false
+                    completelyFinishEyesMouthBreathing = true
+                }
+            } else {
+                completelyFinishEyesMouthBreathing = false
+            }
+
             dirty = true
+        } else if (!(settings["breathing"] as Boolean) and !completelyFinishEyesMouthBreathing and !(settings["abrupt-animation-cancel"] as Boolean)) {
+            finishAnimationEyesMouthBreathing = true
+            eyesMouthBreathingFinishCheckpoint = eyesMouthBreathingProgress
         }
     }
 }
