@@ -16,7 +16,7 @@ class Kao(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val displayMetrics = DisplayMetrics()
 
-    private var currentFace: Face
+    var currentFace: Face
 
     init {
         context.theme.obtainStyledAttributes(
