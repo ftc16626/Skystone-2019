@@ -31,7 +31,9 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private var sensorManager: SensorManager? = null
     private var sensorAccelerometer: Sensor? = null
 
-    private val commandList = mutableMapOf<String, CommandListener>()
+    private val commandList = HashMap<String, CommandListener>()
+    private val settingsTypeList = HashMap<String, SettingType>()
+    private val settingsValueList = HashMap<String, Any>()
 
     init {
         webSocket.addSocketListener(this)
@@ -91,8 +93,22 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         webSocket.broadcast(
             LogModel(
-                "${event.values[0]}, ${event.values[1]}, ${event.values[2]}",
-                "accelerometer",
+                event.values[0].toString(),
+                "accelerometer-x",
+                Date()
+            )
+        )
+        webSocket.broadcast(
+            LogModel(
+                event.values[1].toString(),
+                "accelerometer-y",
+                Date()
+            )
+        )
+        webSocket.broadcast(
+            LogModel(
+                event.values[2].toString(),
+                "accelerometer-z",
                 Date()
             )
         )
@@ -142,7 +158,10 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
     private fun getInitPacket(): String {
         val packet = JSONObject()
-            .put("sensor-keys", JSONArray().put("accelerometer"))
+            .put(
+                "sensor-keys",
+                JSONArray().put("accelerometer-x").put("accelerometer-y").put("accelerometer-z")
+            )
 
         return packet.toString()
     }
@@ -153,4 +172,32 @@ class MissionControl(private val activity: Activity) : SocketListener,
         else
             commandList[cmd] = listener
     }
+
+    // Settings with default values
+    fun registerSettings(settings: Map<String, Any>) {
+        for ((key, value) in settings) {
+            settingsValueList[key] = value
+
+            val valueType = when (value) {
+                is String -> SettingType.STRING
+                is Boolean -> SettingType.BOOL
+
+                is Int -> SettingType.INT
+                is Float -> SettingType.FLOAT
+                is Double -> SettingType.DOUBLE
+                is Long -> SettingType.LONG
+                is Short -> SettingType.SHORT
+                is Byte -> SettingType.BYTE
+                is Array<*> -> SettingType.ARRAY
+
+                else -> SettingType.NONE
+            }
+
+            settingsTypeList[key] = valueType
+        }
+    }
+}
+
+enum class SettingType {
+    STRING, BOOL, INT, FLOAT, LONG, SHORT, BYTE, DOUBLE, ARRAY, NONE
 }
