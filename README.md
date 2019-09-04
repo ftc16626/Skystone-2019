@@ -27,6 +27,7 @@ Please make sure to read the [Contributing Guide](CONTRIBUTING.md) before making
 
 - Noah Bresler - [_@NoahBres_](https://github.com/NoahBres)
 - Alex Dizor - [_@Aelioux_](https://github.com/Aelioux)
+- Devin Hall - [_@Devin34_](https://github.com/Devin34)
 
 ### TODO
 
