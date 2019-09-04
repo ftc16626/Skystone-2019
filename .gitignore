@@ -66,7 +66,7 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-*ASUS_PC_01*
+# OSX files
+.DS_Store
 
-# Windows thumbnail db
-Thumbs.db
+*ASUS_PC_01*
