@@ -1,4 +1,4 @@
-# Skystone-2019
+﻿# Skystone-2019
 
 FTC Team 16626’s code for the Skystone Challenge (2019-2020)
 
@@ -26,6 +26,8 @@ Please make sure to read the [Contributing Guide](CONTRIBUTING.md) before making
 ### Contributors
 
 - Noah Bresler - [_@NoahBres_](https://github.com/NoahBres)
+- Alex Dizor - [_@Aelioux_](https://github.com/Aelioux)
+- Devin Hall - [_@Devin34_](https://github.com/Devin34)
 
 ### TODO
 

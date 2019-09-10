@@ -60,6 +60,9 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.ftc16626.kao.Kao;
+import com.ftc16626.missioncontrol.MissionControl;
+import com.ftc16626.missioncontrol.util.CommandListener;
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeControllerImpl;
@@ -126,6 +129,7 @@ import org.firstinspires.inspection.RcInspectionActivity;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("WeakerAccess")
 public class FtcRobotControllerActivity extends Activity
@@ -175,6 +179,9 @@ public class FtcRobotControllerActivity extends Activity
   private static boolean permissionsValidated = false;
 
   private WifiDirectChannelChanger wifiDirectChannelChanger;
+
+  private MissionControl missionControl = new MissionControl(this);
+  private Kao kao;
 
   protected class RobotRestarter implements Restarter {
 
@@ -388,6 +395,45 @@ public class FtcRobotControllerActivity extends Activity
     if (preferencesHelper.readBoolean(getString(R.string.pref_wifi_automute), false)) {
       initWifiMute(true);
     }
+
+    // Start MissionControl
+    missionControl.registerCommand("face", new CommandListener() {
+      @Override
+      public void onCommand(@NotNull String argument) {
+        if(argument.equals("on")) {
+          runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              kao.showView();
+            }
+          });
+
+        } else if(argument.equals("off")) {
+          runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              kao.hideView();
+            }
+          });
+        }
+      }
+    });
+    missionControl.registerCommand("breathing", new CommandListener() {
+      @Override
+      public void onCommand(@NotNull String argument) {
+        if(argument.equals("on")) {
+          kao.getCurrentFace().setSetting("breathing", true);
+        } else if(argument.equals("off")) {
+          kao.getCurrentFace().setSetting("breathing", false);
+        }
+      }
+    });
+
+    missionControl.start();
+
+    // Initialize Kao
+    kao = findViewById(R.id.face);
+    kao.hideView();
   }
 
   protected UpdateUI createUpdateUI() {
@@ -450,6 +496,8 @@ public class FtcRobotControllerActivity extends Activity
     // called surprisingly often. So, we don't actually do much here.
     super.onStop();
     RobotLog.vv(TAG, "onStop()");
+
+    missionControl.stop();
   }
 
   @Override
@@ -468,6 +516,8 @@ public class FtcRobotControllerActivity extends Activity
     ServiceController.stopService(FtcRobotControllerWatchdogService.class);
     if (wifiLock != null) wifiLock.release();
     if (preferencesHelper != null) preferencesHelper.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener);
+
+    missionControl.stop();
 
     RobotLog.cancelWriteLogcatToDisk();
   }

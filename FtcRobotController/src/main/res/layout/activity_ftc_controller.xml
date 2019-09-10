@@ -42,11 +42,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               android:id="@+id/entire_screen"
               android:orientation="vertical">
 
-<!--    <com.ftc16626.kao.Kao-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        custom:faceRadius="180dp"-->
-<!--        android:id="@+id/face"/>-->
+    <com.ftc16626.kao.Kao
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        custom:faceRadius="180dp"
+        android:id="@+id/face"/>
 
   <!-- black bar on top -->
   <RelativeLayout
