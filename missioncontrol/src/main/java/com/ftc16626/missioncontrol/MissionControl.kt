@@ -133,8 +133,6 @@ class MissionControl(private val activity: Activity) : SocketListener,
         }
 
         if (cmdSplit[0] in commandList) {
-            val x = commandList[cmdSplit[0]]
-
             commandList[cmdSplit[0]]?.onCommand(
                 cmdSplit.slice(
                     IntRange(
