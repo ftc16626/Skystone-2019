@@ -9,6 +9,7 @@ import android.hardware.SensorManager
 import android.os.Environment
 import android.util.Log
 import com.ftc16626.missioncontrol.util.CommandListener
+import com.ftc16626.missioncontrol.util.Scribe
 import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
 import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
 import com.ftc16626.missioncontrol.webserver.WebServer
@@ -19,6 +20,7 @@ import org.java_websocket.handshake.ClientHandshake
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MissionControl(private val activity: Activity) : SocketListener,
@@ -43,11 +45,15 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private val mainDirectory: File
     private val logDirectory: File
 
+    private val scribe: Scribe
+
     init {
         webSocket.addSocketListener(this)
 
         mainDirectory = setupMainDirectory(activity)
         logDirectory = setupLogDirectory(mainDirectory, "mc-logs")
+
+        scribe = Scribe()
     }
 
     fun start() {
@@ -102,27 +108,17 @@ class MissionControl(private val activity: Activity) : SocketListener,
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) return
 
-        webSocket.broadcast(
-            LogModel(
-                event.values[0].toString(),
-                "accelerometer-x",
-                Date()
-            )
-        )
-        webSocket.broadcast(
-            LogModel(
-                event.values[1].toString(),
-                "accelerometer-y",
-                Date()
-            )
-        )
-        webSocket.broadcast(
-            LogModel(
-                event.values[2].toString(),
-                "accelerometer-z",
-                Date()
-            )
-        )
+        val xLog = LogModel(event.values[0].toString(), "accelerometer-x", Date())
+        val yLog = LogModel(event.values[1].toString(), "accelerometer-y", Date())
+        val zLog = LogModel(event.values[2].toString(), "accelerometer-z", Date())
+
+        webSocket.broadcast(xLog)
+        webSocket.broadcast(yLog)
+        webSocket.broadcast(zLog)
+
+        scribe.writeLine(xLog)
+        scribe.writeLine(yLog)
+        scribe.writeLine(zLog)
     }
 
     private fun handleCommand(cmd: String) {
@@ -130,17 +126,8 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         val cmdSplit = cmd.split(' ')
         when (cmdSplit[0]) {
-            "logging-start" -> {
-                this.sendLogs = true
-                this.turnOnSensorReading()
-                this.broadcastLoggingStatus()
-            }
-
-            "logging-stop" -> {
-                this.sendLogs = false
-                this.turnOffSensorReading()
-                this.broadcastLoggingStatus()
-            }
+            "logging-start" -> startLogging()
+            "logging-stop" -> stopLogging()
         }
 
         if (cmdSplit[0] in commandList) {
@@ -173,6 +160,25 @@ class MissionControl(private val activity: Activity) : SocketListener,
             )
 
         return packet.toString()
+    }
+
+    private fun startLogging() {
+        this.sendLogs = true
+        this.turnOnSensorReading()
+        this.broadcastLoggingStatus()
+
+        val date = Date()
+        val formatter = SimpleDateFormat("yyyy-M-dd HH:mm:ss.SSS")
+        val stringDate = formatter.format(date)
+        scribe.beginWrite(File(logDirectory, "log-$stringDate.txt"))
+    }
+
+    private fun stopLogging() {
+        this.sendLogs = false
+        this.turnOffSensorReading()
+        this.broadcastLoggingStatus()
+
+        scribe.closeWrite()
     }
 
     fun registerCommand(cmd: String, listener: CommandListener) {
@@ -235,6 +241,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         return path
     }
+
     private fun setupLogDirectory(parent: File, path: String): File {
         val path = File(parent, "/$path")
 
