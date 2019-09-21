@@ -180,7 +180,7 @@ public class FtcRobotControllerActivity extends Activity
 
   private WifiDirectChannelChanger wifiDirectChannelChanger;
 
-  private MissionControl missionControl = new MissionControl(this);
+  private MissionControl missionControl;
   private Kao kao;
 
   protected class RobotRestarter implements Restarter {
@@ -395,6 +395,8 @@ public class FtcRobotControllerActivity extends Activity
     if (preferencesHelper.readBoolean(getString(R.string.pref_wifi_automute), false)) {
       initWifiMute(true);
     }
+
+    missionControl = new MissionControl(this);
 
     // Start MissionControl
     missionControl.registerCommand("face", new CommandListener() {
