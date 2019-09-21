@@ -1,6 +1,5 @@
 package com.ftc16626.missioncontrol.util
 
-import com.ftc16626.missioncontrol.LogModel
 import java.io.File
 import java.io.FileOutputStream
 

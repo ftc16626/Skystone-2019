@@ -9,13 +9,13 @@ import android.hardware.SensorManager
 import android.os.Environment
 import android.util.Log
 import com.ftc16626.missioncontrol.util.CommandListener
+import com.ftc16626.missioncontrol.util.LogModel
 import com.ftc16626.missioncontrol.util.Scribe
 import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
 import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
 import com.ftc16626.missioncontrol.webserver.WebServer
 import com.ftc16626.missioncontrol.websocket.SocketListener
 import com.ftc16626.missioncontrol.websocket.WebSocket
-import com.vuforia.Vuforia.init
 import org.java_websocket.handshake.ClientHandshake
 import org.json.JSONArray
 import org.json.JSONObject
@@ -89,7 +89,9 @@ class MissionControl(private val activity: Activity) : SocketListener,
     }
 
     override fun onOpen(conn: org.java_websocket.WebSocket, handshake: ClientHandshake) {
-        webSocket.sendMessage(conn, LogModel(getInitPacket(), "init", Date()))
+        webSocket.sendMessage(conn,
+            LogModel(getInitPacket(), "init", Date())
+        )
     }
 
 //    override fun onMessage(conn: org.java_websocket.WebSocket, msg: String?) {
@@ -108,9 +110,21 @@ class MissionControl(private val activity: Activity) : SocketListener,
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) return
 
-        val xLog = LogModel(event.values[0].toString(), "accelerometer-x", Date())
-        val yLog = LogModel(event.values[1].toString(), "accelerometer-y", Date())
-        val zLog = LogModel(event.values[2].toString(), "accelerometer-z", Date())
+        val xLog = LogModel(
+            event.values[0].toString(),
+            "accelerometer-x",
+            Date()
+        )
+        val yLog = LogModel(
+            event.values[1].toString(),
+            "accelerometer-y",
+            Date()
+        )
+        val zLog = LogModel(
+            event.values[2].toString(),
+            "accelerometer-z",
+            Date()
+        )
 
         webSocket.broadcast(xLog)
         webSocket.broadcast(yLog)

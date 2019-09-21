@@ -2,7 +2,7 @@ package com.ftc16626.missioncontrol.websocket
 
 import android.util.Log
 import com.google.gson.Gson
-import com.ftc16626.missioncontrol.LogModel
+import com.ftc16626.missioncontrol.util.LogModel
 import com.google.gson.JsonSyntaxException
 import org.java_websocket.WebSocket
 import org.java_websocket.exceptions.WebsocketNotConnectedException
