@@ -6,14 +6,21 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Environment
 import android.util.Log
 import com.ftc16626.missioncontrol.util.CommandListener
+import com.ftc16626.missioncontrol.util.Scribe
+import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
+import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
 import com.ftc16626.missioncontrol.webserver.WebServer
 import com.ftc16626.missioncontrol.websocket.SocketListener
 import com.ftc16626.missioncontrol.websocket.WebSocket
+import com.vuforia.Vuforia.init
 import org.java_websocket.handshake.ClientHandshake
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MissionControl(private val activity: Activity) : SocketListener,
@@ -35,8 +42,18 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private val settingsTypeList = HashMap<String, SettingType>()
     private val settingsValueList = HashMap<String, Any>()
 
+    private val mainDirectory: File
+    private val logDirectory: File
+
+    private val scribe: Scribe
+
     init {
         webSocket.addSocketListener(this)
+
+        mainDirectory = setupMainDirectory(activity)
+        logDirectory = setupLogDirectory(mainDirectory, "mc-logs")
+
+        scribe = Scribe()
     }
 
     fun start() {
@@ -91,27 +108,17 @@ class MissionControl(private val activity: Activity) : SocketListener,
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) return
 
-        webSocket.broadcast(
-            LogModel(
-                event.values[0].toString(),
-                "accelerometer-x",
-                Date()
-            )
-        )
-        webSocket.broadcast(
-            LogModel(
-                event.values[1].toString(),
-                "accelerometer-y",
-                Date()
-            )
-        )
-        webSocket.broadcast(
-            LogModel(
-                event.values[2].toString(),
-                "accelerometer-z",
-                Date()
-            )
-        )
+        val xLog = LogModel(event.values[0].toString(), "accelerometer-x", Date())
+        val yLog = LogModel(event.values[1].toString(), "accelerometer-y", Date())
+        val zLog = LogModel(event.values[2].toString(), "accelerometer-z", Date())
+
+        webSocket.broadcast(xLog)
+        webSocket.broadcast(yLog)
+        webSocket.broadcast(zLog)
+
+        scribe.writeLine(xLog)
+        scribe.writeLine(yLog)
+        scribe.writeLine(zLog)
     }
 
     private fun handleCommand(cmd: String) {
@@ -119,22 +126,11 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         val cmdSplit = cmd.split(' ')
         when (cmdSplit[0]) {
-            "logging-start" -> {
-                this.sendLogs = true
-                this.turnOnSensorReading()
-                this.broadcastLoggingStatus()
-            }
-
-            "logging-stop" -> {
-                this.sendLogs = false
-                this.turnOffSensorReading()
-                this.broadcastLoggingStatus()
-            }
+            "logging-start" -> startLogging()
+            "logging-stop" -> stopLogging()
         }
 
         if (cmdSplit[0] in commandList) {
-            val x = commandList[cmdSplit[0]]
-
             commandList[cmdSplit[0]]?.onCommand(
                 cmdSplit.slice(
                     IntRange(
@@ -166,6 +162,25 @@ class MissionControl(private val activity: Activity) : SocketListener,
         return packet.toString()
     }
 
+    private fun startLogging() {
+        this.sendLogs = true
+        this.turnOnSensorReading()
+        this.broadcastLoggingStatus()
+
+        val date = Date()
+        val formatter = SimpleDateFormat("yyyy-M-dd HH:mm:ss.SSS")
+        val stringDate = formatter.format(date)
+        scribe.beginWrite(File(logDirectory, "log-$stringDate.txt"))
+    }
+
+    private fun stopLogging() {
+        this.sendLogs = false
+        this.turnOffSensorReading()
+        this.broadcastLoggingStatus()
+
+        scribe.closeWrite()
+    }
+
     fun registerCommand(cmd: String, listener: CommandListener) {
         if (cmd in commandList)
             throw Exception("Command already exists")
@@ -195,6 +210,51 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
             settingsTypeList[key] = valueType
         }
+    }
+
+    private fun setupMainDirectory(activity: Context): File {
+        fun isExternalStorageWritable(): Boolean {
+            return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+        }
+
+        fun isExternalStorageReadable(): Boolean {
+            return Environment.getExternalStorageState() in
+                    setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+        }
+
+        if (!isExternalStorageWritable()) {
+            val errorString = "MissionControl directory not readable/writable"
+            Log.e(TAG, errorString)
+            throw DirectoryNotAccessibleException(errorString)
+        }
+
+        val path = activity.getExternalFilesDir(null)
+
+        if (!(path!!.exists() && path.isDirectory)) {
+            Log.i(TAG, "Directory doesn't exist. Initializing...")
+            if (!path.mkdirs()) {
+                val errorString = "Unable to create MissionControl directory"
+                Log.e(TAG, errorString)
+                throw UnableToCreateDirectoryException(errorString)
+            }
+        }
+
+        return path
+    }
+
+    private fun setupLogDirectory(parent: File, path: String): File {
+        val path = File(parent, "/$path")
+
+        if (!(path!!.exists() && path.isDirectory)) {
+            Log.i(TAG, "Directory doesn't exist. Initializing...")
+            if (!path.mkdirs()) {
+                val errorString = "Unable to create MissionControl Log directory"
+                Log.e(TAG, errorString)
+                throw UnableToCreateDirectoryException(errorString)
+            }
+        }
+
+        return path
     }
 }
 
