@@ -13,9 +13,13 @@ import com.ftc16626.missioncontrol.util.LogModel
 import com.ftc16626.missioncontrol.util.Scribe
 import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
 import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
+import com.ftc16626.missioncontrol.webserver.RequestREST
+import com.ftc16626.missioncontrol.webserver.RequestRESTListener
+import com.ftc16626.missioncontrol.webserver.RequestRESTResponse
 import com.ftc16626.missioncontrol.webserver.WebServer
 import com.ftc16626.missioncontrol.websocket.SocketListener
 import com.ftc16626.missioncontrol.websocket.WebSocket
+import fi.iki.elonen.NanoHTTPD
 import org.java_websocket.handshake.ClientHandshake
 import org.json.JSONArray
 import org.json.JSONObject
@@ -54,6 +58,24 @@ class MissionControl(private val activity: Activity) : SocketListener,
         logDirectory = setupLogDirectory(mainDirectory, "mc-logs")
 
         scribe = Scribe()
+
+        webServer.registerRESTRequest("/logs", NanoHTTPD.Method.GET, object : RequestRESTListener {
+            override fun onRequest(): RequestRESTResponse {
+                val fileList = JSONArray()
+
+                logDirectory.walk().forEach {
+                    if (!it.isDirectory) fileList.put(it.name)
+                }
+
+                val jsonResponse = JSONObject().put("fileNames", fileList)
+
+                return RequestRESTResponse(
+                    NanoHTTPD.Response.Status.OK,
+                    "application/json",
+                    jsonResponse.toString()
+                )
+            }
+        })
     }
 
     fun start() {
@@ -89,7 +111,8 @@ class MissionControl(private val activity: Activity) : SocketListener,
     }
 
     override fun onOpen(conn: org.java_websocket.WebSocket, handshake: ClientHandshake) {
-        webSocket.sendMessage(conn,
+        webSocket.sendMessage(
+            conn,
             LogModel(getInitPacket(), "init", Date())
         )
     }
