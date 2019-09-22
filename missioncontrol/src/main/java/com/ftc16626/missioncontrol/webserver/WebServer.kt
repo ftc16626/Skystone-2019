@@ -10,6 +10,8 @@ class WebServer : NanoHTTPD(PORT) {
         const val TAG = "MissionControlWebServer"
     }
 
+    private val requestRESTList: MutableList<RequestREST> = mutableListOf()
+
     override fun start() {
         try {
             start(SOCKET_READ_TIMEOUT, false)
@@ -22,14 +24,38 @@ class WebServer : NanoHTTPD(PORT) {
     override fun serve(session: IHTTPSession?): Response {
         val uri: String = session!!.uri
 
-        if (uri == "/") {
-            return newFixedLengthResponse("<html><body><h1>Mission Control Root</h1></body></html>")
-        } else if (uri == "/base") {
-            return newFixedLengthResponse("<html><body><h1>Mission Control Base uri</h1></body></html>")
+        for(request in requestRESTList) {
+            if(request.uri == uri && request.method == session.method) {
+                val (status, mimeType, response) = request.listener.onRequest()
+                return newFixedLengthResponse(status, mimeType, response)
+            }
         }
 
-        val msg = "<html><body><h1>Mission Control</h1></body></html>"
-
-        return newFixedLengthResponse(msg)
+        return when (uri) {
+            "/" -> newFixedLengthResponse(
+                Response.Status.OK,
+                MIME_HTML,
+                "<html><body><h1>Mission Control Root</h1></body></html>"
+            )
+            "/base" -> newFixedLengthResponse(
+                Response.Status.OK,
+                MIME_HTML,
+                "<html><body><h1>Mission Control Base uri</h1></body></html>"
+            )
+            else -> newFixedLengthResponse(
+                Response.Status.OK,
+                MIME_HTML,
+                "<html><body><h1>Mission Control</h1></body></html>\""
+            )
+        }
     }
+
+    fun registerRESTRequest(
+        uri: String,
+        method: NanoHTTPD.Method,
+        listener: RequestRESTListener
+    ) {
+        requestRESTList.add(RequestREST(uri, method, listener))
+    }
+
 }
