@@ -21,6 +21,10 @@ class WebSocket : WebSocketServer(InetSocketAddress(PORT)) {
     private val socketListenerList = ArrayList<SocketListener>()
     private val connectionList = ArrayList<WebSocket>()
 
+    init {
+        isReuseAddr = true
+    }
+
     fun addSocketListener(listener: SocketListener) {
         socketListenerList.add(listener)
     }
