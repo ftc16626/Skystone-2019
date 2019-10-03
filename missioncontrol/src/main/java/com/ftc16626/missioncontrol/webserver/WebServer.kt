@@ -22,25 +22,25 @@ class WebServer : NanoHTTPD(PORT) {
     }
 
     override fun serve(session: IHTTPSession?): Response {
-        val uri: String = session!!.uri
+        val uri: List<String> = session!!.uri.split("/").filter { it != "" }
         var response: Response? = null
-
+        
         for(request in requestRESTList) {
-            if(request.uri == uri && request.method == session.method) {
-                val (status, mimeType, payload) = request.listener.onRequest()
+            if(request.uri == uri[0] && request.method == session.method) {
+                val (status, mimeType, payload) = request.listener.onRequest(uri.drop(1))
 
                 response = newFixedLengthResponse(status, mimeType, payload)
             }
         }
 
         if(response == null) {
-            response =  when (uri) {
+            response =  when (uri[0]) {
                 "/" -> newFixedLengthResponse(
                     Response.Status.OK,
                     MIME_HTML,
                     "<html><body><h1>Mission Control Root</h1></body></html>"
                 )
-                "/base" -> newFixedLengthResponse(
+                "base" -> newFixedLengthResponse(
                     Response.Status.OK,
                     MIME_HTML,
                     "<html><body><h1>Mission Control Base uri</h1></body></html>"
