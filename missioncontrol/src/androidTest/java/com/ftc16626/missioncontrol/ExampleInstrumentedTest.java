@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
     // Context of the app under test.
     Context appContext = InstrumentationRegistry.getTargetContext();
 
-    assertEquals("com.ftc16266.missioncontrol.test", appContext.getPackageName());
+    assertEquals("com.ftc16626.missioncontrol.test", appContext.getPackageName());
   }
 }
