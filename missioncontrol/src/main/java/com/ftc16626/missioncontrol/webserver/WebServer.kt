@@ -10,6 +10,8 @@ class WebServer : NanoHTTPD(PORT) {
         const val TAG = "MissionControlWebServer"
     }
 
+    private val requestRESTList: MutableList<RequestREST> = mutableListOf()
+
     override fun start() {
         try {
             start(SOCKET_READ_TIMEOUT, false)
@@ -20,16 +22,50 @@ class WebServer : NanoHTTPD(PORT) {
     }
 
     override fun serve(session: IHTTPSession?): Response {
-        val uri: String = session!!.uri
+        val uri: List<String> = session!!.uri.split("/").filter { it != "" }
+        var response: Response? = null
+        
+        for(request in requestRESTList) {
+            if(request.uri == uri[0] && request.method == session.method) {
+                val (status, mimeType, payload) = request.listener.onRequest(uri.drop(1))
 
-        if (uri == "/") {
-            return newFixedLengthResponse("<html><body><h1>Mission Control Root</h1></body></html>")
-        } else if (uri == "/base") {
-            return newFixedLengthResponse("<html><body><h1>Mission Control Base uri</h1></body></html>")
+                response = newFixedLengthResponse(status, mimeType, payload)
+            }
         }
 
-        val msg = "<html><body><h1>Mission Control</h1></body></html>"
+        if(response == null) {
+            response =  when (uri[0]) {
+                "/" -> newFixedLengthResponse(
+                    Response.Status.OK,
+                    MIME_HTML,
+                    "<html><body><h1>Mission Control Root</h1></body></html>"
+                )
+                "base" -> newFixedLengthResponse(
+                    Response.Status.OK,
+                    MIME_HTML,
+                    "<html><body><h1>Mission Control Base uri</h1></body></html>"
+                )
+                else -> newFixedLengthResponse(
+                    Response.Status.OK,
+                    MIME_HTML,
+                    "<html><body><h1>Mission Control</h1></body></html>\""
+                )
+            }
+        }
 
-        return newFixedLengthResponse(msg)
+        response?.addHeader("Access-Control-Allow-Methods", "DELETE, GET, POST, PUT")
+        response?.addHeader("Access-Control-Allow-Origin",  "*")
+        response?.addHeader("Access-Control-Allow-Headers", "X-Requested-With")
+
+        return response!!
     }
+
+    fun registerRESTRequest(
+        uri: String,
+        method: NanoHTTPD.Method,
+        listener: RequestRESTListener
+    ) {
+        requestRESTList.add(RequestREST(uri, method, listener))
+    }
+
 }

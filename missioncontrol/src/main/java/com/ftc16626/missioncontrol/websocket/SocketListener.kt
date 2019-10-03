@@ -1,6 +1,6 @@
 package com.ftc16626.missioncontrol.websocket
 
-import com.ftc16626.missioncontrol.LogModel
+import com.ftc16626.missioncontrol.util.LogModel
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import java.nio.ByteBuffer
