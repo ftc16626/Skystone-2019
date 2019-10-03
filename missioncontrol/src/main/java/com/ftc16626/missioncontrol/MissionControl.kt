@@ -59,8 +59,8 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         scribe = Scribe()
 
-        webServer.registerRESTRequest("/logs", NanoHTTPD.Method.GET, object : RequestRESTListener {
-            override fun onRequest(): RequestRESTResponse {
+        webServer.registerRESTRequest("logs", NanoHTTPD.Method.GET, object : RequestRESTListener {
+            override fun onRequest(url: List<String>): RequestRESTResponse {
                 val fileList = JSONArray()
 
                 logDirectory.walk().forEach {
@@ -73,6 +73,16 @@ class MissionControl(private val activity: Activity) : SocketListener,
                     NanoHTTPD.Response.Status.OK,
                     "application/json",
                     jsonResponse.toString()
+                )
+            }
+        })
+
+        webServer.registerRESTRequest("log", NanoHTTPD.Method.GET, object : RequestRESTListener {
+            override fun onRequest(url: List<String>): RequestRESTResponse {
+                return RequestRESTResponse(
+                    NanoHTTPD.Response.Status.OK,
+                    "application/json",
+                    "{ \"test\": 10 }"
                 )
             }
         })
