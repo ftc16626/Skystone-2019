@@ -79,10 +79,20 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
         webServer.registerRESTRequest("log", NanoHTTPD.Method.GET, object : RequestRESTListener {
             override fun onRequest(url: List<String>): RequestRESTResponse {
+                val logFile = File(logDirectory, url[0])
+
+                if (!logFile.exists()) {
+                    return RequestRESTResponse(
+                        NanoHTTPD.Response.Status.NOT_FOUND,
+                        "text/plain",
+                        "File not found"
+                    )
+                }
+
                 return RequestRESTResponse(
                     NanoHTTPD.Response.Status.OK,
-                    "application/json",
-                    "{ \"test\": 10 }"
+                    "text/plain",
+                    logFile.readText()
                 )
             }
         })
