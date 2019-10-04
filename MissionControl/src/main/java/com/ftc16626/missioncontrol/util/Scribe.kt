@@ -32,7 +32,7 @@ class Scribe() {
         val msg = log.msg
         val time = log.time
 
-        write("$tag $msg $time\n")
+        write("$tag,$msg,$time\n")
     }
 
     fun write(string: String) {
