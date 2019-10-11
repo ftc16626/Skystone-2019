@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MecanumDrive {
@@ -13,7 +14,7 @@ public class MecanumDrive {
   public DcMotor motorBackLeft = null;
   public DcMotor motorBackRight = null;
 
-  public List<DcMotor> motorList;
+  public List<DcMotor> motorList = new ArrayList<DcMotor>();
 
   public MecanumDrive(HardwareMap hwMap, String motorFrontLeftId, String motorFrontRightId,
       String motorBackLeftId, String motorBackRightId, boolean runWithEncoders) {
