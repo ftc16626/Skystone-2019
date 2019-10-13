@@ -47,7 +47,13 @@ public class MecanumTest4 extends OpMode {
       for (int i = 0; i < speeds.length; i++) speeds[i] /= max;
     }
 
-
+    telemetry.addData("drive", drive);
+    telemetry.addData("strafe", strafe);
+    telemetry.addData("twist", twist);
+    telemetry.addData("front left", speeds[0]);
+    telemetry.addData("front right", speeds[1]);
+    telemetry.addData("back left", speeds[2]);
+    telemetry.addData("back right", speeds[3]);
 
     robot.drive.motorFrontLeft.setPower(speeds[0]);
     robot.drive.motorFrontRight.setPower(speeds[1]);
