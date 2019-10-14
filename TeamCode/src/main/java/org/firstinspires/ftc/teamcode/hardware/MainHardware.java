@@ -18,4 +18,8 @@ public class MainHardware {
   public void init() {
 //    hwMap =
   }
+
+  public void update() {
+    drive.update();
+  }
 }
