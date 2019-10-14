@@ -1,4 +1,4 @@
-# FTC Team 16266
+# FTC Team 16626
 
 Thank you for contributing to the team's code base! However, before submitting your contribution,
 please make sure to read the following guidelines carefully.
@@ -9,7 +9,7 @@ please make sure to read the following guidelines carefully.
 
 ### 1. **Clone**
 
-Clone the project [on GitHub](https://github.com/ftc16266/Skystone-2019).
+Clone the project [on GitHub](https://github.com/ftc16626/Skystone-2019).
 
 ```
 $ git clone git@github.com:ftc16626/Skystone-2019.git
