@@ -14,7 +14,13 @@ public class MecanumDrive {
   public DcMotor motorBackLeft = null;
   public DcMotor motorBackRight = null;
 
-  public List<DcMotor> motorList = new ArrayList<DcMotor>();
+  private List<DcMotor> motorList = new ArrayList<DcMotor>();
+
+  private double angle = 0;
+  private double power = 0;
+  private double turn = 0;
+
+  private boolean dirty = false;
 
   public MecanumDrive(HardwareMap hwMap, String motorFrontLeftId, String motorFrontRightId,
       String motorBackLeftId, String motorBackRightId, boolean runWithEncoders) {
@@ -48,5 +54,67 @@ public class MecanumDrive {
     for (DcMotor motor : motorList) {
       motor.setPower(0);
     }
+  }
+
+  public void update() {
+    if (dirty) {
+      refreshMotors();
+    }
+  }
+
+  public void setAngle(double angle) {
+    this.angle = angle;
+    this.dirty = true;
+  }
+
+  public void setPower(double power) {
+    this.power = power;
+    refreshMotors();
+    this.dirty = true;
+  }
+
+  public void setTurn(double turn) {
+    this.turn = turn;
+    this.dirty = true;
+  }
+
+  public void refreshMotors() {
+    double motorPowerFrontLeft = Math.cos(angle);
+    double motorPowerFrontRight = Math.sin(angle);
+    double motorPowerBackLeft = Math.sin(angle);
+    double motorPowerBackRight = Math.cos(angle);
+
+    // Normalize values
+    double maxValue = Math.abs(Math.max(motorPowerFrontLeft,
+        Math.max(motorPowerFrontRight, Math.max(motorPowerBackLeft, motorPowerBackRight))));
+
+    motorPowerFrontLeft /= maxValue;
+    motorPowerFrontRight /= maxValue;
+    motorPowerBackLeft /= maxValue;
+    motorPowerBackRight /= maxValue;
+
+    motorPowerFrontLeft = motorPowerFrontLeft * power + turn;
+    motorPowerFrontRight = motorPowerFrontRight * power - turn;
+    motorPowerBackLeft = motorPowerBackLeft * power + turn;
+    motorPowerBackRight = motorPowerBackRight * power - turn;
+
+    motorFrontLeft.setPower(motorPowerFrontLeft);
+    motorFrontRight.setPower(motorPowerFrontRight);
+    motorBackLeft.setPower(motorPowerBackLeft);
+    motorBackRight.setPower(motorPowerBackRight);
+
+    this.dirty = false;
+  }
+
+  public double getAngle() {
+    return angle;
+  }
+
+  public double getPower() {
+    return power;
+  }
+
+  public double getTurn() {
+    return turn;
   }
 }
