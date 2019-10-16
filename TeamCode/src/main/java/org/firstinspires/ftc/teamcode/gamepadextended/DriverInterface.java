@@ -8,13 +8,13 @@ public class DriverInterface {
   public GamepadExtended aid;
 
   public DriverInterface(Gamepad driver, Gamepad aid) {
-    this.driver = (GamepadExtended) driver;
-    this.aid = (GamepadExtended) aid;
+    this.driver = new GamepadExtended(driver);
+    this.aid = new GamepadExtended(aid);
   }
 
   public DriverInterface(Gamepad driver, Gamepad aid, GamepadListener listener) {
-    this.driver = (GamepadExtended) driver;
-    this.aid = (GamepadExtended) aid;
+    this.driver = new GamepadExtended(driver);
+    this.aid = new GamepadExtended(aid);
 
     this.driver.setListener(listener);
     this.aid.setListener(listener);
@@ -32,7 +32,7 @@ public class DriverInterface {
   }
 
   public void setDriver(Gamepad gamepad) {
-    this.driver = (GamepadExtended) gamepad;
+    this.driver = new GamepadExtended(gamepad);
   }
 
   public void setDriver(GamepadExtended gamepadExtended) {
@@ -40,7 +40,7 @@ public class DriverInterface {
   }
 
   public void setAid(Gamepad gamepad) {
-    this.aid = (GamepadExtended) gamepad;
+    this.aid = new GamepadExtended(gamepad);
   }
 
   public void setAid(GamepadExtended gamepadExtended) {

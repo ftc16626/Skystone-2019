@@ -7,9 +7,16 @@ import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
 
-public class GamepadExtended extends Gamepad {
+public class GamepadExtended {
+
+  private Gamepad gamepad;
+
+  public GamepadExtended(Gamepad gamepad) {
+    this.gamepad = gamepad;
+  }
 
   private GamepadConfig config = new GamepadConfig(
+      "",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
       false, false,
       false, false
@@ -39,7 +46,7 @@ public class GamepadExtended extends Gamepad {
 
   public float getStrafeStickX() {
     float stickX = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
-        ? left_stick_x : right_stick_x;
+        ? gamepad.left_stick_x : gamepad.right_stick_x;
 
     if (config.invertStrafeStickX) {
       stickX *= -1;
@@ -50,7 +57,7 @@ public class GamepadExtended extends Gamepad {
 
   public float getStrafeStickY() {
     float stickY = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
-        ? left_stick_y : right_stick_y;
+        ? gamepad.left_stick_y : gamepad.right_stick_y;
 
     if (config.invertStrafeStickY) {
       stickY *= -1;
@@ -61,7 +68,7 @@ public class GamepadExtended extends Gamepad {
 
   public float getTurnStickX() {
     float stickX = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
-        ? right_stick_x : left_stick_x;
+        ? gamepad.right_stick_x : gamepad.left_stick_x;
 
     if (config.invertTurnStickX) {
       stickX *= -1;
@@ -72,7 +79,7 @@ public class GamepadExtended extends Gamepad {
 
   public float getTurnStickY() {
     float stickY = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
-        ? right_stick_y : left_stick_y;
+        ? gamepad.right_stick_y : gamepad.left_stick_y;
 
     if (config.invertTurnStickY) {
       stickY *= -1;
@@ -92,21 +99,21 @@ public class GamepadExtended extends Gamepad {
   public void update() {
     if(listener == null) return;
 
-    buttonValues[0] = dpad_up;
-    buttonValues[1] = dpad_down;
-    buttonValues[2] = dpad_left;
-    buttonValues[3] = dpad_right;
-    buttonValues[4] = a;
-    buttonValues[5] = b;
-    buttonValues[6] = x;
-    buttonValues[7] = y;
-    buttonValues[8] = guide;
-    buttonValues[9] = start;
-    buttonValues[10] = back;
-    buttonValues[11] = left_bumper;
-    buttonValues[12] = right_bumper;
-    buttonValues[13] = left_stick_button;
-    buttonValues[14] = right_stick_button;
+    buttonValues[0] = gamepad.dpad_up;
+    buttonValues[1] = gamepad.dpad_down;
+    buttonValues[2] = gamepad.dpad_left;
+    buttonValues[3] = gamepad.dpad_right;
+    buttonValues[4] = gamepad.a;
+    buttonValues[5] = gamepad.b;
+    buttonValues[6] = gamepad.x;
+    buttonValues[7] = gamepad.y;
+    buttonValues[8] = gamepad.guide;
+    buttonValues[9] = gamepad.start;
+    buttonValues[10] = gamepad.back;
+    buttonValues[11] = gamepad.left_bumper;
+    buttonValues[12] = gamepad.right_bumper;
+    buttonValues[13] = gamepad.left_stick_button;
+    buttonValues[14] = gamepad.right_stick_button;
 
     for(int i = 0; i < buttonsToCount; i++) {
       if(buttonValues[i] && !buttonPastValues[i]) {
