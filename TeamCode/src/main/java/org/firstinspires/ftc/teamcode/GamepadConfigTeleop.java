@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
 
-@TeleOp(name = "Main TeleOp", group = "Mecanum")
-public class MainTeleop extends OpMode implements GamepadListener {
+@TeleOp(name = "Gamepad Config TeleOp", group = "Testing")
+public class GamepadConfigTeleop extends OpMode implements GamepadListener {
 
   private MainHardware robot;
   private DriverInterface driverInterface;
@@ -36,15 +36,12 @@ public class MainTeleop extends OpMode implements GamepadListener {
       true, false,
       false, false,
       StickResponseCurve.CUBED);
-
   private GamepadConfig[] configList = new GamepadConfig[]{enzoConfig, mattConfig, emilioConfig};
   private int currentConfigPos = 0;
 
   @Override
   public void init() {
-    robot = new MainHardware(hardwareMap);
     driverInterface = new DriverInterface(gamepad1, gamepad2, this);
-    driverInterface.driver.setConfig(configList[currentConfigPos]);
 
     telemetry.addData("Status", "Initialized");
   }
@@ -52,40 +49,24 @@ public class MainTeleop extends OpMode implements GamepadListener {
   @Override
   public void loop() {
     driverInterface.update();
-
-    double magnitude = driverInterface.driver.getMagnitudeStrafeStick();
-    double angle = driverInterface.driver.getAngleTurnStick();
-    double turn = driverInterface.driver.getTurnStickX();
-
-    robot.drive.setAngle(angle);
-    robot.drive.setPower(magnitude);
-    robot.drive.setTurn(turn);
-
-    robot.update();
-
-    telemetry.addData("Current Config", configList[currentConfigPos].name);
+    telemetry.addData("StickX", driverInterface.driver.getStrafeStickX());
   }
 
   @Override
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
-    if (gamepadType == GamepadType.DRIVER) {
-      if (eventType == GamepadEventType.BUTTON_PRESSED) {
-        switch (eventName) {
-          case START:
-            incrementConfig();
-            break;
-        }
+    if (gamepadType == GamepadType.DRIVER && eventType == GamepadEventType.BUTTON_PRESSED) {
+      switch (eventName) {
+        case START:
+          currentConfigPos++;
+          if (currentConfigPos >= configList.length) {
+            currentConfigPos = 0;
+          }
+          driverInterface.driver.setConfig(configList[currentConfigPos]);
+
+          telemetry.addData("Current Config", configList[currentConfigPos].name);
+        break;
       }
     }
   }
-
-  private void incrementConfig() {
-    currentConfigPos++;
-    if (currentConfigPos >= configList.length) {
-      currentConfigPos = 0;
-    }
-    driverInterface.driver.setConfig(configList[currentConfigPos]);
-  }
-
 }
