@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
 
 public class GamepadExtended {
 
-  private Gamepad gamepad;
+  public Gamepad gamepad;
 
   public GamepadExtended(Gamepad gamepad) {
     this.gamepad = gamepad;
@@ -29,19 +29,19 @@ public class GamepadExtended {
   private boolean[] buttonValues = new boolean[buttonsToCount];
   private GamepadEventName[] eventNameList = GamepadEventName.values();
 
-  public double getMagnitudeStrafeStick() {
+  public double getStrafeStickMagnitude() {
     return Math.min(Math.hypot(getStrafeStickX(), getStrafeStickY()), 1);
   }
 
-  public double getMagnitudeTurnStick() {
+  public double getTurnStickMagnitude() {
     return Math.min(Math.hypot(getTurnStickX(), getTurnStickY()), 1);
   }
 
-  public double getAngleStrafeStick() {
-    return Math.atan2(getStrafeStickX(), getStrafeStickX()) - Math.PI / 4;
+  public double getStrafeStickAngle() {
+    return Math.atan2(getStrafeStickX(), getStrafeStickY()) - Math.PI / 4;
   }
 
-  public double getAngleTurnStick() {
+  public double getTurnStickAngle() {
     return Math.atan2(getTurnStickX(), getTurnStickY()) - Math.PI / 4;
   }
 
