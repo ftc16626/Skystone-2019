@@ -53,8 +53,8 @@ public class MainTeleop extends OpMode implements GamepadListener {
   public void loop() {
     driverInterface.update();
 
-    double magnitude = driverInterface.driver.getMagnitudeStrafeStick();
-    double angle = driverInterface.driver.getAngleTurnStick();
+    double magnitude = driverInterface.driver.getStrafeStickMagnitude();
+    double angle = driverInterface.driver.getStrafeStickAngle();
     double turn = driverInterface.driver.getTurnStickX();
 
     robot.drive.setAngle(angle);
