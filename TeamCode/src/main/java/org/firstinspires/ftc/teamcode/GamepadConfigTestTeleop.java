@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
 
-@TeleOp(name = "Gamepad Config TeleOp", group = "Testing")
-public class GamepadConfigTeleop extends OpMode implements GamepadListener {
+@TeleOp(name = "Gamepad Config Test TeleOp", group = "Testing")
+public class GamepadConfigTestTeleop extends OpMode implements GamepadListener {
 
   private MainHardware robot;
   private DriverInterface driverInterface;
