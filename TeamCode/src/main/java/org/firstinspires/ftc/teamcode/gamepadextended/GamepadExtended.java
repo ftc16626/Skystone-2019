@@ -18,8 +18,9 @@ public class GamepadExtended {
   private GamepadConfig config = new GamepadConfig(
       "",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
+      true, false,
       false, false,
-      false, false
+      StickResponseCurve.CUBED
   );
 
   private GamepadListener listener = null;
@@ -52,6 +53,10 @@ public class GamepadExtended {
       stickX *= -1;
     }
 
+    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+      stickX = (float) Math.pow(stickX, 3);
+    }
+
     return stickX;
   }
 
@@ -61,6 +66,10 @@ public class GamepadExtended {
 
     if (config.invertStrafeStickY) {
       stickY *= -1;
+    }
+
+    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+      stickY = (float) Math.pow(stickY, 3);
     }
 
     return stickY;
@@ -74,6 +83,10 @@ public class GamepadExtended {
       stickX *= -1;
     }
 
+    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+      stickX = (float) Math.pow(stickX, 3);
+    }
+
     return stickX;
   }
 
@@ -83,6 +96,10 @@ public class GamepadExtended {
 
     if (config.invertTurnStickY) {
       stickY *= -1;
+    }
+
+    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+      stickY = (float) Math.pow(stickY, 3);
     }
 
     return stickY;
