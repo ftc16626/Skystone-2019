@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.gamepadextended.GamepadConfig;
 import org.firstinspires.ftc.teamcode.gamepadextended.GamepadConfig.StickControl;
+import org.firstinspires.ftc.teamcode.gamepadextended.StickResponseCurve;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
@@ -17,13 +18,24 @@ public class GamepadConfigTeleop extends OpMode implements GamepadListener {
   private MainHardware robot;
   private DriverInterface driverInterface;
 
-  private GamepadConfig enzoConfig = new GamepadConfig("Enzo's Config",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, false, false, false, false);
-  private GamepadConfig mattConfig = new GamepadConfig("Matt's Config",
-      StickControl.STRAFE_RIGHT_TURN_LEFT_STICK, true, false, false, false);
-  private GamepadConfig emilioConfig = new GamepadConfig("Emilio's Config",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, true, false, false, false);
-
+  private GamepadConfig enzoConfig = new GamepadConfig(
+      "Enzo's Config",
+      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
+      false, false,
+      false, false,
+      StickResponseCurve.CUBED);
+  private GamepadConfig mattConfig = new GamepadConfig(
+      "Matt's Config",
+      StickControl.STRAFE_RIGHT_TURN_LEFT_STICK,
+      true, false,
+      false, false,
+      StickResponseCurve.CUBED);
+  private GamepadConfig emilioConfig = new GamepadConfig(
+      "Emilio's Config",
+      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
+      true, false,
+      false, false,
+      StickResponseCurve.CUBED);
   private GamepadConfig[] configList = new GamepadConfig[]{enzoConfig, mattConfig, emilioConfig};
   private int currentConfigPos = 0;
 
