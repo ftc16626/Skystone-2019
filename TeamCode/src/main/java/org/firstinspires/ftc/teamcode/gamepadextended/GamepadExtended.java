@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.gamepadextended;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import org.firstinspires.ftc.teamcode.gamepadextended.GamepadConfig.StickControl;
+import org.firstinspires.ftc.teamcode.gamepadextended.GamepadProfile.StickControl;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
@@ -15,12 +15,13 @@ public class GamepadExtended {
     this.gamepad = gamepad;
   }
 
-  private GamepadConfig config = new GamepadConfig(
+  private GamepadProfile profile = new GamepadProfile(
       "",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
       true, false,
       false, false,
-      StickResponseCurve.CUBED
+      StickResponseCurve.CUBED,
+      false
   );
 
   private GamepadListener listener = null;
@@ -38,22 +39,22 @@ public class GamepadExtended {
   }
 
   public double getStrafeStickAngle() {
-    return Math.atan2(getStrafeStickX(), getStrafeStickY()) - Math.PI / 4;
+    return Math.atan2(getStrafeStickY(), getStrafeStickX()) - Math.PI / 4;
   }
 
   public double getTurnStickAngle() {
-    return Math.atan2(getTurnStickX(), getTurnStickY()) - Math.PI / 4;
+    return Math.atan2(getTurnStickY(), getTurnStickX()) - Math.PI / 4;
   }
 
   public float getStrafeStickX() {
-    float stickX = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
+    float stickX = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.left_stick_x : gamepad.right_stick_x;
 
-    if (config.invertStrafeStickX) {
+    if (profile.invertStrafeStickX) {
       stickX *= -1;
     }
 
-    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickX = (float) Math.pow(stickX, 3);
     }
 
@@ -61,14 +62,14 @@ public class GamepadExtended {
   }
 
   public float getStrafeStickY() {
-    float stickY = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
+    float stickY = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.left_stick_y : gamepad.right_stick_y;
 
-    if (config.invertStrafeStickY) {
+    if (profile.invertStrafeStickY) {
       stickY *= -1;
     }
 
-    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickY = (float) Math.pow(stickY, 3);
     }
 
@@ -76,14 +77,14 @@ public class GamepadExtended {
   }
 
   public float getTurnStickX() {
-    float stickX = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
+    float stickX = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.right_stick_x : gamepad.left_stick_x;
 
-    if (config.invertTurnStickX) {
+    if (profile.invertTurnStickX) {
       stickX *= -1;
     }
 
-    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickX = (float) Math.pow(stickX, 3);
     }
 
@@ -91,22 +92,22 @@ public class GamepadExtended {
   }
 
   public float getTurnStickY() {
-    float stickY = config.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
+    float stickY = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.right_stick_y : gamepad.left_stick_y;
 
-    if (config.invertTurnStickY) {
+    if (profile.invertTurnStickY) {
       stickY *= -1;
     }
 
-    if(config.stickResponseCurve == StickResponseCurve.CUBED) {
+    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickY = (float) Math.pow(stickY, 3);
     }
 
     return stickY;
   }
 
-  public void setConfig(GamepadConfig config) {
-    this.config = config;
+  public void setProfile(GamepadProfile profile) {
+    this.profile = profile;
   }
 
   public void setListener(GamepadListener listener) {
