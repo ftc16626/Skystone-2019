@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.ArrayList;
@@ -47,6 +48,10 @@ public class MecanumDrive {
       for (DcMotor motor : motorList) {
         motor.setMode(RunMode.RUN_WITHOUT_ENCODER);
       }
+    }
+
+    for(DcMotor motor: motorList) {
+      motor.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
     }
   }
 
