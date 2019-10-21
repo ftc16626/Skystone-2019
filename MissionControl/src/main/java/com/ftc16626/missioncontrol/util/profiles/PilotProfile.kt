@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.gamepadextended
+package com.ftc16626.missioncontrol.util.profiles
 
-data class GamepadProfile (
+import com.google.gson.Gson
+
+data class PilotProfile(
     @JvmField val name: String,
     @JvmField val controlScheme: StickControl,
     @JvmField val invertStrafeStickX: Boolean,
@@ -10,10 +12,7 @@ data class GamepadProfile (
     @JvmField val stickResponseCurve: StickResponseCurve,
     @JvmField val enableFieldCentric: Boolean
 ) {
-    enum class StickControl {
-        STRAFE_RIGHT_TURN_LEFT_STICK,
-        STRAFE_LEFT_TURN_RIGHT_STICK
+    fun toJSON(): String {
+        return Gson().toJson(this)
     }
-
 }
-

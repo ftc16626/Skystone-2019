@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.gamepadextended;
 
+import com.ftc16626.missioncontrol.util.profiles.PilotProfile;
+import com.ftc16626.missioncontrol.util.profiles.StickControl;
+import com.ftc16626.missioncontrol.util.profiles.StickResponseCurve;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import org.firstinspires.ftc.teamcode.gamepadextended.GamepadProfile.StickControl;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
@@ -15,11 +17,11 @@ public class GamepadExtended {
     this.gamepad = gamepad;
   }
 
-  private GamepadProfile profile = new GamepadProfile(
-      "",
+  private PilotProfile profile = new PilotProfile(
+      "Blank Profile",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
       true, false,
-      false, false,
+      true, false,
       StickResponseCurve.CUBED,
       false
   );
@@ -106,8 +108,12 @@ public class GamepadExtended {
     return stickY;
   }
 
-  public void setProfile(GamepadProfile profile) {
-    this.profile = profile;
+  public void setProfile(PilotProfile profile) {
+    if(profile != null) this.profile = profile;
+  }
+
+  public PilotProfile getProfile() {
+    return this.profile;
   }
 
   public void setListener(GamepadListener listener) {
