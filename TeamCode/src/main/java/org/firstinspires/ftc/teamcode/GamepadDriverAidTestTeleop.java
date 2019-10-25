@@ -28,8 +28,10 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     driverInterface = new DriverInterface(gamepad1, gamepad2, this);
     driverInterface.driver.setProfile(missionControl.getPilotProfileHandler().getCurrentProfile());
 
+    robot.init();
     telemetry.addData("Status", "Initialized");
   }
+
 
   @Override
   public void loop() {
@@ -74,6 +76,8 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     robot.drive.setPower(magnitude);
     robot.drive.setTurn(turn);
 
+    robot.intake.setPower(driverInterface.driver.gamepad.right_trigger);
+
     robot.update();
 
     telemetry.addData("Current Profile", driverInterface.driver.getProfile().name);
@@ -88,6 +92,9 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
           case START:
             missionControl.getPilotProfileHandler().incremementPosition();
             driverInterface.driver.setProfile(missionControl.getPilotProfileHandler().getCurrentProfile());
+            break;
+          case X:
+            robot.intake.toggle();
             break;
         }
       }
