@@ -8,12 +8,10 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Environment
 import android.util.Log
-import com.ftc16626.missioncontrol.util.CommandListener
-import com.ftc16626.missioncontrol.util.LogModel
-import com.ftc16626.missioncontrol.util.Scribe
+import com.ftc16626.missioncontrol.util.*
 import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
 import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
-import com.ftc16626.missioncontrol.webserver.RequestREST
+import com.ftc16626.missioncontrol.util.profiles.PilotProfileHandler
 import com.ftc16626.missioncontrol.webserver.RequestRESTListener
 import com.ftc16626.missioncontrol.webserver.RequestRESTResponse
 import com.ftc16626.missioncontrol.webserver.WebServer
@@ -48,16 +46,28 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
     private val mainDirectory: File
     private val logDirectory: File
+    private val profileDirectory: File
 
     private val scribe: Scribe
+    private val accelPos: AccelPos
+
+    val pilotProfileHandler: PilotProfileHandler
 
     init {
         webSocket.addSocketListener(this)
 
-        mainDirectory = setupMainDirectory(activity)
+        val sdCardPath = Environment.getExternalStorageDirectory()
+        val mainDirectoryPath = File("$sdCardPath/FIRST/MissionControl")
+
+        mainDirectory = setupMainDirectory(mainDirectoryPath)
         logDirectory = setupLogDirectory(mainDirectory, "mc-logs")
+        profileDirectory = setupLogDirectory(mainDirectoryPath, "profiles")
 
         scribe = Scribe()
+        accelPos = AccelPos(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
+
+        pilotProfileHandler = PilotProfileHandler(profileDirectory)
+        pilotProfileHandler.init()
 
         webServer.registerRESTRequest("logs", NanoHTTPD.Method.GET, object : RequestRESTListener {
             override fun onRequest(url: List<String>): RequestRESTResponse {
@@ -96,6 +106,30 @@ class MissionControl(private val activity: Activity) : SocketListener,
                 )
             }
         })
+
+        webServer.registerRESTRequest(
+            "pilot-profiles",
+            NanoHTTPD.Method.GET,
+            object : RequestRESTListener {
+                override fun onRequest(url: List<String>): RequestRESTResponse {
+                    val profileList = pilotProfileHandler.profileList
+                    val profileListJSON = JSONArray()
+                    profileList.forEachIndexed { index, element ->
+                        val obj = JSONObject(element.toJSON())
+                        obj.put("__pos__", index)
+                        profileListJSON.put(obj)
+                    }
+
+                    return RequestRESTResponse(
+                        NanoHTTPD.Response.Status.OK,
+                        "application/json",
+                        JSONObject().put("profiles", profileListJSON).put(
+                            "currentPos",
+                            pilotProfileHandler.currentProfilePos
+                        ).toString()
+                    )
+                }
+            })
     }
 
     fun start() {
@@ -118,10 +152,46 @@ class MissionControl(private val activity: Activity) : SocketListener,
         webSocket.stop()
     }
 
+    fun logAndBroadcast(model: LogModel) {
+        log(model)
+        broadcast(model)
+    }
+
+    fun log(model: LogModel) {
+        scribe.writeLine(model)
+    }
+
+    fun broadcast(model: LogModel) {
+        webSocket.broadcast(model)
+    }
+
+    fun startLogging() {
+        this.sendLogs = true
+//        this.turnOnSensorReading()
+        this.broadcastLoggingStatus()
+
+        val date = Date()
+        val formatter = SimpleDateFormat("yyyy-M-dd HH:mm:ss.SSS")
+        val stringDate = formatter.format(date)
+        scribe.beginWrite(File(logDirectory, "log-$stringDate.txt"))
+    }
+
+    fun stopLogging() {
+        this.sendLogs = false
+//        this.turnOffSensorReading()
+        this.broadcastLoggingStatus()
+
+        scribe.closeWrite()
+    }
+
     private fun turnOnSensorReading() {
         this.sendSensorData = true
 
-        sensorManager?.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager?.registerListener(
+            this,
+            sensorAccelerometer,
+            SensorManager.SENSOR_DELAY_FASTEST
+        )
     }
 
     private fun turnOffSensorReading() {
@@ -136,10 +206,6 @@ class MissionControl(private val activity: Activity) : SocketListener,
             LogModel(getInitPacket(), "init", Date())
         )
     }
-
-//    override fun onMessage(conn: org.java_websocket.WebSocket, msg: String?) {
-//        Log.i("MissionControl", "Message: $msg")
-//    }
 
     override fun onFormattedMessage(conn: org.java_websocket.WebSocket, msg: LogModel) {
         when (msg.tag) {
@@ -169,6 +235,45 @@ class MissionControl(private val activity: Activity) : SocketListener,
             Date()
         )
 
+        accelPos.update(
+            Vector3(
+                event.values[0].toDouble(),
+                event.values[1].toDouble(),
+                event.values[2].toDouble()
+            ), System.currentTimeMillis().toDouble() / 1000
+        )
+
+        val velXLog = LogModel(
+            accelPos.currentVel.x.toString(),
+            "velocity-x",
+            Date()
+        )
+        val velYLog = LogModel(
+            accelPos.currentVel.y.toString(),
+            "velocity-y",
+            Date()
+        )
+        val velZLog = LogModel(
+            accelPos.currentVel.z.toString(),
+            "velocity-z",
+            Date()
+        )
+        val posXLog = LogModel(
+            accelPos.currentPos.x.toString(),
+            "position-x",
+            Date()
+        )
+        val posYLog = LogModel(
+            accelPos.currentPos.y.toString(),
+            "position-y",
+            Date()
+        )
+        val posZLog = LogModel(
+            accelPos.currentPos.z.toString(),
+            "position-z",
+            Date()
+        )
+
         webSocket.broadcast(xLog)
         webSocket.broadcast(yLog)
         webSocket.broadcast(zLog)
@@ -176,6 +281,12 @@ class MissionControl(private val activity: Activity) : SocketListener,
         scribe.writeLine(xLog)
         scribe.writeLine(yLog)
         scribe.writeLine(zLog)
+        scribe.writeLine(velXLog)
+        scribe.writeLine(velYLog)
+        scribe.writeLine(velZLog)
+        scribe.writeLine(posXLog)
+        scribe.writeLine(posYLog)
+        scribe.writeLine(posZLog)
     }
 
     private fun handleCommand(cmd: String) {
@@ -219,25 +330,6 @@ class MissionControl(private val activity: Activity) : SocketListener,
         return packet.toString()
     }
 
-    private fun startLogging() {
-        this.sendLogs = true
-        this.turnOnSensorReading()
-        this.broadcastLoggingStatus()
-
-        val date = Date()
-        val formatter = SimpleDateFormat("yyyy-M-dd HH:mm:ss.SSS")
-        val stringDate = formatter.format(date)
-        scribe.beginWrite(File(logDirectory, "log-$stringDate.txt"))
-    }
-
-    private fun stopLogging() {
-        this.sendLogs = false
-        this.turnOffSensorReading()
-        this.broadcastLoggingStatus()
-
-        scribe.closeWrite()
-    }
-
     fun registerCommand(cmd: String, listener: CommandListener) {
         if (cmd in commandList)
             throw Exception("Command already exists")
@@ -269,7 +361,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
         }
     }
 
-    private fun setupMainDirectory(activity: Context): File {
+    private fun setupMainDirectory(path: File): File {
         fun isExternalStorageWritable(): Boolean {
             return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
         }
@@ -285,9 +377,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
             throw DirectoryNotAccessibleException(errorString)
         }
 
-        val path = activity.getExternalFilesDir(null)
-
-        if (!(path!!.exists() && path.isDirectory)) {
+        if (!(path.exists() && path.isDirectory)) {
             Log.i(TAG, "Directory doesn't exist. Initializing...")
             if (!path.mkdirs()) {
                 val errorString = "Unable to create MissionControl directory"
@@ -302,7 +392,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private fun setupLogDirectory(parent: File, path: String): File {
         val path = File(parent, "/$path")
 
-        if (!(path!!.exists() && path.isDirectory)) {
+        if (!(path.exists() && path.isDirectory)) {
             Log.i(TAG, "Directory doesn't exist. Initializing...")
             if (!path.mkdirs()) {
                 val errorString = "Unable to create MissionControl Log directory"
