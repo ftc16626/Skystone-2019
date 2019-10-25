@@ -3,7 +3,7 @@ package com.ftc16626.missioncontrol.util
 import java.io.File
 import java.io.FileOutputStream
 
-class Scribe() {
+class Scribe {
     private var writingToFile = false
 
     private var currentFileOutputStream: FileOutputStream? = null
