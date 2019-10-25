@@ -61,6 +61,16 @@ public class MecanumDrive {
     }
   }
 
+  public void resetEncoders() {
+    for(DcMotor motor : motorList) {
+      motor.setMode(RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    for(DcMotor motor : motorList) {
+      motor.setMode(RunMode.RUN_USING_ENCODER);
+    }
+  }
+
   public void update() {
     if (dirty) {
       refreshMotors();

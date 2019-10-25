@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.ftc16626.missioncontrol.MissionControl;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.gamepadextended.GamepadProfile;
-import org.firstinspires.ftc.teamcode.gamepadextended.GamepadProfile.StickControl;
-import org.firstinspires.ftc.teamcode.gamepadextended.StickResponseCurve;
+import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
@@ -18,46 +17,21 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
   private MainHardware robot;
   private DriverInterface driverInterface;
 
-  private GamepadProfile enzoProfile = new GamepadProfile(
-      "Enzo's Profile",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
-      false, false,
-      true, false,
-      StickResponseCurve.CUBED,
-      false);
-  private GamepadProfile mattProfile = new GamepadProfile(
-      "Matt's Profile",
-      StickControl.STRAFE_RIGHT_TURN_LEFT_STICK,
-      true, false,
-      true, false,
-      StickResponseCurve.CUBED,
-      false);
-  private GamepadProfile emilioProfile = new GamepadProfile(
-      "Emilio's Profile",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
-      true, false,
-      true, false,
-      StickResponseCurve.RAW,
-      false);
-  private GamepadProfile emilioProfileCentricProfile = new GamepadProfile(
-      "Emilio's Profile But Field Centric",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
-      true, false,
-      true, false,
-      StickResponseCurve.RAW,
-      true);
-
-  private GamepadProfile[] ProfileList = new GamepadProfile[]{enzoProfile, mattProfile, emilioProfile, emilioProfileCentricProfile};
-  private int currentProfilePos = 0;
+  private MissionControl missionControl;
 
   @Override
   public void init() {
+    missionControl = ((FtcRobotControllerActivity) hardwareMap.appContext).missionControl;
+
+
     robot = new MainHardware(hardwareMap);
     driverInterface = new DriverInterface(gamepad1, gamepad2, this);
-    driverInterface.driver.setProfile(ProfileList[currentProfilePos]);
+    driverInterface.driver.setProfile(missionControl.getPilotProfileHandler().getCurrentProfile());
 
+    robot.init();
     telemetry.addData("Status", "Initialized");
   }
+
 
   @Override
   public void loop() {
@@ -94,7 +68,7 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
       }
     }
 
-    if(ProfileList[currentProfilePos].enableFieldCentric) {
+    if(driverInterface.driver.getProfile().enableFieldCentric) {
       angle += Math.toRadians(robot.imu.getGlobalHeading() % 360);
     }
 
@@ -102,9 +76,11 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     robot.drive.setPower(magnitude);
     robot.drive.setTurn(turn);
 
+    robot.intake.setPower(driverInterface.driver.gamepad.right_trigger);
+
     robot.update();
 
-    telemetry.addData("Current Profile", ProfileList[currentProfilePos].name);
+    telemetry.addData("Current Profile", driverInterface.driver.getProfile().name);
   }
 
   @Override
@@ -114,18 +90,14 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
       if (eventType == GamepadEventType.BUTTON_PRESSED) {
         switch (eventName) {
           case START:
-            incrementProfile();
+            missionControl.getPilotProfileHandler().incremementPosition();
+            driverInterface.driver.setProfile(missionControl.getPilotProfileHandler().getCurrentProfile());
+            break;
+          case X:
+            robot.intake.toggle();
             break;
         }
       }
     }
-  }
-
-  private void incrementProfile() {
-    currentProfilePos++;
-    if (currentProfilePos >= ProfileList.length) {
-      currentProfilePos = 0;
-    }
-    driverInterface.driver.setProfile(ProfileList[currentProfilePos]);
   }
 }
