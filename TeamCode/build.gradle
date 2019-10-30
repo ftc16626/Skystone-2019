@@ -21,4 +21,6 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(path: ':MissionControl')
+
+    implementation 'org.openftc:rev-extensions-2:1.2'
 }
