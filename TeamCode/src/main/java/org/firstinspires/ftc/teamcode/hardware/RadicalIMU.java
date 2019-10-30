@@ -15,8 +15,8 @@ public class RadicalIMU {
   private BNO055IMU.Parameters parameters;
 
   private Orientation lastOrientation;
-  private double lastHeading;
-  private double globalHeading;
+  private double lastHeading = 0;
+  private double globalHeading = 0;
 
   public RadicalIMU(BNO055IMU imu) {
     parameters = new Parameters();
@@ -33,7 +33,8 @@ public class RadicalIMU {
   }
 
   public void update() {
-    double deltaAngle = getHeading() - lastHeading;
+    double heading = getHeading();
+    double deltaAngle = heading - lastHeading;
 
     if(deltaAngle < -180)
       deltaAngle += 360;
@@ -42,7 +43,7 @@ public class RadicalIMU {
 
     globalHeading += deltaAngle;
 
-    lastHeading = getHeading();
+    lastHeading = heading;
   }
 
   public void resetAngle() {
