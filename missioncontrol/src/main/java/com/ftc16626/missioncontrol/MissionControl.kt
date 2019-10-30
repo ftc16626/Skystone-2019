@@ -165,6 +165,24 @@ class MissionControl(private val activity: Activity) : SocketListener,
         webSocket.broadcast(model)
     }
 
+    fun sendInitPacket() {
+        sendInitPacket(arrayOf())
+    }
+
+    fun sendInitPacket(sensorKeys: Array<String>) {
+        val packet = JSONObject()
+
+        val sensorJSON = JSONArray()
+        sensorKeys.forEach {
+            sensorJSON.put(it)
+        }
+
+        packet.put("sensor-keys", sensorJSON)
+
+
+        webSocket.broadcast(LogModel(packet.toString(), "init", Date()))
+    }
+
     fun startLogging() {
         this.sendLogs = true
 //        this.turnOnSensorReading()
@@ -201,10 +219,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     }
 
     override fun onOpen(conn: org.java_websocket.WebSocket, handshake: ClientHandshake) {
-        webSocket.sendMessage(
-            conn,
-            LogModel(getInitPacket(), "init", Date())
-        )
+        sendInitPacket()
     }
 
     override fun onFormattedMessage(conn: org.java_websocket.WebSocket, msg: LogModel) {
@@ -324,7 +339,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
         val packet = JSONObject()
             .put(
                 "sensor-keys",
-                JSONArray().put("accelerometer-x").put("accelerometer-y").put("accelerometer-z")
+                JSONArray()//.put("accelerometer-x").put("accelerometer-y").put("accelerometer-z")
             )
 
         return packet.toString()
