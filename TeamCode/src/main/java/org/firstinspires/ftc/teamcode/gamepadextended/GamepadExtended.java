@@ -52,7 +52,7 @@ public class GamepadExtended {
     float stickX = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.left_stick_x : gamepad.right_stick_x;
 
-    if (profile.invertStrafeStickX) {
+    if (!profile.invertStrafeStickX) {
       stickX *= -1;
     }
 
@@ -67,7 +67,7 @@ public class GamepadExtended {
     float stickY = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.left_stick_y : gamepad.right_stick_y;
 
-    if (profile.invertStrafeStickY) {
+    if (!profile.invertStrafeStickY) {
       stickY *= -1;
     }
 
@@ -82,7 +82,7 @@ public class GamepadExtended {
     float stickX = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.right_stick_x : gamepad.left_stick_x;
 
-    if (profile.invertTurnStickX) {
+    if (!profile.invertTurnStickX) {
       stickX *= -1;
     }
 
@@ -97,7 +97,7 @@ public class GamepadExtended {
     float stickY = profile.controlScheme == StickControl.STRAFE_LEFT_TURN_RIGHT_STICK
         ? gamepad.right_stick_y : gamepad.left_stick_y;
 
-    if (profile.invertTurnStickY) {
+    if (!profile.invertTurnStickY) {
       stickY *= -1;
     }
 
