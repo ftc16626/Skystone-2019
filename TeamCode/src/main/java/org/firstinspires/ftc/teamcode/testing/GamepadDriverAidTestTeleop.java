@@ -81,10 +81,10 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     robot.drive.setTurn(turn);
 
     if(driverInterface.driver.gamepad.dpad_up) {
-      starboardServoPos = Math.min(starboardServoPos + 0.1, 1);
+      starboardServoPos = Math.min(starboardServoPos + 0.05, 1);
       robot.starboardServo.setPosition(starboardServoPos);
     } else if(driverInterface.driver.gamepad.dpad_down) {
-      starboardServoPos = Math.max(starboardServoPos - 0.1, 0);
+      starboardServoPos = Math.max(starboardServoPos - 0.05, 0);
       robot.starboardServo.setPosition(starboardServoPos);
     }
 
