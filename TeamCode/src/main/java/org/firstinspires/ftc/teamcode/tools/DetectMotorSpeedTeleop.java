@@ -11,15 +11,10 @@ import java.util.Date;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
-@TeleOp(name = "Detect Motor Speed Teleop", group = "Testing")
+@TeleOp(name = "Detect Motor Speed Teleop", group = "Tools")
 public class DetectMotorSpeedTeleop extends OpMode {
 
   private MainHardware robot;
-
-  private int lastEncoderFrontLeft = 0;
-  private int lastEncoderFrontRight = 0;
-  private int lastEncoderBackLeft = 0;
-  private int lastEncoderBackRight = 0;
 
   private double waitingStartTime = 0;
   private double sampleStartTime = 0;
@@ -50,11 +45,6 @@ public class DetectMotorSpeedTeleop extends OpMode {
     robot = new MainHardware(hardwareMap);
     robot.drive.stopMotors();
     robot.init();
-
-    lastEncoderFrontLeft = robot.drive.motorFrontLeft.getCurrentPosition();
-    lastEncoderFrontRight = robot.drive.motorFrontRight.getCurrentPosition();
-    lastEncoderBackLeft = robot.drive.motorBackLeft.getCurrentPosition();
-    lastEncoderBackRight = robot.drive.motorBackRight.getCurrentPosition();
 
     samples.add(new ArrayList<Object[]>());
     samples.add(new ArrayList<Object[]>());
@@ -93,7 +83,6 @@ public class DetectMotorSpeedTeleop extends OpMode {
       case WAITING:
         if (getRuntime() - waitingStartTime >= waitTime) {
           sampleStartTime = getRuntime();
-          setLastEncoderValues();
           stateMachine.transition();
         }
         break;
@@ -116,6 +105,7 @@ public class DetectMotorSpeedTeleop extends OpMode {
         break;
     }
 
+    robot.update();
   }
 
   @Override
@@ -123,55 +113,38 @@ public class DetectMotorSpeedTeleop extends OpMode {
     missionControl.stopLogging();
   }
 
-  private void setLastEncoderValues() {
-    lastEncoderFrontLeft = robot.drive.motorFrontLeft.getCurrentPosition();
-    lastEncoderFrontRight = robot.drive.motorFrontRight.getCurrentPosition();
-    lastEncoderBackLeft = robot.drive.motorBackLeft.getCurrentPosition();
-    lastEncoderBackRight = robot.drive.motorBackRight.getCurrentPosition();
-  }
-
   private void collectAndPushSamples() {
     double time = getRuntime();
 
-    int deltaEncoderFrontLeft =
-        robot.drive.motorFrontLeft.getCurrentPosition() - lastEncoderFrontLeft;
-    int deltaEncoderFrontRight =
-        robot.drive.motorFrontRight.getCurrentPosition() - lastEncoderFrontRight;
-    int deltaEncoderBackLeft = robot.drive.motorBackLeft.getCurrentPosition() - lastEncoderBackLeft;
-    int deltaEncoderBackRight =
-        robot.drive.motorBackRight.getCurrentPosition() - lastEncoderBackRight;
+    Date now = new Date();
 
-    samples.get(0).add(new Object[]{time, deltaEncoderFrontLeft});
-    samples.get(1).add(new Object[]{time, deltaEncoderFrontRight});
-    samples.get(2).add(new Object[]{time, deltaEncoderBackLeft});
-    samples.get(3).add(new Object[]{time, deltaEncoderBackRight});
+    samples.get(0).add(new Object[]{time, robot.drive.motorVelFrontLeft});
+    samples.get(1).add(new Object[]{time, robot.drive.motorVelFrontRight});
+    samples.get(2).add(new Object[]{time, robot.drive.motorVelBackLeft});
+    samples.get(3).add(new Object[]{time, robot.drive.motorVelBackRight});
 
     if (logTicks++ % 5 == 0) {
       missionControl.logAndBroadcast(
-          new LogModel(Double.toString(deltaEncoderFrontLeft), "EncoderDeltaFrontLeft",
-              new Date()));
+          new LogModel(Double.toString(robot.drive.motorVelFrontLeft), "EncoderDeltaFrontLeft", now));
       missionControl.logAndBroadcast(
-          new LogModel(Double.toString(deltaEncoderFrontRight), "EncoderDeltaFrontRight",
-              new Date()));
+          new LogModel(Double.toString(robot.drive.motorVelFrontRight), "EncoderDeltaFrontRight", now));
       missionControl.logAndBroadcast(
-          new LogModel(Double.toString(deltaEncoderBackLeft), "EncoderDeltaBackLeft", new Date()));
+          new LogModel(Double.toString(robot.drive.motorVelBackLeft), "EncoderDeltaBackLeft", now));
       missionControl.logAndBroadcast(
-          new LogModel(Double.toString(deltaEncoderBackRight), "EncoderDeltaBackRight",
-              new Date()));
+          new LogModel(Double.toString(robot.drive.motorVelBackRight), "EncoderDeltaBackRight", now));
     }
 
     telemetry.addData("Power", currentSpeed);
-    telemetry.addData("Front Left", deltaEncoderFrontLeft);
-    telemetry.addData("Front Right", deltaEncoderFrontRight);
-    telemetry.addData("Back Left", deltaEncoderBackLeft);
-    telemetry.addData("Back Right", deltaEncoderBackRight);
+    telemetry.addData("Front Left", robot.drive.motorVelFrontLeft);
+    telemetry.addData("Front Right", robot.drive.motorVelFrontRight);
+    telemetry.addData("Back Left", robot.drive.motorVelBackLeft);
+    telemetry.addData("Back Right", robot.drive.motorVelBackRight);
 
-    setLastEncoderValues();
 
-    currentSamples.get(0).add(deltaEncoderFrontLeft);
-    currentSamples.get(1).add(deltaEncoderFrontRight);
-    currentSamples.get(2).add(deltaEncoderBackLeft);
-    currentSamples.get(3).add(deltaEncoderBackRight);
+    currentSamples.get(0).add(robot.drive.motorVelFrontLeft);
+    currentSamples.get(1).add(robot.drive.motorVelFrontRight);
+    currentSamples.get(2).add(robot.drive.motorVelBackLeft);
+    currentSamples.get(3).add(robot.drive.motorVelBackRight);
   }
 
   private void setMotorSpeed(double speed) {
