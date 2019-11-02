@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.ftc16626.missioncontrol.math.Vector2;
+import com.ftc16626.missioncontrol.math.kinematics.Kinematics;
+import com.ftc16626.missioncontrol.math.kinematics.KinematicsIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
@@ -14,7 +17,7 @@ public class MecanumDrive {
 
   public ExpansionHubMotor motorFrontLeft;
   public ExpansionHubMotor motorFrontRight;
-  public ExpansionHubMotor  motorBackLeft;
+  public ExpansionHubMotor motorBackLeft;
   public ExpansionHubMotor motorBackRight;
 
   private List<ExpansionHubMotor> motorList = new ArrayList<>();
@@ -33,14 +36,30 @@ public class MecanumDrive {
   public int motorVelBackLeft = 0;
   public int motorVelBackRight = 0;
 
+  private double gearRatio;
+  private double encoderCounts;
+
   private double angle = 0;
   private double power = 0;
   private double turn = 0;
 
   private boolean dirty = false;
 
-  public MecanumDrive(HardwareMap hwMap, ExpansionHubEx expansionHub, String motorFrontLeftId, String motorFrontRightId,
-      String motorBackLeftId, String motorBackRightId, boolean runWithEncoders) {
+  private Kinematics kinematics;
+
+  public double velocityX = 0;
+  public double velocityY = 0;
+  public double angularVelocity = 0;
+
+  private KinematicsIntegrator kinematicsIntegrator = new KinematicsIntegrator(new Vector2());
+
+  public MecanumDrive(
+      HardwareMap hwMap, ExpansionHubEx expansionHub,
+      String motorFrontLeftId, String motorFrontRightId,
+      String motorBackLeftId, String motorBackRightId,
+      boolean runWithEncoders,
+      double width, double length, double wheelRadius,
+      double gearRatio, double encoderCounts) {
     motorFrontLeft = (ExpansionHubMotor) hwMap.dcMotor.get(motorFrontLeftId);
     motorFrontRight = (ExpansionHubMotor) hwMap.dcMotor.get(motorFrontRightId);
     motorBackLeft = (ExpansionHubMotor) hwMap.dcMotor.get(motorBackLeftId);
@@ -68,9 +87,17 @@ public class MecanumDrive {
       }
     }
 
-    for(ExpansionHubMotor motor: motorList) {
+    for (ExpansionHubMotor motor : motorList) {
       motor.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
     }
+
+    this.gearRatio = gearRatio;
+    this.encoderCounts = encoderCounts;
+
+    kinematics = new Kinematics(
+        length / 2, width / 2,
+        wheelRadius
+    );
   }
 
   public void stopMotors() {
@@ -80,11 +107,11 @@ public class MecanumDrive {
   }
 
   public void resetEncoders() {
-    for(ExpansionHubMotor motor : motorList) {
+    for (ExpansionHubMotor motor : motorList) {
       motor.setMode(RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    for(ExpansionHubMotor motor : motorList) {
+    for (ExpansionHubMotor motor : motorList) {
       motor.setMode(RunMode.RUN_USING_ENCODER);
     }
   }
@@ -96,6 +123,22 @@ public class MecanumDrive {
     motorVelFrontRight = bulkData.getMotorCurrentPosition(motorFrontRight) - lastMotorVelFrontRight;
     motorVelBackLeft = bulkData.getMotorCurrentPosition(motorBackLeft) - lastMotorVelBackLeft;
     motorVelBackRight = bulkData.getMotorCurrentPosition(motorBackRight) - lastMotorVelBackRight;
+
+    motorVelFrontLeft *= 2 * (1 / encoderCounts);
+    motorVelFrontRight *= 2 * (1 / encoderCounts);
+    motorVelBackLeft *= 2 * (1 / encoderCounts);
+    motorVelBackRight *= 2 * (1 / encoderCounts);
+
+    double[] motion = kinematics.mecanumDrive(
+        motorVelFrontLeft, motorVelFrontRight,
+        motorVelBackLeft, motorVelBackRight
+    );
+
+    velocityX = motion[0];
+    velocityY = motion[1];
+    angularVelocity = motion[2];
+
+    kinematicsIntegrator.update(new Vector2(velocityX, velocityY), angularVelocity, System.currentTimeMillis());
 
     lastMotorVelFrontLeft = bulkData.getMotorCurrentPosition(motorFrontLeft);
     lastMotorVelFrontRight = bulkData.getMotorCurrentPosition(motorFrontRight);
@@ -161,5 +204,9 @@ public class MecanumDrive {
 
   public double getTurn() {
     return turn;
+  }
+
+  public Vector2 getPosition() {
+    return kinematicsIntegrator.getCurrentPos();
   }
 }

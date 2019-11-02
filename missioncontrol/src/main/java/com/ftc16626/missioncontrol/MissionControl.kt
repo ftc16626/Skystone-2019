@@ -55,6 +55,8 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
     val pilotProfileHandler: PilotProfileHandler
 
+    private val liveVariable = mutableMapOf<String, Any>()
+
     init {
         webSocket.addSocketListener(this)
 
@@ -136,6 +138,36 @@ class MissionControl(private val activity: Activity) : SocketListener,
                     )
                 }
             })
+
+        webServer.registerRESTRequest(
+            "get-live-var",
+            NanoHTTPD.Method.GET,
+            object : RequestRESTListener {
+                override fun onRequest(url: List<String>): RequestRESTResponse {
+                    return RequestRESTResponse(
+                        NanoHTTPD.Response.Status.OK,
+                        "application/json",
+                        JSONObject().put("value", getLiveVariable(url[0])).toString()
+                    )
+                }
+            }
+        )
+
+        webServer.registerRESTRequest(
+            "set-live-var",
+            NanoHTTPD.Method.GET,
+            object : RequestRESTListener {
+                override fun onRequest(url: List<String>): RequestRESTResponse {
+                    liveVariable[url[0]] = url[1]
+
+                    return RequestRESTResponse(
+                        NanoHTTPD.Response.Status.OK,
+                        "application/json",
+                        JSONObject().put("result", "success").toString()
+                    )
+                }
+            }
+        )
     }
 
     fun start() {
@@ -380,6 +412,18 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
             settingsTypeList[key] = valueType
         }
+    }
+
+    fun registerLiveVariable(key: String, value: Any) {
+        liveVariable[key] = value
+    }
+
+    fun clearLiveVariables() {
+        liveVariable.clear()
+    }
+
+    fun getLiveVariable(key: String): Any? {
+        return liveVariable[key]
     }
 
     private fun setupMainDirectory(path: File): File {

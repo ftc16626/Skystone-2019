@@ -12,9 +12,11 @@ import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
 public class GamepadExtended {
 
   public Gamepad gamepad;
+  public GamepadType type;
 
-  public GamepadExtended(Gamepad gamepad) {
+  public GamepadExtended(Gamepad gamepad, GamepadType type) {
     this.gamepad = gamepad;
+    this.type = type;
   }
 
   private PilotProfile profile = new PilotProfile(
@@ -141,11 +143,11 @@ public class GamepadExtended {
 
     for(int i = 0; i < buttonsToCount; i++) {
       if(buttonValues[i] && !buttonPastValues[i]) {
-        listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, GamepadType.DRIVER);
+        listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, type);
 
         buttonPastValues[i] = true;
       } else if(!buttonValues[i] && buttonPastValues[i]) {
-        listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_RELEASED, GamepadType.DRIVER);
+        listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_RELEASED, type);
 
         buttonPastValues[i] = false;
       }

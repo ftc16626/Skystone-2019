@@ -23,7 +23,7 @@ class RadicalIMU(var imu: BNO055IMU, useMagnetometer: Boolean) {
     var acceleration = Acceleration()
 
     // Start new integrator with blank vectors
-    private var positionIntegrator = PositionIntegrator(
+    private val positionIntegrator = PositionIntegrator(
         Vector3(),
         Vector3(),
         Vector3()
