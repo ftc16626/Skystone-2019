@@ -21,6 +21,10 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
 
   private double starboardServoPos = 0;
 
+  private boolean isBackServoDown = false;
+
+  private boolean inited = false;
+
   @Override
   public void init() {
     missionControl = ((FtcRobotControllerActivity) hardwareMap.appContext).missionControl;
@@ -32,15 +36,25 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     robot.init();
     starboardServoPos = 1;
     robot.starboardServo.setPosition(starboardServoPos);
+
+    robot.backServo.setPosition(1);
+
+    robot.swingyServo.setPosition(1);
     telemetry.addData("Status", "Initialized");
   }
 
   @Override
   public void loop() {
+    if(!inited) {
+      robot.swingyServo.setPosition(0.65);
+      inited = true;
+    }
+
     driverInterface.update();
 
     handleControlDriving();
     handleControlStarboardServo();
+    handleSliderMotor();
 
     robot.update();
 
@@ -100,7 +114,26 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     }
 
     telemetry.addData("Servo pos", starboardServoPos);
+  }
 
+  private void handleSliderMotor() {
+    if(driverInterface.aid.gamepad.left_bumper) {
+      robot.motorSlider.setPower(0.5);
+    } else if(driverInterface.aid.gamepad.right_bumper) {
+      robot.motorSlider.setPower(-0.5);
+    } else {
+      robot.motorSlider.setPower(0);
+    }
+  }
+
+  private void toggleBackServo() {
+    isBackServoDown = !isBackServoDown;
+
+    if(isBackServoDown) {
+      robot.backServo.setPosition(0);
+    } else {
+      robot.backServo.setPosition(1);
+    }
   }
 
   @Override
@@ -130,6 +163,9 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
             break;
           case B:
             robot.intake.toggleIntakeOpen();
+            break;
+          case Y:
+            toggleBackServo();
             break;
         }
       }

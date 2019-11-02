@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.openftc.revextensions2.ExpansionHubEx;
@@ -13,7 +14,12 @@ public class MainHardware {
   public MecanumDrive drive;
   public RadicalIMU imu;
   public Intake intake;
+
   public Servo starboardServo;
+  public Servo backServo;
+  public Servo swingyServo;
+
+  public DcMotor motorSlider;
 
   private final String[] motorIds = new String[]{
       "motorFrontLeft", "motorFrontRight",
@@ -23,7 +29,11 @@ public class MainHardware {
   private final String[] intakeMotorIds = new String[]{"intakeLeft", "intakeRight"};
   private final String intakeServoId = "intakeServo";
 
+  private final String sliderMotorId = "motorSlider";
+
   private final String starboardServoId = "starboardServo";
+  private final String backSerovId = "backServo";
+  private final String swingyServoId = "swingyServo";
 
   public MainHardware(HardwareMap hwMap) {
     expansionHubMain = hwMap.get(ExpansionHubEx.class, "Expansion Hub 9");
@@ -42,6 +52,12 @@ public class MainHardware {
 
     starboardServo = hwMap.get(Servo.class, starboardServoId);
     starboardServo.scaleRange(0.35, 0.83);
+
+    backServo = hwMap.get(Servo.class, backSerovId);
+
+    swingyServo = hwMap.get(Servo.class, swingyServoId);
+
+    motorSlider = hwMap.get(DcMotor.class, sliderMotorId);
   }
 
   public void init() {

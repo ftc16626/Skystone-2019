@@ -25,6 +25,33 @@ public class AutoOp extends LinearOpMode {
 
     waitForStart();
     runtime.reset();
+
+    robot.drive.setAngle(Math.toRadians(90));
+    robot.drive.setPower(0.75);
+    while(opModeIsActive() && (runtime.seconds() < 2.0)) {
+      telemetry.addData("Pos X", robot.drive.getPosition().getX());
+      telemetry.addData("Pos Y", robot.drive.getPosition().getY());
+      telemetry.update();
+    }
+
+    runtime.reset();
+    robot.drive.setAngle(Math.toRadians(0));
+    while(opModeIsActive() && (runtime.seconds() < 2.0)) {
+      telemetry.addData("Pos X", robot.drive.getPosition().getX());
+      telemetry.addData("Pos Y", robot.drive.getPosition().getY());
+      telemetry.update();
+    }
+
+    runtime.reset();
+    robot.drive.setAngle(Math.toRadians(270));
+    while(opModeIsActive() && (runtime.seconds() < 2.0)) {
+      telemetry.addData("Pos X", robot.drive.getPosition().getX());
+      telemetry.addData("Pos Y", robot.drive.getPosition().getY());
+      telemetry.update();
+    }
+
+
+    robot.drive.stopMotors();
   }
 
 }

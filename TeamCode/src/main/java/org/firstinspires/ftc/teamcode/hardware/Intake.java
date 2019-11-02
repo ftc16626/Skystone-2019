@@ -3,37 +3,38 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
   private DcMotor motorLeft;
   private DcMotor motorRight;
 
   private float power = -0.75f;
-  private boolean on = false;
+  private boolean isMotorOn = false;
 
-  public Intake(HardwareMap hwMap, String motorLeftId, String motorRightId) {
+  private Servo intakeServo;
+  private boolean isServoOpen = false;
+
+  public Intake(HardwareMap hwMap, String motorLeftId, String motorRightId, String servoId) {
     motorLeft = hwMap.get(DcMotor.class, motorLeftId);
     motorRight = hwMap.get(DcMotor.class, motorRightId);
 
     motorRight.setDirection(Direction.REVERSE);
-  }
 
-  public void setPower(float power) {
-//    this.power = power;
-    motorLeft.setPower(power);
-    motorRight.setPower(power);
+    intakeServo = hwMap.get(Servo.class, servoId);
+    intakeServo.scaleRange(0.5, 1);
   }
 
   public void toggle() {
-    on = !on;
+    isMotorOn = !isMotorOn;
 
-    toggle(on);
+    toggle(isMotorOn);
   }
 
   public void toggle(boolean on) {
-    this.on = on;
+    this.isMotorOn = on;
 
-    if(this.on) {
+    if(this.isMotorOn) {
       motorLeft.setPower(power);
       motorRight.setPower(power);
     } else {
@@ -45,9 +46,24 @@ public class Intake {
   public void reverse() {
     power = power * -1;
 
-    if(this.on) {
+    if(this.isMotorOn) {
       motorLeft.setPower(power);
       motorRight.setPower(power);
     }
+  }
+
+  public void toggleIntakeOpen() {
+    isServoOpen = !isServoOpen;
+
+    if(isServoOpen) open();
+    else if(!isServoOpen) close();
+  }
+
+  public void open() {
+    intakeServo.setPosition(0);
+  }
+
+  public void close() {
+    intakeServo.setPosition(1);
   }
 }
