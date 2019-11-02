@@ -29,7 +29,7 @@ public class MainHardware {
     expansionHubDaughter = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
 
     drive = new MecanumDrive(hwMap, expansionHubMain, motorIds[0], motorIds[1], motorIds[2], motorIds[3], true);
-    imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"));
+    imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"), false);
     intake = new Intake(hwMap, intakeMotorIds[0], intakeMotorIds[1]);
 
     starboardServo = hwMap.get(Servo.class, starboardServoId);
