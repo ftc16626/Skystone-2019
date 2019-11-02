@@ -8,6 +8,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Environment
 import android.util.Log
+import com.ftc16626.missioncontrol.math.imu.PositionIntegrator
+import com.ftc16626.missioncontrol.math.Vector3
 import com.ftc16626.missioncontrol.util.*
 import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
 import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
@@ -49,7 +51,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private val profileDirectory: File
 
     private val scribe: Scribe
-    private val accelPos: AccelPos
+    private val positionIntegrator: PositionIntegrator
 
     val pilotProfileHandler: PilotProfileHandler
 
@@ -64,7 +66,11 @@ class MissionControl(private val activity: Activity) : SocketListener,
         profileDirectory = setupLogDirectory(mainDirectoryPath, "profiles")
 
         scribe = Scribe()
-        accelPos = AccelPos(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
+        positionIntegrator = PositionIntegrator(
+            Vector3(0.0, 0.0, 0.0),
+            Vector3(0.0, 0.0, 0.0),
+            Vector3(0.0, 0.0, 0.0)
+        )
 
         pilotProfileHandler = PilotProfileHandler(profileDirectory)
         pilotProfileHandler.init()
@@ -250,7 +256,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
             Date()
         )
 
-        accelPos.update(
+        positionIntegrator.update(
             Vector3(
                 event.values[0].toDouble(),
                 event.values[1].toDouble(),
@@ -259,32 +265,32 @@ class MissionControl(private val activity: Activity) : SocketListener,
         )
 
         val velXLog = LogModel(
-            accelPos.currentVel.x.toString(),
+            positionIntegrator.currentVel.x.toString(),
             "velocity-x",
             Date()
         )
         val velYLog = LogModel(
-            accelPos.currentVel.y.toString(),
+            positionIntegrator.currentVel.y.toString(),
             "velocity-y",
             Date()
         )
         val velZLog = LogModel(
-            accelPos.currentVel.z.toString(),
+            positionIntegrator.currentVel.z.toString(),
             "velocity-z",
             Date()
         )
         val posXLog = LogModel(
-            accelPos.currentPos.x.toString(),
+            positionIntegrator.currentPos.x.toString(),
             "position-x",
             Date()
         )
         val posYLog = LogModel(
-            accelPos.currentPos.y.toString(),
+            positionIntegrator.currentPos.y.toString(),
             "position-y",
             Date()
         )
         val posZLog = LogModel(
-            accelPos.currentPos.z.toString(),
+            positionIntegrator.currentPos.z.toString(),
             "position-z",
             Date()
         )
