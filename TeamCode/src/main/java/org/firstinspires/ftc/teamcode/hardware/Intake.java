@@ -9,8 +9,8 @@ public class Intake {
   private DcMotor motorLeft;
   private DcMotor motorRight;
 
-  private float power = -0.75f;
-  private boolean isMotorOn = false;
+  public float power = -0.75f;
+  public boolean isMotorOn = false;
 
   private Servo intakeServo;
   private boolean isServoOpen = false;
@@ -22,7 +22,7 @@ public class Intake {
     motorRight.setDirection(Direction.REVERSE);
 
     intakeServo = hwMap.get(Servo.class, servoId);
-    intakeServo.scaleRange(0.5, 1);
+    intakeServo.scaleRange(0.58, 1);
   }
 
   public void toggle() {
@@ -34,13 +34,7 @@ public class Intake {
   public void toggle(boolean on) {
     this.isMotorOn = on;
 
-    if(this.isMotorOn) {
-      motorLeft.setPower(power);
-      motorRight.setPower(power);
-    } else {
-      motorLeft.setPower(0);
-      motorRight.setPower(0);
-    }
+    setPower();
   }
 
   public void reverse() {
@@ -52,6 +46,26 @@ public class Intake {
     }
   }
 
+  public void directionBackward() {
+    power = Math.abs(power) * -1;
+    setPower();
+  }
+
+  public void directionForward() {
+    power = Math.abs(power);
+    setPower();
+  }
+
+  private void setPower() {
+    if(this.isMotorOn) {
+      motorLeft.setPower(power);
+      motorRight.setPower(power);
+    } else {
+      motorLeft.setPower(0);
+      motorRight.setPower(0);
+    }
+  }
+
   public void toggleIntakeOpen() {
     isServoOpen = !isServoOpen;
 
@@ -60,10 +74,12 @@ public class Intake {
   }
 
   public void open() {
+    isServoOpen = true;
     intakeServo.setPosition(0);
   }
 
   public void close() {
+    isServoOpen = false;
     intakeServo.setPosition(1);
   }
 }

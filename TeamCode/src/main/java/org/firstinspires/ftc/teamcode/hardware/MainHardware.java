@@ -35,6 +35,8 @@ public class MainHardware {
   private final String backSerovId = "backServo";
   private final String swingyServoId = "swingyServo";
 
+  private double starboardServoPos = 0;
+
   public MainHardware(HardwareMap hwMap) {
     expansionHubMain = hwMap.get(ExpansionHubEx.class, "Expansion Hub 9");
     expansionHubDaughter = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
@@ -48,12 +50,14 @@ public class MainHardware {
         2, 386.3
     );
     imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"), false);
+
     intake = new Intake(hwMap, intakeMotorIds[0], intakeMotorIds[1], intakeServoId);
 
     starboardServo = hwMap.get(Servo.class, starboardServoId);
-    starboardServo.scaleRange(0.35, 0.83);
+    starboardServo.scaleRange(0.35, 0.78);
 
     backServo = hwMap.get(Servo.class, backSerovId);
+    backServo.scaleRange(0, 0.82);
 
     swingyServo = hwMap.get(Servo.class, swingyServoId);
 
@@ -62,10 +66,30 @@ public class MainHardware {
 
   public void init() {
     drive.resetEncoders();
+
+    starboardServo.setPosition(1);
+    backServo.setPosition(1);
+    swingyServo.setPosition(0.38);
+
+    intake.close();
   }
 
   public void update() {
     drive.update();
     imu.update();
+  }
+
+  public void lowerStarboardServo() {
+    starboardServoPos = Math.max(starboardServoPos - 0.05, 0);
+    starboardServo.setPosition(starboardServoPos);
+  }
+
+  public void raiseStarboardServo() {
+    starboardServoPos = Math.min(starboardServoPos + 0.05, 1);
+    starboardServo.setPosition(starboardServoPos);
+  }
+
+  public double getStarboardServoPos() {
+    return starboardServoPos;
   }
 }

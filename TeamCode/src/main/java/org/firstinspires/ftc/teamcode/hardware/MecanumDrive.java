@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import android.util.Log;
 import com.ftc16626.missioncontrol.math.Vector2;
 import com.ftc16626.missioncontrol.math.kinematics.Kinematics;
 import com.ftc16626.missioncontrol.math.kinematics.KinematicsIntegrator;
@@ -26,15 +27,15 @@ public class MecanumDrive {
 
   private RevBulkData bulkData;
 
-  private int lastMotorVelFrontLeft = 0;
-  private int lastMotorVelFrontRight = 0;
-  private int lastMotorVelBackLeft = 0;
-  private int lastMotorVelBackRight = 0;
+  private double lastMotorVelFrontLeft = 0;
+  private double lastMotorVelFrontRight = 0;
+  private double lastMotorVelBackLeft = 0;
+  private double lastMotorVelBackRight = 0;
 
-  public int motorVelFrontLeft = 0;
-  public int motorVelFrontRight = 0;
-  public int motorVelBackLeft = 0;
-  public int motorVelBackRight = 0;
+  public double motorVelFrontLeft = 0;
+  public double motorVelFrontRight = 0;
+  public double motorVelBackLeft = 0;
+  public double motorVelBackRight = 0;
 
   private double gearRatio;
   private double encoderCounts;
@@ -124,10 +125,14 @@ public class MecanumDrive {
     motorVelBackLeft = bulkData.getMotorCurrentPosition(motorBackLeft) - lastMotorVelBackLeft;
     motorVelBackRight = bulkData.getMotorCurrentPosition(motorBackRight) - lastMotorVelBackRight;
 
+    Log.i("TEST2", Double.toString(motorVelFrontLeft));
+
     motorVelFrontLeft *= 2 * (1 / encoderCounts);
     motorVelFrontRight *= 2 * (1 / encoderCounts);
     motorVelBackLeft *= 2 * (1 / encoderCounts);
     motorVelBackRight *= 2 * (1 / encoderCounts);
+
+    Log.i("TEST2", Double.toString(motorVelFrontLeft));
 
     double[] motion = kinematics.mecanumDrive(
         motorVelFrontLeft, motorVelFrontRight,

@@ -190,13 +190,37 @@ class MissionControl(private val activity: Activity) : SocketListener,
         webSocket.stop()
     }
 
+    fun logAndBroadcast(msg: String, tag: String) {
+        logAndBroadcast(LogModel(msg, tag))
+    }
+
+    fun logAndBroadcast(msg: String, tag: String, time: Date) {
+        logAndBroadcast(LogModel(msg, tag, time))
+    }
+
     fun logAndBroadcast(model: LogModel) {
         log(model)
         broadcast(model)
     }
 
+    fun log(msg: String, tag: String) {
+        log(LogModel(msg, tag))
+    }
+
+    fun log(msg: String, tag: String, time: Date) {
+        log(LogModel(msg, tag, time))
+    }
+
     fun log(model: LogModel) {
         scribe.writeLine(model)
+    }
+
+    fun broadcast(msg: String, tag: String) {
+        broadcast(LogModel(msg, tag))
+    }
+
+    fun broadcast(msg: String, tag: String, time: Date) {
+        broadcast(LogModel(msg, tag, time))
     }
 
     fun broadcast(model: LogModel) {

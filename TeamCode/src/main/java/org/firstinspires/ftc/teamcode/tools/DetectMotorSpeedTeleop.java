@@ -27,7 +27,7 @@ public class DetectMotorSpeedTeleop extends OpMode {
 
   private ArrayList<ArrayList<Object[]>> samples = new ArrayList<>();
 
-  private ArrayList<ArrayList<Integer>> currentSamples = new ArrayList<>();
+  private ArrayList<ArrayList<Double>> currentSamples = new ArrayList<>();
   private int[][] averages = new int[4][(int) (1 / increments) + 1];
   private int currentAvgPosition = 0;
 
@@ -51,10 +51,10 @@ public class DetectMotorSpeedTeleop extends OpMode {
     samples.add(new ArrayList<Object[]>());
     samples.add(new ArrayList<Object[]>());
 
-    currentSamples.add(new ArrayList<Integer>());
-    currentSamples.add(new ArrayList<Integer>());
-    currentSamples.add(new ArrayList<Integer>());
-    currentSamples.add(new ArrayList<Integer>());
+    currentSamples.add(new ArrayList<Double>());
+    currentSamples.add(new ArrayList<Double>());
+    currentSamples.add(new ArrayList<Double>());
+    currentSamples.add(new ArrayList<Double>());
 
     missionControl.sendInitPacket(
         new String[]{
@@ -155,7 +155,7 @@ public class DetectMotorSpeedTeleop extends OpMode {
   }
 
   private void clearCurrentSamples() {
-    for (ArrayList<Integer> sampleList : currentSamples) {
+    for (ArrayList<Double> sampleList : currentSamples) {
       sampleList.clear();
     }
   }
@@ -163,9 +163,9 @@ public class DetectMotorSpeedTeleop extends OpMode {
   private void averageAndPushCurrentSamples() {
     int currentPositionInList = 0;
 
-    for (ArrayList<Integer> currentSampleList : currentSamples) {
+    for (ArrayList<Double> currentSampleList : currentSamples) {
       int sum = 0;
-      for (int value : currentSampleList) {
+      for (double value : currentSampleList) {
         sum += value;
       }
 
