@@ -1,9 +1,11 @@
 package com.ftc16626.missioncontrol.math.kinematics
 
+import android.util.Log
 import com.ftc16626.missioncontrol.math.Vector2
 
 class KinematicsIntegrator(private val initialPos: Vector2) {
     var currentPos = Vector2()
+    var currentHeading: Double = 0.0
 
     private var updatedFirstTime = false
     private var lastTime: Double = 0.0
@@ -14,9 +16,12 @@ class KinematicsIntegrator(private val initialPos: Vector2) {
             updatedFirstTime = true
         }
 
-        val timeDelta = lastTime - now
+        val timeDelta = (now - lastTime) / 1000
 
-        currentPos += vel.rotate(angle) * timeDelta
+        currentHeading += angle * timeDelta
+
+        currentPos += vel * timeDelta
+//        currentPos += vel.rotate(currentHeading) * timeDelta
 
         lastTime = now
     }
