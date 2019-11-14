@@ -119,20 +119,18 @@ public class MecanumDrive {
 
   public void update() {
     bulkData = expansionHub.getBulkInputData();
+    double now = System.currentTimeMillis();
 
     motorVelFrontLeft = bulkData.getMotorCurrentPosition(motorFrontLeft) - lastMotorVelFrontLeft;
     motorVelFrontRight = bulkData.getMotorCurrentPosition(motorFrontRight) - lastMotorVelFrontRight;
     motorVelBackLeft = bulkData.getMotorCurrentPosition(motorBackLeft) - lastMotorVelBackLeft;
     motorVelBackRight = bulkData.getMotorCurrentPosition(motorBackRight) - lastMotorVelBackRight;
 
-    Log.i("TEST2", Double.toString(motorVelFrontLeft));
-
-    motorVelFrontLeft *= 2 * (1 / encoderCounts);
-    motorVelFrontRight *= 2 * (1 / encoderCounts);
-    motorVelBackLeft *= 2 * (1 / encoderCounts);
-    motorVelBackRight *= 2 * (1 / encoderCounts);
-
-    Log.i("TEST2", Double.toString(motorVelFrontLeft));
+    // Convert ticks to radians then distance
+//    motorVelFrontLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
+//    motorVelFrontRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
+//    motorVelBackLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
+//    motorVelBackRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
 
     double[] motion = kinematics.mecanumDrive(
         motorVelFrontLeft, motorVelFrontRight,
@@ -143,7 +141,15 @@ public class MecanumDrive {
     velocityY = motion[1];
     angularVelocity = motion[2];
 
-    kinematicsIntegrator.update(new Vector2(velocityX, velocityY), angularVelocity, System.currentTimeMillis());
+//    Log.i("vx", Double.toString(velocityX));
+//    Log.i("vy", Double.toString(velocityY));
+//    Log.i("av", Double.toString(angularVelocity));
+
+//    Log.i("VX", Double.toString(velocityX));
+//    Log.i("VY", Double.toString(velocityY));
+//    Log.i("AV", Double.toString(angularVelocity));
+
+    kinematicsIntegrator.update(new Vector2(velocityX, velocityY), angularVelocity, now);
 
     lastMotorVelFrontLeft = bulkData.getMotorCurrentPosition(motorFrontLeft);
     lastMotorVelFrontRight = bulkData.getMotorCurrentPosition(motorFrontRight);
@@ -213,5 +219,8 @@ public class MecanumDrive {
 
   public Vector2 getPosition() {
     return kinematicsIntegrator.getCurrentPos();
+  }
+  public Double getHeading() {
+    return kinematicsIntegrator.getCurrentHeading();
   }
 }
