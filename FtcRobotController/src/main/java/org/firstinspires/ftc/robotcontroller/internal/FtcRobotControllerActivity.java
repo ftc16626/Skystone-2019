@@ -49,6 +49,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -509,7 +510,11 @@ public class FtcRobotControllerActivity extends Activity
     if (wifiLock != null) wifiLock.release();
     if (preferencesHelper != null) preferencesHelper.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener);
 
-    missionControl.stop();
+    try {
+      missionControl.stop();
+    } catch(Exception e) {
+      Log.e("MISSIONCONTROL", e.toString());
+    }
 
     RobotLog.cancelWriteLogcatToDisk();
   }
