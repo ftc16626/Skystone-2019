@@ -3,10 +3,7 @@ package com.ftc16626.missioncontrol.math.kinematics
 import android.util.Log
 import com.ftc16626.missioncontrol.math.Vector2
 
-class KinematicsIntegrator(private val initialPos: Vector2) {
-    var currentPos = Vector2()
-    var currentHeading: Double = 0.0
-
+class KinematicsIntegrator(var currentPos: Vector2, var currentHeading: Double) {
     private var updatedFirstTime = false
     private var lastTime: Double = 0.0
 

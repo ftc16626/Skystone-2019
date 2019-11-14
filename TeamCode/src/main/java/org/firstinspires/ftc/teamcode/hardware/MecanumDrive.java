@@ -52,7 +52,7 @@ public class MecanumDrive {
   public double velocityY = 0;
   public double angularVelocity = 0;
 
-  private KinematicsIntegrator kinematicsIntegrator = new KinematicsIntegrator(new Vector2());
+  private KinematicsIntegrator kinematicsIntegrator = new KinematicsIntegrator(new Vector2(), 0);
 
   public MecanumDrive(
       HardwareMap hwMap, ExpansionHubEx expansionHub,
@@ -131,6 +131,11 @@ public class MecanumDrive {
 //    motorVelFrontRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
 //    motorVelBackLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
 //    motorVelBackRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
+
+    motorVelFrontLeft *= (2 * Math.PI / encoderCounts);
+    motorVelFrontRight *= (2 * Math.PI / encoderCounts);
+    motorVelBackLeft *= (2 * Math.PI / encoderCounts);
+    motorVelBackRight *= (2 * Math.PI / encoderCounts);
 
     double[] motion = kinematics.mecanumDrive(
         motorVelFrontLeft, motorVelFrontRight,
