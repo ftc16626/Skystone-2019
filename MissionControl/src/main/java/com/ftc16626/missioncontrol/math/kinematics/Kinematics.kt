@@ -1,9 +1,9 @@
 package com.ftc16626.missioncontrol.math.kinematics
 
 class Kinematics(
-    private val length: Double,
-    private val width: Double,
-    private val wheelRadius: Double
+    val length: Double,
+    val width: Double,
+    val wheelRadius: Double
 ) {
 
     fun mecanumDrive(
