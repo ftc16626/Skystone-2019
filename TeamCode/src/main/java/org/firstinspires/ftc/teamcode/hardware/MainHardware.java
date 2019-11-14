@@ -37,6 +37,13 @@ public class MainHardware {
 
   private double starboardServoPos = 0;
 
+  // Millimeters
+  public final Dimensions dimensionsDriveTrain = new Dimensions(198.125, 336, 50);
+  public final double wheelRadius = 100 / 2;
+
+  public final double gearRatio = 2;
+  public final double encoderCountsPerRev = 386.3;
+
   public MainHardware(HardwareMap hwMap) {
     expansionHubMain = hwMap.get(ExpansionHubEx.class, "Expansion Hub 9");
     expansionHubDaughter = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
@@ -46,8 +53,8 @@ public class MainHardware {
         expansionHubMain,
         motorIds[0], motorIds[1], motorIds[2], motorIds[3],
         true,
-        198.125, 336, 100,
-        2, 386.3
+        dimensionsDriveTrain.getWidth(), dimensionsDriveTrain.getHeight(), wheelRadius,
+        gearRatio, encoderCountsPerRev
     );
     imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"), false);
 
