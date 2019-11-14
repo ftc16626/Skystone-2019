@@ -17,7 +17,7 @@ class Kinematics(
         val vy =
             (-velocityFrontLeft + velocityFrontRight + velocityBackLeft - velocityBackRight) * (wheelRadius / 4)
         val av =
-            (-velocityFrontLeft + velocityFrontRight - velocityBackLeft + velocityBackRight) * (wheelRadius / (4 * (length + width)))
+            (-velocityFrontLeft + velocityFrontRight - velocityBackLeft + velocityBackRight) * (wheelRadius / (2 * (length / 2 + width / 2)))
 
         return doubleArrayOf(vx, vy, av)
     }

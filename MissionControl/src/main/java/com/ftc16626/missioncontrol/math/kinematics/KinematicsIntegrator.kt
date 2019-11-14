@@ -15,10 +15,10 @@ class KinematicsIntegrator(var currentPos: Vector2, var currentHeading: Double) 
 
         val timeDelta = (now - lastTime) / 1000
 
-        currentHeading += angle * timeDelta
+        currentHeading += angle * timeDelta * 0.94
 
-        currentPos += vel * timeDelta
-//        currentPos += vel.rotate(currentHeading) * timeDelta
+//        currentPos += vel * timeDelta
+        currentPos += vel.rotate(currentHeading) * timeDelta
 
         lastTime = now
     }

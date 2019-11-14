@@ -28,19 +28,27 @@ public class KinematicsTestOp extends LinearOpMode {
     waitForStart();
     runtime.reset();
 
-    robot.drive.setAngle(0);
+    robot.drive.setAngle(Math.toRadians(45));
     robot.drive.setPower(0.75);
     while(opModeIsActive() && (runtime.seconds() < 2.0)) {
       telemetry.addData("Pos X", robot.drive.getPosition().getX());
       telemetry.addData("Pos Y", robot.drive.getPosition().getY());
+      telemetry.addData("Heading", robot.drive.getHeading());
+      telemetry.addData("Status", "Step 1");
       telemetry.update();
+      robot.update();
     }
 
-    robot.drive.setAngle(Math.toRadians(90));
+    runtime.reset();
+
+    robot.drive.setAngle(Math.toRadians(135));
     while(opModeIsActive() && (runtime.seconds() < 2.0)) {
       telemetry.addData("Pos X", robot.drive.getPosition().getX());
       telemetry.addData("Pos Y", robot.drive.getPosition().getY());
+      telemetry.addData("Heading", robot.drive.getHeading());
+      telemetry.addData("Status", "Step 2");
       telemetry.update();
+      robot.update();
     }
 
     robot.drive.stopMotors();

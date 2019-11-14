@@ -41,7 +41,7 @@ public class MainHardware {
   public final Dimensions dimensionsDriveTrain = new Dimensions(198.125, 336, 50);
   public final double wheelRadius = 100 / 2;
 
-  public final double gearRatio = 2;
+  public final double gearRatio = 1;
   public final double encoderCountsPerRev = 386.3;
 
   public MainHardware(HardwareMap hwMap) {

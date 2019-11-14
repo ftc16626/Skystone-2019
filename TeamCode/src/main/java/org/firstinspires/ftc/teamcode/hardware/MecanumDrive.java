@@ -54,6 +54,9 @@ public class MecanumDrive {
 
   private KinematicsIntegrator kinematicsIntegrator = new KinematicsIntegrator(new Vector2(), 0);
 
+  private boolean updatedFirstTime = false;
+  private double lastTime = 0;
+
   public MecanumDrive(
       HardwareMap hwMap, ExpansionHubEx expansionHub,
       String motorFrontLeftId, String motorFrontRightId,
@@ -121,10 +124,22 @@ public class MecanumDrive {
     bulkData = expansionHub.getBulkInputData();
     double now = System.currentTimeMillis();
 
+    if(!updatedFirstTime) {
+      lastTime = now;
+      updatedFirstTime = true;
+    }
+
+    double timeDelta = (now - lastTime) / 1000;
+
     motorVelFrontLeft = bulkData.getMotorCurrentPosition(motorFrontLeft) - lastMotorVelFrontLeft;
     motorVelFrontRight = bulkData.getMotorCurrentPosition(motorFrontRight) - lastMotorVelFrontRight;
     motorVelBackLeft = bulkData.getMotorCurrentPosition(motorBackLeft) - lastMotorVelBackLeft;
     motorVelBackRight = bulkData.getMotorCurrentPosition(motorBackRight) - lastMotorVelBackRight;
+
+//    motorVelFrontLeft *= timeDelta;
+//    motorVelFrontRight *= timeDelta;
+//    motorVelBackLeft *= timeDelta;
+//    motorVelBackRight *= timeDelta;
 
     // Convert ticks to radians then distance
 //    motorVelFrontLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
@@ -164,6 +179,8 @@ public class MecanumDrive {
     if (dirty) {
       refreshMotors();
     }
+
+    lastTime = now;
   }
 
   public void setAngle(double angle) {
