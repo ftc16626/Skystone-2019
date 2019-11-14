@@ -5,7 +5,7 @@ import kotlin.math.sin
 
 data class Vector2(val x: Double = 0.0, val y: Double = 0.0) {
     fun rotate(angle: Double): Vector2 {
-        return Vector2(cos(x) - sin(y), sin(x) - cos(y))
+        return Vector2((x * cos(angle)) - (y * sin(angle)), (x * sin(angle)) - (y * cos(angle)))
     }
 
     operator fun unaryMinus(): Vector2 {
