@@ -14,8 +14,11 @@ public class RegisterProfiles extends OpMode {
   private MissionControl missionControl;
 
   private PilotProfile enzoProfile = new PilotProfile("Enzo's Profile",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, true, false,
+      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, false, false,
       true, false, StickResponseCurve.CUBED, false);
+  private PilotProfile fieldCentricProfile = new PilotProfile("Field Centric Profile",
+      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, true, false,
+      true, false, StickResponseCurve.CUBED, true);
   private PilotProfile emilioProfile = new PilotProfile("Emilio's Profile",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, true, false,
       true, false, StickResponseCurve.CUBED, false);
@@ -24,7 +27,8 @@ public class RegisterProfiles extends OpMode {
   public void init() {
     missionControl = ((FtcRobotControllerActivity) hardwareMap.appContext).missionControl;
     missionControl.getPilotProfileHandler().addProfile(enzoProfile);
-    missionControl.getPilotProfileHandler().addProfile(emilioProfile);
+    missionControl.getPilotProfileHandler().addProfile(fieldCentricProfile);
+//    missionControl.getPilotProfileHandler().addProfile(emilioProfile);
   }
 
   @Override
