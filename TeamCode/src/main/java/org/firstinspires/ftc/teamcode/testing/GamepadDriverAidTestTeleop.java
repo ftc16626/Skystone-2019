@@ -37,8 +37,6 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     driverInterface = new DriverInterface(gamepad1, gamepad2, this);
     driverInterface.driver.setProfile(missionControl.getPilotProfileHandler().getCurrentProfile());
 
-    robot.init();
-
     telemetry.addData("Status", "Initialized");
 
     expansionHub = robot.expansionHubMain;
@@ -47,7 +45,9 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
   @Override
   public void loop() {
     if (!inited) {
+      robot.init();
       robot.swingyServo.setPosition(1);
+
       inited = true;
     }
 
@@ -64,12 +64,16 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     telemetry.addData("Current Profile", driverInterface.driver.getProfile().name);
     telemetry.addData("Invert X", driverInterface.driver.getProfile().invertStrafeStickX);
     telemetry.addData("Invert Y", driverInterface.driver.getProfile().invertStrafeStickY);
-    telemetry.addData("Vel 1", robot.drive.motorVelFrontLeft);
+//    telemetry.addData("Vel 1", robot.drive.motorVelFrontLeft);
 
-    telemetry.addData("ENcoder 0", bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft));
-    telemetry.addData("ENcoder 1", bulkData.getMotorCurrentPosition(robot.drive.motorFrontRight));
-    telemetry.addData("ENcoder 2", bulkData.getMotorCurrentPosition(robot.drive.motorBackLeft));
-    telemetry.addData("ENcoder 3", bulkData.getMotorCurrentPosition(robot.drive.motorBackRight));
+//    telemetry.addData("ENcoder 0", bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft));
+//    telemetry.addData("ENcoder 1", bulkData.getMotorCurrentPosition(robot.drive.motorFrontRight));
+//    telemetry.addData("ENcoder 2", bulkData.getMotorCurrentPosition(robot.drive.motorBackLeft));
+//    telemetry.addData("ENcoder 3", bulkData.getMotorCurrentPosition(robot.drive.motorBackRight));
+
+    telemetry.addData("Pos X", robot.drive.getPosition().getX());
+    telemetry.addData("Pos Y", robot.drive.getPosition().getY());
+    telemetry.addData("Heading", Math.toDegrees(robot.drive.getHeading()));
   }
 
   private void handleControlDriving() {
@@ -81,8 +85,8 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     double realAngle = driverInterface.driver.getStrafeStickAngle();
     double realTurn = driverInterface.driver.getTurnStickX();
 
-    if (driverInterface.driver.gamepad.right_bumper) {
-      turn = realMag;
+    if (driverInterface.driver.gamepad.right_trigger > 0.7) {
+      turn = realTurn;
       magnitude = realMag;
       angle = realAngle;
     } else if (driverInterface.driver.getTurnStickX() != 0) {
@@ -92,7 +96,7 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
       angle = realAngle;
     }
 
-    if (driverInterface.driver.gamepad.left_bumper) {
+    if (driverInterface.driver.gamepad.left_trigger > 0.7) {
       double deg = Math.toDegrees(realAngle);
       double rounded = Math.round(deg / 45) * 45;
       angle = Math.toRadians(rounded);
@@ -107,12 +111,15 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
         magnitude /= 4;
       }
     } else {
-      magnitude *= 1 - driverInterface.driver.gamepad.left_trigger;
+//      magnitude *= 1 - driverInterface.driver.gamepad.left_trigger;
     }
 
-    if (driverInterface.driver.getProfile().enableFieldCentric) {
-      angle += Math.toRadians(robot.imu.getGlobalHeading() % 360);
-    }
+//    if (driverInterface.driver.getProfile().enableFieldCentric) {
+//      angle += Math.toRadians(robot.imu.getGlobalHeading() % 360);
+//      telemetry.addData("field centric", "true " + angle);
+//    } else {
+//      telemetry.addData("field centric", "false " + angle);
+//    }
 
     robot.drive.setAngle(angle);
     robot.drive.setPower(magnitude);
