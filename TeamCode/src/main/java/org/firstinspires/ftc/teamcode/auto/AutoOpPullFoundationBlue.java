@@ -23,13 +23,14 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     missionControl = ((FtcRobotControllerActivity) hardwareMap.appContext).missionControl;
 
     robot = new MainHardware(hardwareMap);
-    robot.init();
 
     telemetry.addData("Status", "Initialized");
     telemetry.update();
 
     waitForStart();
     runtime.reset();
+
+    robot.init();
 
     bulkData = robot.expansionHubMain.getBulkInputData();
 
@@ -46,7 +47,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(225));
-    while(opModeIsActive() && runtime.seconds() < 1.25) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
+    while(opModeIsActive() && runtime.seconds() < 1.50) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
@@ -69,7 +70,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
 
     robot.drive.setPower(0.75);
     robot.drive.setAngle(Math.toRadians(45));
-    while(opModeIsActive() && runtime.seconds() < 1.55) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
+    while(opModeIsActive() && runtime.seconds() < 2.25) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
@@ -111,7 +112,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(315));
-    while(opModeIsActive() && runtime.seconds() < 1) {
+    while(opModeIsActive() && runtime.seconds() < 1.2) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
@@ -126,7 +127,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(315 - 180));
-    while(opModeIsActive() && runtime.seconds() < 1) {
+    while(opModeIsActive() && runtime.seconds() < 1.2) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();

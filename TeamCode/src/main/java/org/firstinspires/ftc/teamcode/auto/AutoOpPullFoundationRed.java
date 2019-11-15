@@ -23,13 +23,14 @@ public class AutoOpPullFoundationRed extends LinearOpMode {
     missionControl = ((FtcRobotControllerActivity) hardwareMap.appContext).missionControl;
 
     robot = new MainHardware(hardwareMap);
-    robot.init();
 
     telemetry.addData("Status", "Initialized");
     telemetry.update();
 
     waitForStart();
     runtime.reset();
+
+    robot.init();
 
     bulkData = robot.expansionHubMain.getBulkInputData();
 
@@ -46,7 +47,7 @@ public class AutoOpPullFoundationRed extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(225));
-    while(opModeIsActive() && runtime.seconds() < 1.25) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
+    while(opModeIsActive() && runtime.seconds() < 1.50) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
@@ -69,7 +70,7 @@ public class AutoOpPullFoundationRed extends LinearOpMode {
 
     robot.drive.setPower(0.75);
     robot.drive.setAngle(Math.toRadians(45));
-    while(opModeIsActive() && runtime.seconds() < 1.65) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
+    while(opModeIsActive() && runtime.seconds() < 2.1) {//bulkData.getMotorCurrentPosition(robot.drive.motorFrontLeft) > -1900) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
