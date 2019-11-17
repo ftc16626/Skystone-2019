@@ -38,8 +38,10 @@ android {
 
     defaultConfig {
         applicationId 'com.qualcomm.ftcrobotcontroller'
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
+
+        multiDexEnabled true
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
@@ -98,6 +100,11 @@ android {
     sourceSets.main {
         jni.srcDirs = []
         jniLibs.srcDir rootProject.file('libs')
+    }
+
+    dependencies {
+        def multidex_version = "2.0.1"
+        implementation "androidx.multidex:multidex:$multidex_version"
     }
 }
 
