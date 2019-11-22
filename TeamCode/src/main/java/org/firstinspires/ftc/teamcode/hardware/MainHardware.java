@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.openftc.revextensions2.ExpansionHubEx;
@@ -21,6 +24,8 @@ public class MainHardware {
 
   public DcMotor motorSlider;
 
+  public Rev2mDistanceSensor sliderRange;
+
   private final String[] motorIds = new String[]{
       "motorFrontLeft", "motorFrontRight",
       "motorBackLeft", "motorBackRight"
@@ -34,6 +39,8 @@ public class MainHardware {
   private final String starboardServoId = "starboardServo";
   private final String backSerovId = "backServo";
   private final String swingyServoId = "swingyServo";
+
+  private final String sliderRangeId = "sliderRange";
 
   private double starboardServoPos = 0;
 
@@ -64,11 +71,15 @@ public class MainHardware {
     starboardServo.scaleRange(0.35, 0.78);
 
     backServo = hwMap.get(Servo.class, backSerovId);
-    backServo.scaleRange(0, 0.82);
+    backServo.scaleRange(0.50, 0.92);
 
     swingyServo = hwMap.get(Servo.class, swingyServoId);
 
     motorSlider = hwMap.get(DcMotor.class, sliderMotorId);
+//    motorSlider.setTargetPosition(0);
+//    motorSlider.setMode(RunMode.RUN_TO_POSITION);
+
+    sliderRange = (Rev2mDistanceSensor) hwMap.get(DistanceSensor.class, sliderRangeId);
   }
 
   public void init() {
