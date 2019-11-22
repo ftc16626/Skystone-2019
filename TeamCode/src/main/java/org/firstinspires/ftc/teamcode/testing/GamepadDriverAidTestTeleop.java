@@ -141,13 +141,13 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
   }
 
   private void handleControlStarboardServo() {
-    if (driverInterface.aid.gamepad.dpad_up) {
-      robot.raiseStarboardServo();
-    } else if (driverInterface.aid.gamepad.dpad_down) {
-      robot.lowerStarboardServo();
-    }
-
-    telemetry.addData("Servo pos", robot.getStarboardServoPos());
+//    if (driverInterface.aid.gamepad.dpad_up) {
+//      robot.raiseStarboardServo();
+//    } else if (driverInterface.aid.gamepad.dpad_down) {
+//      robot.lowerStarboardServo();
+//    }
+//
+//    telemetry.addData("Servo pos", robot.getStarboardServoPos());
   }
 
   private void handleSliderMotor() {
@@ -195,9 +195,9 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     isBackServoDown = !isBackServoDown;
 
     if (isBackServoDown) {
-      robot.backServo.setPosition(0);
+      robot.backRightServo.setPosition(0);
     } else {
-      robot.backServo.setPosition(1);
+      robot.backRightServo.setPosition(1);
     }
   }
 
@@ -247,9 +247,9 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
             robot.intake.directionForward();
 //            robot.intake.reverse();
             break;
-          case B:
-            robot.intake.toggleIntakeOpen();
-            break;
+//          case B:
+//            robot.intake.toggleIntakeOpen();
+//            break;
           case Y:
             toggleBackServo();
             break;
