@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.ftc16626.missioncontrol.MissionControl;
 import com.ftc16626.missioncontrol.util.LogModel;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.Date;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.teamcode.hardware.RadicalIMU;
 
 @TeleOp(name="AccelGyro Test Op", group = "Testing")
+@Disabled
 public class AccelGyroTestOp extends OpMode {
 
   private RadicalIMU radicalIMU;

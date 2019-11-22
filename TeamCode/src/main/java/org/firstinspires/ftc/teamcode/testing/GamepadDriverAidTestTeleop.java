@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.ftc16626.missioncontrol.MissionControl;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
@@ -16,6 +17,7 @@ import org.openftc.revextensions2.ExpansionHubMotor;
 import org.openftc.revextensions2.RevBulkData;
 
 @TeleOp(name = "Gamepad Driver Aid Teleop", group = "Testing")
+@Disabled
 public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListener {
 
   RevBulkData bulkData;

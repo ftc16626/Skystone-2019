@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.ftc16626.missioncontrol.MissionControl;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
 @TeleOp(name ="Square Auto Op", group = "Testing")
+@Disabled
 public class SquareAutoOp extends LinearOpMode {
 
   private MainHardware robot;

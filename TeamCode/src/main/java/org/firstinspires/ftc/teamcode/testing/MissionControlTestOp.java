@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.ftc16626.missioncontrol.MissionControl;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 
 @TeleOp(name = "MissionControl Test Op", group="Testing")
+@Disabled
 public class MissionControlTestOp extends OpMode {
 
   private MissionControl missionControl;

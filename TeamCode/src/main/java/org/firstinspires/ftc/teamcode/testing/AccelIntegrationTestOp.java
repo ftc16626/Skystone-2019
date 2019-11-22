@@ -4,6 +4,7 @@ import com.ftc16626.missioncontrol.MissionControl;
 import com.ftc16626.missioncontrol.util.LogModel;
 import com.ftc16626.missioncontrol.util.statemachine.State;
 import com.ftc16626.missioncontrol.util.statemachine.StateMachine;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
 @TeleOp(name = "Accel Integration Test OP", group = "Testing")
+@Disabled
 public class AccelIntegrationTestOp extends OpMode {
 
   private MainHardware robot;
