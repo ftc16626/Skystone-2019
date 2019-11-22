@@ -4,6 +4,7 @@ import com.ftc16626.missioncontrol.MissionControl;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
@@ -18,6 +19,7 @@ import org.openftc.revextensions2.RevBulkData;
 public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListener {
 
   RevBulkData bulkData;
+  RevBulkData bulkData2;
   ExpansionHubEx expansionHub;
 
   private MainHardware robot;
@@ -28,6 +30,11 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
   private boolean isBackServoDown = false;
 
   private boolean inited = false;
+
+  private int sliderPos = 0;
+  private final int maxSlider = 7000;
+
+  private int sliderInitOffset = 0;
 
   @Override
   public void init() {
@@ -40,6 +47,8 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     telemetry.addData("Status", "Initialized");
 
     expansionHub = robot.expansionHubMain;
+
+    sliderInitOffset = robot.expansionHubDaughter.getBulkInputData().getMotorCurrentPosition(robot.motorSlider);
   }
 
   @Override
@@ -53,14 +62,16 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
 
     driverInterface.update();
 
+    bulkData = expansionHub.getBulkInputData();
+    bulkData2 = robot.expansionHubDaughter.getBulkInputData();
+
     handleControlDriving();
     handleControlStarboardServo();
     handleSliderMotor();
 
     robot.update();
 
-    bulkData = expansionHub.getBulkInputData();
-
+    telemetry.addData("Distance", robot.sliderRange.getDistance(DistanceUnit.MM));
     telemetry.addData("Current Profile", driverInterface.driver.getProfile().name);
     telemetry.addData("Invert X", driverInterface.driver.getProfile().invertStrafeStickX);
     telemetry.addData("Invert Y", driverInterface.driver.getProfile().invertStrafeStickY);
@@ -81,9 +92,9 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
     double angle = 0;
     double turn = 0;
 
-    double realMag = driverInterface.driver.getStrafeStickMagnitude();
+    double realMag = driverInterface.driver.getStrafeStickMagnitude() / 2;
     double realAngle = driverInterface.driver.getStrafeStickAngle();
-    double realTurn = driverInterface.driver.getTurnStickX();
+    double realTurn = driverInterface.driver.getTurnStickX() / 2;
 
     if (driverInterface.driver.gamepad.right_trigger > 0.7) {
       turn = realTurn;
@@ -104,12 +115,15 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
 
     if (driverInterface.driver.gamepad.left_bumper) {
       if (magnitude != 0) {
-        magnitude /= 2;
+        magnitude *= 2;
+      }
+      if (turn != 0) {
+        turn *= 2;
       }
     } else if (driverInterface.driver.gamepad.right_bumper) {
-      if (magnitude != 0) {
-        magnitude /= 4;
-      }
+//      if (magnitude != 0) {
+//        magnitude /= 4;
+//      }
     } else {
 //      magnitude *= 1 - driverInterface.driver.gamepad.left_trigger;
     }
@@ -137,11 +151,44 @@ public class GamepadDriverAidTestTeleop extends OpMode implements GamepadListene
   }
 
   private void handleSliderMotor() {
+    int currentPos = bulkData2.getMotorCurrentPosition(robot.motorSlider) - sliderInitOffset;
+    double distance = robot.sliderRange.getDistance(DistanceUnit.MM);
+
     if (driverInterface.aid.gamepad.left_stick_y != 0) {
-      robot.motorSlider.setPower(driverInterface.aid.gamepad.left_stick_y);
+      float stick = driverInterface.aid.gamepad.left_stick_y;
+//      telemetry.addData("TEST", stick);
+//      if (stick < 0 && currentPos > -6000) {
+//        robot.motorSlider.setPower(stick);
+//      } else if(stick > 0 && currentPos < 0){
+//        robot.motorSlider.setPower(stick);
+//      }
+      if(stick < 0 && distance < 580) {
+        robot.motorSlider.setPower(stick);
+      } else if(stick > 0 && distance > 20) {
+        robot.motorSlider.setPower(stick);
+      } else {
+        robot.motorSlider.setPower(0);
+      }
+//        robot.motorSlider.setPower(stick);
     } else {
       robot.motorSlider.setPower(0);
     }
+
+    sliderPos += driverInterface.aid.gamepad.left_stick_y;
+    sliderPos = Math.max(0, sliderPos);
+    sliderPos = Math.min(sliderPos, maxSlider);
+//    robot.motorSlider.setTargetPosition(sliderPos);
+
+//    int currentPos = Math.abs(bulkData2.getMotorCurrentPosition(robot.motorSlider));
+//    if(currentPos > sliderPos) {
+//      robot.motorSlider.setPower(0.6);
+//    } else if(currentPos < sliderPos) {
+//      robot.motorSlider.setPower(-0.6);
+//    } else {
+//      robot.motorSlider.setPower(0);
+//    }
+
+    telemetry.addData("Slider pos", currentPos);
   }
 
   private void toggleBackServo() {
