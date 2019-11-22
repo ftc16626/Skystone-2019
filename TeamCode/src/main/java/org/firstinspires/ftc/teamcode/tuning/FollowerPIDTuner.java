@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 
 @Config
-@Autonomous(group = "tuning")
+@Autonomous(name="Tuning - Follower PID", group = "tuning")
 public class FollowerPIDTuner extends LinearOpMode {
   public static double DISTANCE = 1219.2;
 

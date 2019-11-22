@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 import org.firstinspires.ftc.teamcode.hardware.DriveConstants;
 
-@Autonomous(name="Track Width Tuner", group="Tuning")
+@Autonomous(name="Tuning - Track Width Tuner", group="Tuning")
 public class TrackWidthTuner extends LinearOpMode {
 
   public static double ANGLE = 180; // deg

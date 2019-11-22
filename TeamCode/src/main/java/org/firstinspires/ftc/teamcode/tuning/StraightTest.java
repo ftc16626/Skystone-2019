@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
  * This is a simple routine to test translational drive capabilities.
  */
 @Config
-@Autonomous(group = "tuning")
+@Autonomous(name="Tuning - Straight Test", group = "tuning")
 public class StraightTest extends LinearOpMode {
   public static double DISTANCE = 1000;
 

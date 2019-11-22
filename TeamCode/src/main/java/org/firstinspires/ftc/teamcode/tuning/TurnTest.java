@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 
 @Config
-@Autonomous(group = "tuning")
+@Autonomous(name="Tuning - Turn Test", group = "tuning")
 public class TurnTest extends LinearOpMode {
   public static double ANGLE = 90; // deg
 
