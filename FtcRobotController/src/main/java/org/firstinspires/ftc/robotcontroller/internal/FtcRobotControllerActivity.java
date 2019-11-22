@@ -395,38 +395,38 @@ public class FtcRobotControllerActivity extends Activity
     missionControl = new MissionControl(this);
 
     // Start MissionControl
-    missionControl.registerCommand("face", new CommandListener() {
-      @Override
-      public void onCommand(@NotNull String argument) {
-        if(argument.equals("on")) {
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              kao.showView();
-            }
-          });
-
-        } else if(argument.equals("off")) {
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              kao.hideView();
-            }
-          });
-        }
-      }
-    });
-    missionControl.registerCommand("breathing", new CommandListener() {
-      @Override
-      public void onCommand(@NotNull String argument) {
-        if(argument.equals("on")) {
-          kao.getCurrentFace().setSetting("breathing", true);
-        } else if(argument.equals("off")) {
-          kao.getCurrentFace().setSetting("breathing", false);
-        }
-      }
-    });
-
+//    missionControl.registerCommand("face", new CommandListener() {
+//      @Override
+//      public void onCommand(@NotNull String argument) {
+//        if(argument.equals("on")) {
+//          runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//              kao.showView();
+//            }
+//          });
+//
+//        } else if(argument.equals("off")) {
+//          runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//              kao.hideView();
+//            }
+//          });
+//        }
+//      }
+//    });
+//    missionControl.registerCommand("breathing", new CommandListener() {
+//      @Override
+//      public void onCommand(@NotNull String argument) {
+//        if(argument.equals("on")) {
+//          kao.getCurrentFace().setSetting("breathing", true);
+//        } else if(argument.equals("off")) {
+//          kao.getCurrentFace().setSetting("breathing", false);
+//        }
+//      }
+//    });
+//
     missionControl.start();
 
     // Initialize Kao
@@ -494,7 +494,7 @@ public class FtcRobotControllerActivity extends Activity
     super.onStop();
     RobotLog.vv(TAG, "onStop()");
 
-//    missionControl.stop();
+    missionControl.stop();
   }
 
   @Override
@@ -520,7 +520,7 @@ public class FtcRobotControllerActivity extends Activity
       Log.e("MISSIONCONTROL", e.toString());
     }
 
-//    FtcDashboard.stop();
+    FtcDashboard.stop();
 
     RobotLog.cancelWriteLogcatToDisk();
   }
