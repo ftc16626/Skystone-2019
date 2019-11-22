@@ -18,8 +18,8 @@ public class MainHardware {
   public RadicalIMU imu;
   public Intake intake;
 
-  public Servo starboardServo;
-  public Servo backServo;
+  public Servo backRightServo;
+  public Servo backLeftServo;
   public Servo swingyServo;
 
   public DcMotor motorSlider;
@@ -36,15 +36,28 @@ public class MainHardware {
 
   private final String sliderMotorId = "motorSlider";
 
-  private final String starboardServoId = "starboardServo";
-  private final String backSerovId = "backServo";
+  private final String backLeftServoId = "backLeftServo";
+  private final String backRightServoId = "backRightServo";
+
   private final String swingyServoId = "swingyServo";
 
   private final String sliderRangeId = "sliderRange";
 
-  private double starboardServoPos = 0;
+  // Hardware Constraints
+  private final double backRightServoMin = 0.50;
+  private final double backRightServoMax = 0.92;
 
-  // Millimeters
+  private final double backLeftServoMin = 0.45;
+  private final double backLeftServoMax = 0.8;
+
+  private final double swingyServoMin = 0.38;
+  private final double swingyServoMax = 1;
+
+  // Positions
+  private double backLeftServoPos = 0;
+  private double backRightServoPos = 0;
+
+  // Units in millimeters
   public final Dimensions dimensionsDriveTrain = new Dimensions(198.125, 336, 50);
   public final double wheelRadius = 100 / 2;
 
@@ -67,11 +80,11 @@ public class MainHardware {
 
     intake = new Intake(hwMap, intakeMotorIds[0], intakeMotorIds[1], intakeServoId);
 
-    starboardServo = hwMap.get(Servo.class, starboardServoId);
-    starboardServo.scaleRange(0.35, 0.78);
+    backLeftServo = hwMap.get(Servo.class, backLeftServoId);
+    backLeftServo.scaleRange(backLeftServoMin, backLeftServoMax);
 
-    backServo = hwMap.get(Servo.class, backSerovId);
-    backServo.scaleRange(0.50, 0.92);
+    backRightServo = hwMap.get(Servo.class, backRightServoId);
+    backRightServo.scaleRange(backRightServoMin, backRightServoMax);
 
     swingyServo = hwMap.get(Servo.class, swingyServoId);
 
@@ -85,9 +98,8 @@ public class MainHardware {
   public void init() {
     drive.resetEncoders();
 
-    starboardServo.setPosition(1);
-    backServo.setPosition(1);
-    swingyServo.setPosition(0.38);
+    raiseBackServos();
+    lockSliderServo();
 
     intake.close();
   }
@@ -97,17 +109,37 @@ public class MainHardware {
     imu.update();
   }
 
-  public void lowerStarboardServo() {
-    starboardServoPos = Math.max(starboardServoPos - 0.05, 0);
-    starboardServo.setPosition(starboardServoPos);
+  public void dropSliderServo() {
+    swingyServo.setPosition(swingyServoMax);
   }
 
-  public void raiseStarboardServo() {
-    starboardServoPos = Math.min(starboardServoPos + 0.05, 1);
-    starboardServo.setPosition(starboardServoPos);
+  public void lockSliderServo() {
+    swingyServo.setPosition(swingyServoMin);
   }
 
-  public double getStarboardServoPos() {
-    return starboardServoPos;
+  public void lowerBackLeftServo() {
+    backLeftServo.setPosition(1);
+  }
+
+  public void lowerBackRightServo() {
+    backRightServo.setPosition(0);
+  }
+
+  public void raiseBackLeftServo() {
+    backLeftServo.setPosition(0);
+  }
+
+  public void raiseBackRightServo() {
+    backRightServo.setPosition(1);
+  }
+
+  public void lowerBackServos() {
+    lowerBackLeftServo();
+    lowerBackRightServo();
+  }
+
+  public void raiseBackServos() {
+    raiseBackLeftServo();
+    raiseBackRightServo();
   }
 }
