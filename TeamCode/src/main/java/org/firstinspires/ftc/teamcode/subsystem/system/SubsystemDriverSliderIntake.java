@@ -1,0 +1,96 @@
+package org.firstinspires.ftc.teamcode.subsystem.system;
+
+import android.util.Log;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
+import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
+import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
+import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
+import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
+import org.firstinspires.ftc.teamcode.hardware.MainHardware;
+import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
+import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
+import org.jetbrains.annotations.NotNull;
+import org.openftc.revextensions2.RevBulkData;
+
+public class SubsystemDriverSliderIntake extends Subsystem implements GamepadListener {
+
+  public DriverInterface driverInterface;
+  private RevBulkData bulkData;
+
+  public SubsystemDriverSliderIntake(
+      @NotNull MainHardware robot,
+      @NotNull RadicalOpMode opMode,
+      @NotNull DriverInterface driverInterface) {
+    super(robot, opMode);
+
+    this.driverInterface = driverInterface;
+  }
+
+  @Override
+  public void update() {
+    bulkData = getRobot().expansionHubDaughter.getBulkInputData();
+
+    double distance = getRobot().sliderRange.getDistance(DistanceUnit.MM);
+
+    if (driverInterface.aid.gamepad.left_stick_y != 0) {
+      float stick = driverInterface.aid.gamepad.left_stick_y;
+
+      if (stick < 0 && distance < 580) {
+        getRobot().motorSlider.setPower(stick);
+      } else if (stick > 0 && distance > 20) {
+        getRobot().motorSlider.setPower(stick);
+      } else {
+        getRobot().motorSlider.setPower(0);
+      }
+    } else {
+      getRobot().motorSlider.setPower(0);
+    }
+
+    if(driverInterface.aid.gamepad.b) {
+      getRobot().intake.open();
+    } else {
+      getRobot().intake.close();
+    }
+
+    getOpMode().telemetry.addData("Slider Height", distance);
+  }
+
+  @Override
+  public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
+      GamepadType gamepadType) {
+    if (gamepadType == GamepadType.AID) {
+      if (eventType == GamepadEventType.BUTTON_PRESSED) {
+        switch (eventName) {
+          case LEFT_BUMPER:
+            if (!getRobot().intake.isMotorOn) {
+              getRobot().intake.directionBackward();
+              getRobot().intake.toggle(true);
+            } else if (getRobot().intake.power > 1) {
+              getRobot().intake.directionBackward();
+            } else {
+              getRobot().intake.toggle(false);
+            }
+
+            break;
+          case RIGHT_BUMPER:
+            if (!getRobot().intake.isMotorOn) {
+              getRobot().intake.directionForward();
+              getRobot().intake.toggle(true);
+            } else if (getRobot().intake.power < 1) {
+              getRobot().intake.directionForward();
+            } else {
+              getRobot().intake.toggle(false);
+            }
+
+            getRobot().intake.directionForward();
+            break;
+//          case B:
+//            getRobot().intake.toggleIntakeOpen();
+//            break;
+        }
+
+      }
+    }
+  }
+}
