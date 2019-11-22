@@ -43,7 +43,7 @@ public class BlockAutoRed extends LinearOpMode {
     Trajectory trajectory6 = drive.trajectoryBuilder().strafeRight(step2).build();
     Trajectory trajectory7 = drive.trajectoryBuilder().back(step9).build();
 
-    robot.backServo.setPosition(1);
+    robot.backRightServo.setPosition(1);
     robot.swingyServo.setPosition(1);
 
     double startingAngle = drive.getRawExternalHeading();
@@ -58,7 +58,7 @@ public class BlockAutoRed extends LinearOpMode {
 
     drive.followTrajectorySync(trajectory1);
 
-    robot.backServo.setPosition(0);
+    robot.backRightServo.setPosition(0);
     robot.swingyServo.setPosition(1);
 
     runtime.reset();
@@ -68,12 +68,12 @@ public class BlockAutoRed extends LinearOpMode {
 
     drive.followTrajectorySync(trajectory2);
 
-    robot.backServo.setPosition(1);
+    robot.backRightServo.setPosition(1);
 
     drive.turnSync(-(drive.getRawExternalHeading() - startingAngle));
     drive.followTrajectorySync(trajectory3);
 
-    robot.backServo.setPosition(0);
+    robot.backRightServo.setPosition(0);
 
     runtime.reset();
     while (runtime.seconds() < 0.8) {
@@ -82,7 +82,7 @@ public class BlockAutoRed extends LinearOpMode {
 
     drive.followTrajectorySync(trajectory4);
 
-    robot.backServo.setPosition(1);
+    robot.backRightServo.setPosition(1);
     drive.turnSync(-(drive.getRawExternalHeading() - startingAngle));
 
     runtime.reset();
@@ -91,7 +91,7 @@ public class BlockAutoRed extends LinearOpMode {
 
     drive.followTrajectorySync(trajectory5);
 
-    robot.backServo.setPosition(0);
+    robot.backRightServo.setPosition(0);
 
     runtime.reset();
     while (runtime.seconds() < 0.8) {

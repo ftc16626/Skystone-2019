@@ -34,7 +34,7 @@ public class BlockAutoBlue extends LinearOpMode {
     Trajectory trajectory2 = drive.trajectoryBuilder().forward(step2).strafeRight(step3).build();
     Trajectory trajectory3 = drive.trajectoryBuilder().strafeLeft(step4).back(step5).build();
 
-    robot.backServo.setPosition(1);
+    robot.backRightServo.setPosition(1);
     robot.swingyServo.setPosition(1);
 
     double startingAngle = drive.getRawExternalHeading();
@@ -50,7 +50,7 @@ public class BlockAutoBlue extends LinearOpMode {
 
     drive.followTrajectorySync(trajectory1);
 
-    robot.backServo.setPosition(0);
+    robot.backRightServo.setPosition(0);
 
     runtime.reset();
     while (runtime.seconds() < 0.8) {
@@ -59,13 +59,13 @@ public class BlockAutoBlue extends LinearOpMode {
 
     drive.followTrajectorySync(trajectory2);
 
-    robot.backServo.setPosition(1);
+    robot.backRightServo.setPosition(1);
     telemetry.addData("Heading", drive.getRawExternalHeading());
 
     drive.turnSync(drive.getRawExternalHeading() - startingAngle);
     drive.followTrajectorySync(trajectory3);
 
-    robot.backServo.setPosition(0);
+    robot.backRightServo.setPosition(0);
 
     runtime.reset();
     while (runtime.seconds() < 0.8) {
