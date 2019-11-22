@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.openftc.revextensions2.RevBulkData;
 
-@Autonomous(name="Pull Foundation - Blue")
+@Autonomous(name="Auto - Pull Foundation")
 public class AutoOpPullFoundationBlue extends LinearOpMode {
 
   RevBulkData bulkData;
