@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.openftc.revextensions2.RevBulkData;
 
-@Autonomous(name="Auto - Pull Foundation")
+@Autonomous(name="Auto - Pull Foundation Blue")
 public class AutoOpPullFoundationBlue extends LinearOpMode {
 
   RevBulkData bulkData;
@@ -56,7 +56,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
       telemetry.addData("STEP", "2");
       telemetry.update();
 
-      if(runtime.seconds() > 1) robot.backServo.setPosition(0);
+      if(runtime.seconds() > 1) robot.backRightServo.setPosition(0);
     }
 
     robot.drive.setPower(0);
@@ -84,7 +84,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(315 - 180));
-    robot.backServo.setPosition(1);
+    robot.backRightServo.setPosition(1);
     while(opModeIsActive() && runtime.seconds() < 1.8) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
