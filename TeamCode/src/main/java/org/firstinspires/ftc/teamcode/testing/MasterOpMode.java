@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.ftc16626.missioncontrol.MissionControl;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
 @TeleOp(name="MasterOp", group="")
+@Disabled
 public class MasterOpMode extends OpMode implements GamepadListener {
 
   private MainHardware robot;
