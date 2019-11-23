@@ -56,7 +56,10 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
       telemetry.addData("STEP", "2");
       telemetry.update();
 
-      if(runtime.seconds() > 1) robot.backRightServo.setPosition(0);
+      if(runtime.seconds() > 1) {
+        robot.backRightServo.setPosition(0);
+        robot.lowerBackLeftServo();
+      }
     }
 
     robot.drive.setPower(0);
@@ -85,6 +88,8 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
 
     robot.drive.setAngle(Math.toRadians(315 - 180));
     robot.backRightServo.setPosition(1);
+    robot.raiseBackLeftServo();
+
     while(opModeIsActive() && runtime.seconds() < 1.8) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
