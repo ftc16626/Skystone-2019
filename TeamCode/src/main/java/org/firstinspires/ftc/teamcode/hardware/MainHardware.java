@@ -44,11 +44,13 @@ public class MainHardware {
   private final String sliderRangeId = "sliderRange";
 
   // Hardware Constraints
-  private final double backRightServoMin = 0.50;
+  private final double backRightServoMin = 0.40;
   private final double backRightServoMax = 0.92;
+  private final double backRightServoPerpendicular = 0.21;
 
   private final double backLeftServoMin = 0.45;
-  private final double backLeftServoMax = 0.8;
+  private final double backLeftServoMax = 0.9;
+  private final double backLeftServoPerpendicular = 0.9;
 
   private final double swingyServoMin = 0.38;
   private final double swingyServoMax = 1;
@@ -131,6 +133,14 @@ public class MainHardware {
 
   public void raiseBackRightServo() {
     backRightServo.setPosition(1);
+  }
+
+  public void perpendicularBackLeftServo() {
+    backLeftServo.setPosition(backLeftServoPerpendicular);
+  }
+
+  public void perpendicularBackRightServo() {
+    backRightServo.setPosition(backRightServoPerpendicular);
   }
 
   public void lowerBackServos() {
