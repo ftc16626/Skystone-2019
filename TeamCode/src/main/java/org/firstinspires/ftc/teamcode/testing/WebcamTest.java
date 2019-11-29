@@ -12,10 +12,9 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous(group = "testing")
 public class WebcamTest extends LinearOpMode {
@@ -51,7 +50,8 @@ public class WebcamTest extends LinearOpMode {
 
 //    phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK,
 //        cameraMonitorViewId);
-    phoneCam = new OpenCvWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+    phoneCam = OpenCvCameraFactory
+        .getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
     phoneCam.openCameraDevice();//open camera
     phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
