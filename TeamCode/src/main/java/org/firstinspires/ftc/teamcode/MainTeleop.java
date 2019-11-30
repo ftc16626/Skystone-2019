@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystem.system.SubsystemDriverControl;
 @TeleOp(name = "Main TeleOp", group = "Mecanum")
 public class MainTeleop extends RadicalOpMode {
   @Override
-  public void overridenInit() {
+  public void extendedInit() {
     Subsystem driverControl = new SubsystemDriverControl(robot, this);
 
     subsystemHandler.add(driverControl);

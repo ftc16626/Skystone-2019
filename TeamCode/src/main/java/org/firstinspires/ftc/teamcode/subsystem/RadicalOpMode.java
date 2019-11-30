@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystem;
 
-import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
@@ -16,8 +15,7 @@ public abstract class RadicalOpMode extends OpMode implements GamepadListener {
   private boolean initRanOnce = false;
   private boolean mountRanOnce = false;
 
-  public void overridenInit() {
-
+  public void extendedInit() {
   }
 
   @Override
@@ -31,7 +29,7 @@ public abstract class RadicalOpMode extends OpMode implements GamepadListener {
 
 //    subsystemHandler.initLoop();
 
-    overridenInit();
+    extendedInit();
     subsystemHandler.onInit();
   }
 
@@ -49,6 +47,9 @@ public abstract class RadicalOpMode extends OpMode implements GamepadListener {
     }
 
     subsystemHandler.update();
+  }
+
+  public void extendedLoop() {
   }
 
   @Override
