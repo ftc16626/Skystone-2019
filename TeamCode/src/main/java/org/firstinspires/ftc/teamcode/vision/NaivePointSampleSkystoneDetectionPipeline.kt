@@ -2,9 +2,8 @@ package org.firstinspires.ftc.teamcode.vision
 
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
-import org.openftc.easyopencv.OpenCvPipeline
 
-class NaivePointSampleSkystoneDetectionPipeline : OpenCvPipeline() {
+class NaivePointSampleSkystoneDetectionPipeline : Init3BlockDetection() {
 
     var valMid = -1
     var valRight = -1
@@ -25,9 +24,6 @@ class NaivePointSampleSkystoneDetectionPipeline : OpenCvPipeline() {
     private val rightX = .75
     private val rightY = .5
 
-    val cols = 480
-    val rows = 640
-
     private val yCbCrChan2Mat = Mat()
     private val thresholdMat = Mat()
     private val combinedMat = Mat()
@@ -35,9 +31,9 @@ class NaivePointSampleSkystoneDetectionPipeline : OpenCvPipeline() {
     private val contours = mutableListOf<MatOfPoint>()
 
     enum class PipelineStage {
-        DETECTION, // Display outline
-        THRESHOLD, // Display greyscale extraction
-        RAW_IMAGE  // Display raw image
+        DETECTION,
+        THRESHOLD,
+        RAW_IMAGE
     }
 
     var stageToRenderToViewPoint = PipelineStage.DETECTION
@@ -74,13 +70,16 @@ class NaivePointSampleSkystoneDetectionPipeline : OpenCvPipeline() {
         val pixelsMid =
             thresholdMat.get((input!!.rows() * midY).toInt(), (input.cols() * midX).toInt())
         val pixelsLeft =
-            thresholdMat.get((input!!.rows() * leftY).toInt(), (input.cols() * leftX).toInt())
+            thresholdMat.get((input.rows() * leftY).toInt(), (input.cols() * leftX).toInt())
         val pixelsRight =
-            thresholdMat.get((input!!.rows() * rightY).toInt(), (input.cols() * rightX).toInt())
+            thresholdMat.get((input.rows() * rightY).toInt(), (input.cols() * rightX).toInt())
 
         valMid = pixelsMid[0].toInt()
         valLeft = pixelsLeft[0].toInt()
         valRight = pixelsRight[0].toInt()
+
+        detectedSkystonePosition =
+            if (valLeft == 0) 0 else if (valMid == 0) 1 else if (valRight == 0) 2 else -1
 
         Imgproc.rectangle(
             combinedMat,
@@ -124,7 +123,7 @@ class NaivePointSampleSkystoneDetectionPipeline : OpenCvPipeline() {
         return when (stageToRenderToViewPoint) {
             PipelineStage.THRESHOLD -> thresholdMat
             PipelineStage.DETECTION -> combinedMat
-            PipelineStage.RAW_IMAGE -> input!!
+            PipelineStage.RAW_IMAGE -> input
         }
     }
 
