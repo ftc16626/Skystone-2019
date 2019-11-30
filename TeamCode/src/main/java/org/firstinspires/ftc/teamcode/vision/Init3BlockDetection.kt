@@ -7,8 +7,8 @@ abstract class Init3BlockDetection : OpenCvPipeline() {
 
     var detectedSkystonePosition = -1
 
-    val cols = 480
-    val rows = 640
+    val width = 640
+    val height = 480
 
     fun getSkystonePositions(leftMostPosition: Int): Array<Int> {
         val firstSkystonePosition = detectedSkystonePosition + leftMostPosition

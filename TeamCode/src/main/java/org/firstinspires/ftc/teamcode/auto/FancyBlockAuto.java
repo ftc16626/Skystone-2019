@@ -27,7 +27,7 @@ public class FancyBlockAuto extends LinearOpMode {
         .getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
     webCam.openCameraDevice();
     webCam.setPipeline(pipeline);
-    webCam.startStreaming(pipeline.getRows(), pipeline.getCols(), OpenCvCameraRotation.UPRIGHT);
+    webCam.startStreaming(pipeline.getWidth(), pipeline.getHeight(), OpenCvCameraRotation.UPRIGHT);
 
     waitForStart();
 
@@ -36,8 +36,8 @@ public class FancyBlockAuto extends LinearOpMode {
       telemetry.addData("Skystone", pipeline.getDetectedSkystonePosition());
       telemetry.addData("Skystone Positions", pipeline.getSkystonePositions(3)[0] + "" + pipeline.getSkystonePositions(3)[1]);
 //      telemetry.addData("Stage", pipeline.getStageToRenderToViewPoint());
-      telemetry.addData("Width", pipeline.getCols());
-      telemetry.addData("Height", pipeline.getRows());
+      telemetry.addData("Width", pipeline.getHeight());
+      telemetry.addData("Height", pipeline.getWidth());
 
       telemetry.addData("Frame Count", webCam.getFrameCount());
       telemetry.addData("FPS", String.format("%.2f", webCam.getFps()));
