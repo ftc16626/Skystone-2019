@@ -8,6 +8,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Environment
 import android.util.Log
+import com.ftc16626.missioncontrol.math.imu.PositionIntegrator
+import com.ftc16626.missioncontrol.math.Vector3
 import com.ftc16626.missioncontrol.util.*
 import com.ftc16626.missioncontrol.util.exceptions.DirectoryNotAccessibleException
 import com.ftc16626.missioncontrol.util.exceptions.UnableToCreateDirectoryException
@@ -49,9 +51,11 @@ class MissionControl(private val activity: Activity) : SocketListener,
     private val profileDirectory: File
 
     private val scribe: Scribe
-    private val accelPos: AccelPos
+    private val positionIntegrator: PositionIntegrator
 
     val pilotProfileHandler: PilotProfileHandler
+
+    private val liveVariable = mutableMapOf<String, Any>()
 
     init {
         webSocket.addSocketListener(this)
@@ -64,7 +68,11 @@ class MissionControl(private val activity: Activity) : SocketListener,
         profileDirectory = setupLogDirectory(mainDirectoryPath, "profiles")
 
         scribe = Scribe()
-        accelPos = AccelPos(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
+        positionIntegrator = PositionIntegrator(
+            Vector3(0.0, 0.0, 0.0),
+            Vector3(0.0, 0.0, 0.0),
+            Vector3(0.0, 0.0, 0.0)
+        )
 
         pilotProfileHandler = PilotProfileHandler(profileDirectory)
         pilotProfileHandler.init()
@@ -130,6 +138,36 @@ class MissionControl(private val activity: Activity) : SocketListener,
                     )
                 }
             })
+
+        webServer.registerRESTRequest(
+            "get-live-var",
+            NanoHTTPD.Method.GET,
+            object : RequestRESTListener {
+                override fun onRequest(url: List<String>): RequestRESTResponse {
+                    return RequestRESTResponse(
+                        NanoHTTPD.Response.Status.OK,
+                        "application/json",
+                        JSONObject().put("value", getLiveVariable(url[0])).toString()
+                    )
+                }
+            }
+        )
+
+        webServer.registerRESTRequest(
+            "set-live-var",
+            NanoHTTPD.Method.GET,
+            object : RequestRESTListener {
+                override fun onRequest(url: List<String>): RequestRESTResponse {
+                    liveVariable[url[0]] = url[1]
+
+                    return RequestRESTResponse(
+                        NanoHTTPD.Response.Status.OK,
+                        "application/json",
+                        JSONObject().put("result", "success").toString()
+                    )
+                }
+            }
+        )
     }
 
     fun start() {
@@ -152,17 +190,59 @@ class MissionControl(private val activity: Activity) : SocketListener,
         webSocket.stop()
     }
 
+    fun logAndBroadcast(msg: String, tag: String) {
+        logAndBroadcast(LogModel(msg, tag))
+    }
+
+    fun logAndBroadcast(msg: String, tag: String, time: Date) {
+        logAndBroadcast(LogModel(msg, tag, time))
+    }
+
     fun logAndBroadcast(model: LogModel) {
         log(model)
         broadcast(model)
+    }
+
+    fun log(msg: String, tag: String) {
+        log(LogModel(msg, tag))
+    }
+
+    fun log(msg: String, tag: String, time: Date) {
+        log(LogModel(msg, tag, time))
     }
 
     fun log(model: LogModel) {
         scribe.writeLine(model)
     }
 
+    fun broadcast(msg: String, tag: String) {
+        broadcast(LogModel(msg, tag))
+    }
+
+    fun broadcast(msg: String, tag: String, time: Date) {
+        broadcast(LogModel(msg, tag, time))
+    }
+
     fun broadcast(model: LogModel) {
         webSocket.broadcast(model)
+    }
+
+    fun sendInitPacket() {
+        sendInitPacket(arrayOf())
+    }
+
+    fun sendInitPacket(sensorKeys: Array<String>) {
+        val packet = JSONObject()
+
+        val sensorJSON = JSONArray()
+        sensorKeys.forEach {
+            sensorJSON.put(it)
+        }
+
+        packet.put("sensor-keys", sensorJSON)
+
+
+        webSocket.broadcast(LogModel(packet.toString(), "init", Date()))
     }
 
     fun startLogging() {
@@ -201,10 +281,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
     }
 
     override fun onOpen(conn: org.java_websocket.WebSocket, handshake: ClientHandshake) {
-        webSocket.sendMessage(
-            conn,
-            LogModel(getInitPacket(), "init", Date())
-        )
+        sendInitPacket()
     }
 
     override fun onFormattedMessage(conn: org.java_websocket.WebSocket, msg: LogModel) {
@@ -235,7 +312,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
             Date()
         )
 
-        accelPos.update(
+        positionIntegrator.update(
             Vector3(
                 event.values[0].toDouble(),
                 event.values[1].toDouble(),
@@ -244,32 +321,32 @@ class MissionControl(private val activity: Activity) : SocketListener,
         )
 
         val velXLog = LogModel(
-            accelPos.currentVel.x.toString(),
+            positionIntegrator.currentVel.x.toString(),
             "velocity-x",
             Date()
         )
         val velYLog = LogModel(
-            accelPos.currentVel.y.toString(),
+            positionIntegrator.currentVel.y.toString(),
             "velocity-y",
             Date()
         )
         val velZLog = LogModel(
-            accelPos.currentVel.z.toString(),
+            positionIntegrator.currentVel.z.toString(),
             "velocity-z",
             Date()
         )
         val posXLog = LogModel(
-            accelPos.currentPos.x.toString(),
+            positionIntegrator.currentPos.x.toString(),
             "position-x",
             Date()
         )
         val posYLog = LogModel(
-            accelPos.currentPos.y.toString(),
+            positionIntegrator.currentPos.y.toString(),
             "position-y",
             Date()
         )
         val posZLog = LogModel(
-            accelPos.currentPos.z.toString(),
+            positionIntegrator.currentPos.z.toString(),
             "position-z",
             Date()
         )
@@ -324,7 +401,7 @@ class MissionControl(private val activity: Activity) : SocketListener,
         val packet = JSONObject()
             .put(
                 "sensor-keys",
-                JSONArray().put("accelerometer-x").put("accelerometer-y").put("accelerometer-z")
+                JSONArray()//.put("accelerometer-x").put("accelerometer-y").put("accelerometer-z")
             )
 
         return packet.toString()
@@ -359,6 +436,18 @@ class MissionControl(private val activity: Activity) : SocketListener,
 
             settingsTypeList[key] = valueType
         }
+    }
+
+    fun registerLiveVariable(key: String, value: Any) {
+        liveVariable[key] = value
+    }
+
+    fun clearLiveVariables() {
+        liveVariable.clear()
+    }
+
+    fun getLiveVariable(key: String): Any? {
+        return liveVariable[key]
     }
 
     private fun setupMainDirectory(path: File): File {

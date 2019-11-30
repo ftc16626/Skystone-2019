@@ -3,37 +3,83 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
   private DcMotor motorLeft;
   private DcMotor motorRight;
 
-  private float power = 1;
-  private boolean on = false;
+  public float power = -0.75f;
+  public boolean isMotorOn = false;
 
-  public Intake(HardwareMap hwMap, String motorLeftId, String motorRightId) {
+  private Servo intakeServo;
+  private boolean isServoOpen = false;
+
+  public Intake(HardwareMap hwMap, String motorLeftId, String motorRightId, String servoId) {
     motorLeft = hwMap.get(DcMotor.class, motorLeftId);
     motorRight = hwMap.get(DcMotor.class, motorRightId);
 
-    motorLeft.setDirection(Direction.REVERSE);
-  }
+    motorRight.setDirection(Direction.REVERSE);
 
-  public void setPower(float power) {
-    this.power = power;
+    intakeServo = hwMap.get(Servo.class, servoId);
+    intakeServo.scaleRange(0.58, 1);
   }
 
   public void toggle() {
-    on = !on;
+    isMotorOn = !isMotorOn;
 
-    toggle(on);
+    toggle(isMotorOn);
   }
 
   public void toggle(boolean on) {
-    this.on = on;
+    this.isMotorOn = on;
 
-    if(this.on) {
+    setPower();
+  }
+
+  public void reverse() {
+    power = power * -1;
+
+    if(this.isMotorOn) {
       motorLeft.setPower(power);
       motorRight.setPower(power);
     }
+  }
+
+  public void directionBackward() {
+    power = Math.abs(power) * -1;
+    setPower();
+  }
+
+  public void directionForward() {
+    power = Math.abs(power);
+    setPower();
+  }
+
+  private void setPower() {
+    if(this.isMotorOn) {
+      motorLeft.setPower(power);
+      motorRight.setPower(power);
+    } else {
+      motorLeft.setPower(0);
+      motorRight.setPower(0);
+    }
+  }
+
+  public void toggleIntakeOpen() {
+    isServoOpen = !isServoOpen;
+
+    if(isServoOpen) open();
+    else if(!isServoOpen) close();
+  }
+
+  public void open() {
+    isServoOpen = true;
+    intakeServo.setPosition(0);
+  }
+
+  public void close() {
+    isServoOpen = false;
+    intakeServo.setPosition(1);
   }
 }

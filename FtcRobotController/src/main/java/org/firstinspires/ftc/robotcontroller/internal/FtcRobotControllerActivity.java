@@ -49,6 +49,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -60,6 +61,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.ftc16626.kao.Kao;
 import com.ftc16626.missioncontrol.MissionControl;
 import com.ftc16626.missioncontrol.util.CommandListener;
@@ -321,6 +323,7 @@ public class FtcRobotControllerActivity extends Activity
           }
         });
         popupMenu.inflate(R.menu.ftc_robot_controller);
+        FtcDashboard.populateMenu(popupMenu.getMenu());
         popupMenu.show();
       }
     });
@@ -392,43 +395,45 @@ public class FtcRobotControllerActivity extends Activity
     missionControl = new MissionControl(this);
 
     // Start MissionControl
-    missionControl.registerCommand("face", new CommandListener() {
-      @Override
-      public void onCommand(@NotNull String argument) {
-        if(argument.equals("on")) {
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              kao.showView();
-            }
-          });
-
-        } else if(argument.equals("off")) {
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              kao.hideView();
-            }
-          });
-        }
-      }
-    });
-    missionControl.registerCommand("breathing", new CommandListener() {
-      @Override
-      public void onCommand(@NotNull String argument) {
-        if(argument.equals("on")) {
-          kao.getCurrentFace().setSetting("breathing", true);
-        } else if(argument.equals("off")) {
-          kao.getCurrentFace().setSetting("breathing", false);
-        }
-      }
-    });
-
+//    missionControl.registerCommand("face", new CommandListener() {
+//      @Override
+//      public void onCommand(@NotNull String argument) {
+//        if(argument.equals("on")) {
+//          runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//              kao.showView();
+//            }
+//          });
+//
+//        } else if(argument.equals("off")) {
+//          runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//              kao.hideView();
+//            }
+//          });
+//        }
+//      }
+//    });
+//    missionControl.registerCommand("breathing", new CommandListener() {
+//      @Override
+//      public void onCommand(@NotNull String argument) {
+//        if(argument.equals("on")) {
+//          kao.getCurrentFace().setSetting("breathing", true);
+//        } else if(argument.equals("off")) {
+//          kao.getCurrentFace().setSetting("breathing", false);
+//        }
+//      }
+//    });
+//
     missionControl.start();
 
     // Initialize Kao
     kao = findViewById(R.id.face);
     kao.hideView();
+
+    FtcDashboard.start();
   }
 
   protected UpdateUI createUpdateUI() {
@@ -489,7 +494,7 @@ public class FtcRobotControllerActivity extends Activity
     super.onStop();
     RobotLog.vv(TAG, "onStop()");
 
-//    missionControl.stop();
+    missionControl.stop();
   }
 
   @Override
@@ -509,7 +514,13 @@ public class FtcRobotControllerActivity extends Activity
     if (wifiLock != null) wifiLock.release();
     if (preferencesHelper != null) preferencesHelper.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener);
 
-    missionControl.stop();
+    try {
+      missionControl.stop();
+    } catch(Exception e) {
+      Log.e("MISSIONCONTROL", e.toString());
+    }
+
+    FtcDashboard.stop();
 
     RobotLog.cancelWriteLogcatToDisk();
   }
@@ -584,6 +595,7 @@ public class FtcRobotControllerActivity extends Activity
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.ftc_robot_controller, menu);
+    FtcDashboard.populateMenu(menu);
     return true;
   }
 
@@ -719,6 +731,8 @@ public class FtcRobotControllerActivity extends Activity
         return service.getRobot().eventLoopManager;
       }
     });
+
+    FtcDashboard.attachWebServer(service.getWebServer());
   }
 
   private void updateUIAndRequestRobotSetup() {
@@ -758,6 +772,8 @@ public class FtcRobotControllerActivity extends Activity
 
     passReceivedUsbAttachmentsToEventLoop();
     AndroidBoard.showErrorIfUnknownControlHub();
+
+    FtcDashboard.attachEventLoop(eventLoop);
   }
 
   protected OpModeRegister createOpModeRegister() {
