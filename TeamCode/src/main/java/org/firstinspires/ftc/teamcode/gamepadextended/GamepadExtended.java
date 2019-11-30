@@ -29,9 +29,9 @@ public class GamepadExtended {
   );
 
   private GamepadListener listener = null;
-  private final int buttonsToCount = 15;
-  private boolean[] buttonPastValues = new boolean[buttonsToCount];
-  private boolean[] buttonValues = new boolean[buttonsToCount];
+  private final int BUTTONS_TO_COUNT = 15;
+  private boolean[] buttonPastValues = new boolean[BUTTONS_TO_COUNT];
+  private boolean[] buttonValues = new boolean[BUTTONS_TO_COUNT];
   private GamepadEventName[] eventNameList = GamepadEventName.values();
 
   public double getStrafeStickMagnitude() {
@@ -141,7 +141,7 @@ public class GamepadExtended {
     buttonValues[13] = gamepad.left_stick_button;
     buttonValues[14] = gamepad.right_stick_button;
 
-    for(int i = 0; i < buttonsToCount; i++) {
+    for(int i = 0; i < BUTTONS_TO_COUNT; i++) {
       if(buttonValues[i] && !buttonPastValues[i]) {
         listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, type);
 

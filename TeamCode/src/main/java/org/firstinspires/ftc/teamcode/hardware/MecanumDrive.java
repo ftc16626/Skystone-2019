@@ -142,10 +142,10 @@ public class MecanumDrive {
 //    motorVelBackRight *= timeDelta;
 
     // Convert ticks to radians then distance
-//    motorVelFrontLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
-//    motorVelFrontRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
-//    motorVelBackLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
-//    motorVelBackRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * gearRatio;
+//    motorVelFrontLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * GEAR_RATIO;
+//    motorVelFrontRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * GEAR_RATIO;
+//    motorVelBackLeft *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * GEAR_RATIO;
+//    motorVelBackRight *= (2 * Math.PI / encoderCounts) * kinematics.getWheelRadius() * GEAR_RATIO;
 
     motorVelFrontLeft *= (2 * Math.PI / encoderCounts);
     motorVelFrontRight *= (2 * Math.PI / encoderCounts);
