@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystem.system;
 
-import android.util.Log;
 import com.ftc16626.missioncontrol.MissionControl;
 import com.ftc16626.missioncontrol.util.profiles.PilotProfile;
 import com.ftc16626.missioncontrol.util.profiles.StickControl;
@@ -23,7 +22,7 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
 
   private SubsytemDriveMecanum mecanumDrive;
   private SubsystemDriverBackServos backServos;
-  private SubsystemDriverSliderIntake sliderIntake;
+  private SubsystemDriverLiftIntake sliderIntake;
 
   private PilotProfile enzoProfile = new PilotProfile("Enzo's Profile",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, false, false,
@@ -35,7 +34,7 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
 
     mecanumDrive = new SubsytemDriveMecanum(robot, opMode, driverInterface);
     backServos = new SubsystemDriverBackServos(robot, opMode, driverInterface);
-    sliderIntake = new SubsystemDriverSliderIntake(robot, opMode, driverInterface);
+    sliderIntake = new SubsystemDriverLiftIntake(robot, opMode, driverInterface);
 
     getSubsystemHandler().add(mecanumDrive);
     getSubsystemHandler().add(backServos);

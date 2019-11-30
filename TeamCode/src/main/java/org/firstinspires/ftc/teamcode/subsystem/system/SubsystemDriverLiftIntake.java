@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystem.system;
 
-import android.util.Log;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
 import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
@@ -13,12 +12,12 @@ import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.openftc.revextensions2.RevBulkData;
 
-public class SubsystemDriverSliderIntake extends Subsystem implements GamepadListener {
+public class SubsystemDriverLiftIntake extends Subsystem implements GamepadListener {
 
   public DriverInterface driverInterface;
   private RevBulkData bulkData;
 
-  public SubsystemDriverSliderIntake(
+  public SubsystemDriverLiftIntake(
       @NotNull MainHardware robot,
       @NotNull RadicalOpMode opMode,
       @NotNull DriverInterface driverInterface) {
@@ -31,20 +30,20 @@ public class SubsystemDriverSliderIntake extends Subsystem implements GamepadLis
   public void update() {
     bulkData = getRobot().expansionHubDaughter.getBulkInputData();
 
-    double distance = getRobot().sliderRange.getDistance(DistanceUnit.MM);
+    double distance = getRobot().liftRange.getDistance(DistanceUnit.MM);
 
     if (driverInterface.aid.gamepad.left_stick_y != 0) {
       float stick = driverInterface.aid.gamepad.left_stick_y;
 
       if (stick < 0 && distance < 580) {
-        getRobot().motorSlider.setPower(stick);
+        getRobot().motorLift.setPower(stick);
       } else if (stick > 0 && distance > 20) {
-        getRobot().motorSlider.setPower(stick);
+        getRobot().motorLift.setPower(stick);
       } else {
-        getRobot().motorSlider.setPower(0);
+        getRobot().motorLift.setPower(0);
       }
     } else {
-      getRobot().motorSlider.setPower(0);
+      getRobot().motorLift.setPower(0);
     }
 
     if(driverInterface.aid.gamepad.b) {
