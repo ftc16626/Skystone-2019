@@ -14,8 +14,7 @@ import org.openftc.revextensions2.RevBulkData;
 
 public class SubsystemDriverLiftIntake extends Subsystem implements GamepadListener {
 
-  public DriverInterface driverInterface;
-  private RevBulkData bulkData;
+  DriverInterface driverInterface;
 
   public SubsystemDriverLiftIntake(
       @NotNull MainHardware robot,
@@ -28,7 +27,7 @@ public class SubsystemDriverLiftIntake extends Subsystem implements GamepadListe
 
   @Override
   public void update() {
-    bulkData = getRobot().expansionHubDaughter.getBulkInputData();
+    RevBulkData bulkData = getRobot().expansionHubDaughter.getBulkInputData();
 
     double distance = getRobot().liftRange.getDistance(DistanceUnit.MM);
 
@@ -46,6 +45,21 @@ public class SubsystemDriverLiftIntake extends Subsystem implements GamepadListe
       getRobot().motorLift.setPower(0);
     }
 
+    /**
+     * 15,0.1489
+     * 30,.107
+     * 40,.0988
+     * 50,0.1239
+     * 70,.1155
+     * 90,.1322
+     * 120,.057
+     * 150,.09
+     * 170,.098
+     * 200,.098
+     * 220,0.157
+     *
+     */
+
     if(driverInterface.aid.gamepad.b) {
       getRobot().intake.open();
     } else {
@@ -53,6 +67,7 @@ public class SubsystemDriverLiftIntake extends Subsystem implements GamepadListe
     }
 
     getOpMode().telemetry.addData("Slider Height", distance);
+    getOpMode().telemetry.addData("Y", driverInterface.aid.gamepad.left_stick_y);
   }
 
   @Override
