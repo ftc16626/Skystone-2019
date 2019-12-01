@@ -22,7 +22,8 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
 
   private SubsytemDriveMecanum mecanumDrive;
   private SubsystemDriverBackServos backServos;
-  private SubsystemDriverLiftIntake liftIntake;
+  private SubsystemDriverIntake intake;
+  private SubsystemDriverLift lift;
 
   private PilotProfile enzoProfile = new PilotProfile("Enzo's Profile",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, false, false,
@@ -34,11 +35,13 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
 
     mecanumDrive = new SubsytemDriveMecanum(robot, opMode, driverInterface);
     backServos = new SubsystemDriverBackServos(robot, opMode, driverInterface);
-    liftIntake = new SubsystemDriverLiftIntake(robot, opMode, driverInterface);
+    intake = new SubsystemDriverIntake(robot, opMode, driverInterface);
+    lift = new SubsystemDriverLift(robot, opMode, driverInterface);
 
     getSubsystemHandler().add(mecanumDrive);
     getSubsystemHandler().add(backServos);
-    getSubsystemHandler().add(liftIntake);
+    getSubsystemHandler().add(intake);
+    getSubsystemHandler().add(lift);
   }
 
   @Override
@@ -51,7 +54,8 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
 
     mecanumDrive.driverInterface = driverInterface;
     backServos.driverInterface = driverInterface;
-    liftIntake.driverInterface = driverInterface;
+    intake.driverInterface = driverInterface;
+    lift.driverInterface = driverInterface;
   }
 
   @Override
@@ -71,6 +75,7 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
     backServos.actionPerformed(eventName, eventType, gamepadType);
-    liftIntake.actionPerformed(eventName, eventType, gamepadType);
+    intake.actionPerformed(eventName, eventType, gamepadType);
+    lift.actionPerformed(eventName, eventType, gamepadType);
   }
 }
