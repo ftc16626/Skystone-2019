@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystem.system;
 
-import android.util.Log;
 import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
@@ -10,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 public class SubsytemDriveMecanum extends Subsystem {
 
   public DriverInterface driverInterface;
+
+  private final boolean USE_FIELD_CENTRIC = true;
 
   public SubsytemDriveMecanum(
       @NotNull MainHardware robot,
@@ -63,11 +64,12 @@ public class SubsytemDriveMecanum extends Subsystem {
     }
 
 //    if (driverInterface.driver.getProfile().enableFieldCentric) {
-//      angle += Math.toRadians(robot.imu.getGlobalHeading() % 360);
-//      telemetry.addData("field centric", "true " + angle);
-//    } else {
-//      telemetry.addData("field centric", "false " + angle);
-//    }
+    if(USE_FIELD_CENTRIC) {
+      angle += Math.toRadians(getRobot().imu.getGlobalHeading() % 360);
+      getOpMode().telemetry.addData("field centric", "true " + angle);
+    } else {
+      getOpMode().telemetry.addData("field centric", "false " + angle);
+    }
 
     getRobot().drive.setAngle(angle);
     getRobot().drive.setPower(magnitude);
