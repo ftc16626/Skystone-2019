@@ -27,12 +27,14 @@ public class SubsystemPIDLift extends Subsystem implements GamepadListener {
 
   public static double kP = 0.25;
   public static double kI = 0;
-  public static double kD = 0.08;
+  public static double kD = 0.09;
 
   public static double kG = 0; // power against gravity
 
   private double currentHeight = 0;
   public static double targetHeight = 8;
+
+  public static double MAX_HEIGHT = 62;
 
   private FtcDashboard dashboard = FtcDashboard.getInstance();
   Telemetry telemetry = dashboard.getTelemetry();
@@ -57,7 +59,7 @@ public class SubsystemPIDLift extends Subsystem implements GamepadListener {
 
   @Override
   public void update() {
-    targetHeight = Range.clip(targetHeight - getOpMode().gamepad1.left_stick_y / 2, 1.5, 52);
+    targetHeight = Range.clip(targetHeight - getOpMode().gamepad1.left_stick_y / 2, 1.5, MAX_HEIGHT);
 
     controller.setConstants(kP, kI, kD, currentHeight < 3 ? 0 : kG);
 
@@ -82,10 +84,10 @@ public class SubsystemPIDLift extends Subsystem implements GamepadListener {
       GamepadType gamepadType) {
     if(eventType == GamepadEventType.BUTTON_PRESSED) {
       if(eventName == GamepadEventName.DPAD_UP) {
-        targetHeight = Range.clip(targetHeight + 10, 1.5, 52);
+        targetHeight = Range.clip(targetHeight + 10, 1.5, MAX_HEIGHT);
       Log.i("TEST", "BUTTON PRESSED 1");
       } else if(eventName == GamepadEventName.DPAD_DOWN) {
-        targetHeight = Range.clip(targetHeight - 10, 1.5, 52);
+        targetHeight = Range.clip(targetHeight - 10, 1.5, MAX_HEIGHT);
       Log.i("TEST", "BUTTON PRESSED 2");
       }
 
