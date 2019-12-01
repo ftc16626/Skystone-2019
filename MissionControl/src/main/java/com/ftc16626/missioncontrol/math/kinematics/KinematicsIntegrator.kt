@@ -1,6 +1,5 @@
 package com.ftc16626.missioncontrol.math.kinematics
 
-import android.util.Log
 import com.ftc16626.missioncontrol.math.Vector2
 
 class KinematicsIntegrator(var currentPos: Vector2, var currentHeading: Double) {
