@@ -57,7 +57,7 @@ public class SubsystemDriverLift extends Subsystem implements GamepadListener {
   public void update() {
     targetHeight = Range.clip(targetHeight - driverInterface.aid.gamepad.left_stick_y * LIFT_SPEED, MIN_HEIGHT, MAX_HEIGHT);
 
-    controller.setConstants(kP, kI, kD, currentHeight < 3 ? 0 : kG);
+//    controller.setConstants(kP, kI, kD, kG);
 
     currentHeight = getRobot().liftRange.getDistance(DistanceUnit.CM);
     double power = -controller.update(targetHeight - currentHeight);
