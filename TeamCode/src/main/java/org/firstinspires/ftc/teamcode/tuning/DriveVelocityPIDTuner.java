@@ -36,7 +36,7 @@ import org.firstinspires.ftc.teamcode.hardware.DriveConstants;
 @Config
 @Autonomous(name="Tuning - Drive Velocity PID", group = "tuning")
 public class DriveVelocityPIDTuner extends LinearOpMode {
-  public static double DISTANCE = 72;
+  public static double DISTANCE = 1500;
 
   private static final String PID_VAR_NAME = "VELO_PID";
 
