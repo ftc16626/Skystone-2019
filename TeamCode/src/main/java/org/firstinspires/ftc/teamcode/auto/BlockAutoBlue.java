@@ -5,7 +5,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanumOld;
+import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
 @Config
@@ -66,7 +66,7 @@ public class BlockAutoBlue extends LinearOpMode {
   @Override
   public void runOpMode() {
     robot = new MainHardware(hardwareMap);
-    DriveBaseMecanumOld drive = new DriveBaseMecanumOld(hardwareMap);
+    DriveBaseMecanum drive = new DriveBaseMecanum(hardwareMap);
 
     Trajectory trajectory1 = drive.trajectoryBuilder()
         .back(step1).build();

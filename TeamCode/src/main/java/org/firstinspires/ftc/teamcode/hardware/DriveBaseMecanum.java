@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import android.support.annotation.NonNull;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import java.util.ArrayList;
@@ -37,9 +39,9 @@ public class DriveBaseMecanum extends SampleMecanumDriveBase {
     // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
     leftFront = hardwareMap.get(ExpansionHubMotor.class, "motorFrontLeft");
-    rightFront = hardwareMap.get(ExpansionHubMotor.class, "motorFrontRight");
     leftRear = hardwareMap.get(ExpansionHubMotor.class, "motorBackLeft");
     rightRear = hardwareMap.get(ExpansionHubMotor.class, "motorBackRight");
+    rightFront = hardwareMap.get(ExpansionHubMotor.class, "motorFrontRight");
 
     motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -55,6 +57,8 @@ public class DriveBaseMecanum extends SampleMecanumDriveBase {
     }
 
     // TODO: reverse any motors using DcMotor.setDirection()
+    leftFront.setDirection(Direction.REVERSE);
+    leftRear.setDirection(Direction.REVERSE);
 
     // TODO: if desired, use setLocalizer() to change the localization method
     // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
@@ -117,5 +121,4 @@ public class DriveBaseMecanum extends SampleMecanumDriveBase {
   @Override
   public double getRawExternalHeading() {
     return imu.getAngularOrientation().firstAngle;
-  }
-}
+  }}
