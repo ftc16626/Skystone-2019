@@ -54,8 +54,8 @@ public class MainHardware {
   private final double SWINGY_SERVO_MIN = 0.38;
   private final double SWINGY_SERVO_MAX = 1;
 
-  private final double LIFT_MAX_HEIGHT = 580;
-  private final double LIFT_Min_HEIGHT = 580;
+  public final double LIFT_MAX_HEIGHT = 620;
+  public final double LIFT_MIN_HEIGHT = 10;
 
   // Units in millimeters
   public final Dimensions dimensionsDriveTrain = new Dimensions(198.125, 336, 50);
@@ -89,8 +89,6 @@ public class MainHardware {
     swingyServo = hwMap.get(Servo.class, SWINGY_SERVO_ID);
 
     motorLift = hwMap.get(DcMotor.class, SLIDER_MOTOR_ID);
-//    motorLift.setTargetPosition(0);
-//    motorLift.setMode(RunMode.RUN_TO_POSITION);
 
     liftRange = (Rev2mDistanceSensor) hwMap.get(DistanceSensor.class, SLIDER_RANGE_ID);
   }
