@@ -14,7 +14,8 @@ public class MainHardware {
   public ExpansionHubEx expansionHubDaughter;
 
   public MecanumDrive drive;
-  public RadicalIMU imu;
+//  public RadicalIMU imu;
+  public SimpleIMU imu;
   public Intake intake;
 
   public Servo backRightServo;
@@ -76,7 +77,8 @@ public class MainHardware {
         dimensionsDriveTrain.getWidth(), dimensionsDriveTrain.getHeight(), WHEEL_RADIUS,
         GEAR_RATIO, ENCODER_COUNTS_PER_REV
     );
-    imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"), false);
+//    imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"), false);
+    imu = new SimpleIMU(hwMap.get(BNO055IMU.class, "imu"));
 
     intake = new Intake(hwMap, intakeMotorIds[0], intakeMotorIds[1], INTAKE_SERVO_ID);
 
