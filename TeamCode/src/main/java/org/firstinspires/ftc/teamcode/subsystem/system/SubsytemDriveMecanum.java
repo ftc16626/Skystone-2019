@@ -65,8 +65,8 @@ public class SubsytemDriveMecanum extends Subsystem {
 
 //    if (driverInterface.driver.getProfile().enableFieldCentric) {
     if(USE_FIELD_CENTRIC) {
-      angle += Math.toRadians(getRobot().imu.getGlobalHeading() % 360);
-      getOpMode().telemetry.addData("field centric", "true " + angle);
+      angle -= Math.toRadians(getRobot().imu.getGlobalHeading() % 360);
+      getOpMode().telemetry.addData("field centric", "true " + Math.toDegrees(angle));
     } else {
       getOpMode().telemetry.addData("field centric", "false " + angle);
     }
