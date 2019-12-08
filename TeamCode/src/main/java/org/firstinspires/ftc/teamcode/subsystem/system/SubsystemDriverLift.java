@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.DriverInterface;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
@@ -22,7 +22,7 @@ public class SubsystemDriverLift extends Subsystem implements GamepadListener {
 
   private final double kP = 0.25;
   private final double kI = 0;
-  private final double kD = 0.09;
+  private final double kD = 2.5;
 
   private final double kG = 0; // power against gravity
 
@@ -32,7 +32,7 @@ public class SubsystemDriverLift extends Subsystem implements GamepadListener {
   private final double MAX_HEIGHT = getRobot().LIFT_MAX_HEIGHT / 10;
   private final double MIN_HEIGHT = getRobot().LIFT_MIN_HEIGHT / 10;
 
-  private final double LIFT_SPEED = 0.8; // gamepad y stick * LIFT_SPEED
+  private final double LIFT_SPEED = 0.7; // gamepad y stick * LIFT_SPEED
   private final double DPAD_INCREMENT = 14;
 
   public SubsystemDriverLift(
