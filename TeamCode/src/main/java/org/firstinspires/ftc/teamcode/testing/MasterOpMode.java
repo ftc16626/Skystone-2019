@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
 @TeleOp(name="MasterOp", group="")
