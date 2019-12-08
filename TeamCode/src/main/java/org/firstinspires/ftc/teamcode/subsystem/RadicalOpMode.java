@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystem;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
 public abstract class RadicalOpMode extends OpMode implements GamepadListener {

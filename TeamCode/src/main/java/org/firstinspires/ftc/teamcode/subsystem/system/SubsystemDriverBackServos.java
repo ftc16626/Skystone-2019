@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystem.system;
 
-import java.sql.Driver;
-import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventName;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadEventType;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadListener;
-import org.firstinspires.ftc.teamcode.gamepadextended.listener.GamepadType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.DriverInterface;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventType;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;

@@ -124,7 +124,7 @@ public class MecanumDrive {
     bulkData = expansionHub.getBulkInputData();
     double now = System.currentTimeMillis();
 
-    if(!updatedFirstTime) {
+    if (!updatedFirstTime) {
       lastTime = now;
       updatedFirstTime = true;
     }
@@ -242,6 +242,7 @@ public class MecanumDrive {
   public Vector2 getPosition() {
     return kinematicsIntegrator.getCurrentPos();
   }
+
   public Double getHeading() {
     return kinematicsIntegrator.getCurrentHeading();
   }

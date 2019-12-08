@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystem.system;
 
-import org.firstinspires.ftc.teamcode.gamepadextended.DriverInterface;
+import org.firstinspires.ftc.teamcode.util.gamepadextended.DriverInterface;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;

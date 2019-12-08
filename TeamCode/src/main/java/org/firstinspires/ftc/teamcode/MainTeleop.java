@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
