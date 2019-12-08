@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 @Config
 @Autonomous(name="Tuning - Turn Test", group = "tuning")
 public class TurnTest extends LinearOpMode {
-  public static double ANGLE = 90; // deg
+  public static double ANGLE = 180; // deg
 
   @Override
   public void runOpMode() throws InterruptedException {
