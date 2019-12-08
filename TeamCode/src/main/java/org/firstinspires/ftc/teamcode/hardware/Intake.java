@@ -56,7 +56,7 @@ public class Intake {
     setPower();
   }
 
-  private void setPower() {
+  public void setPower() {
     if(this.isMotorOn) {
       motorLeft.setPower(power);
       motorRight.setPower(power);
@@ -64,6 +64,11 @@ public class Intake {
       motorLeft.setPower(0);
       motorRight.setPower(0);
     }
+  }
+
+  public void setPower(double test) {
+    motorLeft.setPower(test);
+    motorRight.setPower(test);
   }
 
   public void toggleIntakeOpen() {
