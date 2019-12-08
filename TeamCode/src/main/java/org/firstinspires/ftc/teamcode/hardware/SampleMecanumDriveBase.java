@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 /*
  * Base class with shared functionality for sample mecanum drives. All hardware-specific details are
@@ -30,10 +31,10 @@ import java.util.List;
  */
 @Config
 public abstract class SampleMecanumDriveBase extends MecanumDrive {
-
   public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
   public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
+  private static final double IN_TO_MM = 0.394;
 
   public enum Mode {
     IDLE,
@@ -60,7 +61,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH);
 
     dashboard = FtcDashboard.getInstance();
-    dashboard.setTelemetryTransmissionInterval(25);
+    dashboard.setTelemetryTransmissionInterval(1);
 
     clock = NanoClock.system();
 
@@ -69,8 +70,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     turnController = new PIDFController(HEADING_PID);
     turnController.setInputBounds(0, 2 * Math.PI);
 
-    constraints = new MecanumConstraints(DriveConstants.BASE_CONSTRAINTS,
-        DriveConstants.TRACK_WIDTH);
+    constraints = new MecanumConstraints(DriveConstants.BASE_CONSTRAINTS, DriveConstants.TRACK_WIDTH);
     follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID);
   }
 
@@ -172,14 +172,14 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
 
         fieldOverlay.setStrokeWidth(1);
         fieldOverlay.setStroke("4CAF50");
-//        DashboardUtil.drawSampledPath(fieldOverlay, trajectory.getPath());
+        DashboardUtil.drawSampledPath(fieldOverlay, trajectory.getPath());
 
         fieldOverlay.setStroke("#F44336");
         double t = follower.elapsedTime();
-//        DashboardUtil.drawRobot(fieldOverlay, trajectory.get(t));
+        DashboardUtil.drawRobot(fieldOverlay, trajectory.get(t));
 
         fieldOverlay.setStroke("#3F51B5");
-        fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);
+        fieldOverlay.fillCircle(currentPose.getX() * IN_TO_MM, currentPose.getY() * IN_TO_MM, 3);
 
         if (!follower.isFollowing()) {
           mode = Mode.IDLE;
@@ -207,8 +207,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     List<Double> positions = getWheelPositions();
     double currentTimestamp = clock.seconds();
 
-    List<Double> velocities = new ArrayList<>(positions.size());
-
+    List<Double> velocities = new ArrayList<>(positions.size());;
     if (lastWheelPositions != null) {
       double dt = currentTimestamp - lastTimestamp;
       for (int i = 0; i < positions.size(); i++) {
@@ -229,5 +228,4 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
   public abstract PIDCoefficients getPIDCoefficients(DcMotor.RunMode runMode);
 
   public abstract void setPIDCoefficients(DcMotor.RunMode runMode, PIDCoefficients coefficients);
-
 }
