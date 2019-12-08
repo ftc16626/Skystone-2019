@@ -13,12 +13,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 import org.firstinspires.ftc.teamcode.hardware.DriveConstants;
+import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 
 @Config
-@Autonomous(group = "drive")
+@Autonomous(name="Tuning - Feed Forward", group = "tuning")
 public class DriveFeedForwardTuner extends LinearOpMode {
   public static final double MAX_POWER = 0.7;
-  public static final double DISTANCE = 203;
+  public static final double DISTANCE = 120;
 
   @Override
   public void runOpMode() throws InterruptedException {
