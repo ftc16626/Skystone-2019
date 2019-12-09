@@ -17,6 +17,7 @@ public class MainHardware {
 //  public RadicalIMU imu;
   public SimpleIMU imu;
   public Intake intake;
+  public Lift lift;
 
   public Servo backRightServo;
   public Servo backLeftServo;
@@ -81,6 +82,8 @@ public class MainHardware {
     imu = new SimpleIMU(hwMap.get(BNO055IMU.class, "imu"));
 
     intake = new Intake(hwMap, intakeMotorIds[0], intakeMotorIds[1], INTAKE_SERVO_ID);
+
+    lift = new Lift(hwMap, SLIDER_MOTOR_ID, SLIDER_RANGE_ID, LIFT_MAX_HEIGHT / 10, LIFT_MIN_HEIGHT / 10);
 
     backLeftServo = hwMap.get(Servo.class, BACK_LEFT_SERVO_ID);
     backLeftServo.scaleRange(BACK_LEFT_SERVO_MIN, BACK_LEFT_SERVO_MAX);
