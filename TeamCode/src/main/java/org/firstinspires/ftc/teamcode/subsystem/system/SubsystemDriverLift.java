@@ -20,7 +20,7 @@ public class SubsystemDriverLift extends Subsystem implements GamepadListener {
   DriverInterface driverInterface;
   private PIDController controller;
 
-  private final double kP = 0.25;
+  private final double kP = 0.3;
   private final double kI = 0;
   private final double kD = 2.5;
 
