@@ -80,7 +80,7 @@ public class Intake {
 
   public void open() {
     isServoOpen = true;
-    intakeServo.setPosition(0);
+    intakeServo.setPosition(0.1);
   }
 
   public void close() {
