@@ -7,13 +7,13 @@ import kotlin.jvm.functions.Function0;
 import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
 import org.firstinspires.ftc.teamcode.hardware.MainHardware;
 
-public class SkyStoneDeliverFoundationFirst implements DeliveryPath {
+public class SkyStoneDeliverFoundationFirstRed implements DeliveryPath {
   private DriveBaseMecanum driveBaseMecanum;
   private MainHardware mainHardware;
 
   private Trajectory trajectory1;
 
-  public SkyStoneDeliverFoundationFirst(MainHardware mainHardware, DriveBaseMecanum driveBaseMecanum) {
+  public SkyStoneDeliverFoundationFirstRed(MainHardware mainHardware, DriveBaseMecanum driveBaseMecanum) {
     this.mainHardware = mainHardware;
     this.driveBaseMecanum = driveBaseMecanum;
   }
