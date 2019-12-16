@@ -90,7 +90,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     robot.backRightServo.setPosition(1);
     robot.raiseBackLeftServo();
 
-    while(opModeIsActive() && runtime.seconds() < 1.8) {
+    while(opModeIsActive() && runtime.seconds() < 1.2) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
@@ -103,7 +103,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(225));
-    while(opModeIsActive() && runtime.seconds() < 0.5) {
+    while(opModeIsActive() && runtime.seconds() < 0.3) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
@@ -117,7 +117,7 @@ public class AutoOpPullFoundationBlue extends LinearOpMode {
     runtime.reset();
 
     robot.drive.setAngle(Math.toRadians(315));
-    while(opModeIsActive() && runtime.seconds() < 1.2) {
+    while(opModeIsActive() && runtime.seconds() < 1.5) {
       bulkData = robot.expansionHubMain.getBulkInputData();
 
       robot.update();
