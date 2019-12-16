@@ -26,7 +26,7 @@ public class SubsystemDriverControl extends Subsystem implements GamepadListener
   private SubsystemDriverLift lift;
 
   private PilotProfile enzoProfile = new PilotProfile("Enzo's Profile",
-      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, true, false,
+      StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, false, false,
       true, false, StickResponseCurve.CUBED, false);
 
   public SubsystemDriverControl(
