@@ -35,7 +35,7 @@ public class SubsystemDriverBackServos extends Subsystem implements GamepadListe
     isBackRightServoDown = !isBackRightServoDown;
 
     if(isBackRightServoDown) {
-      getRobot().perpendicularBackRightServo();
+      getRobot().lowerBackRightServo();
     } else {
       getRobot().raiseBackRightServo();
     }
@@ -45,7 +45,7 @@ public class SubsystemDriverBackServos extends Subsystem implements GamepadListe
     isBackLeftServoDown = !isBackLeftServoDown;
 
     if(isBackLeftServoDown) {
-      getRobot().perpendicularBackLeftServo();
+      getRobot().lowerBackLeftServo();
     } else {
       getRobot().raiseBackLeftServo();
     }
