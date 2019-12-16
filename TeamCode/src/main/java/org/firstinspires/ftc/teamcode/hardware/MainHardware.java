@@ -14,7 +14,7 @@ public class MainHardware {
   public ExpansionHubEx expansionHubDaughter;
 
   public MecanumDrive drive;
-//  public RadicalIMU imu;
+  //  public RadicalIMU imu;
   public SimpleIMU imu;
   public Intake intake;
   public Lift lift;
@@ -45,13 +45,13 @@ public class MainHardware {
   private final String SLIDER_RANGE_ID = "liftRange";
 
   // Hardware Constraints
-  private final double BACK_RIGHT_SERVO_MIN = 0.40;
+  private final double BACK_RIGHT_SERVO_MIN = 0.45;
   private final double BACK_RIGHT_SERVO_MAX = 0.92;
   private final double BACK_RIGHT_SERVO_PERPENDICULAR = 0.21;
 
   private final double BACK_LEFT_SERVO_MIN = 0.45;
-  private final double BACK_LEFT_SERVO_MAX = 0.9;
-  private final double BACK_LEFT_SERVO_PERPENDICULAR = 0.9;
+  private final double BACK_LEFT_SERVO_MAX = 0.85;
+  private final double BACK_LEFT_SERVO_PERPENDICULAR = 0.8;
 
   private final double SWINGY_SERVO_MIN = 0.38;
   private final double SWINGY_SERVO_MAX = 1;
@@ -66,6 +66,8 @@ public class MainHardware {
   public final double GEAR_RATIO = 1;
   public final double ENCODER_COUNTS_PER_REV = 386.3;
 
+  public static boolean ENABLE_IMU = true;
+
   public MainHardware(HardwareMap hwMap) {
     expansionHubMain = hwMap.get(ExpansionHubEx.class, "Expansion Hub 9");
     expansionHubDaughter = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
@@ -79,11 +81,14 @@ public class MainHardware {
         GEAR_RATIO, ENCODER_COUNTS_PER_REV
     );
 //    imu = new RadicalIMU(hwMap.get(BNO055IMU.class, "imu"), false);
-    imu = new SimpleIMU(hwMap.get(BNO055IMU.class, "imu"));
+    if (ENABLE_IMU) {
+      imu = new SimpleIMU(hwMap.get(BNO055IMU.class, "imu"));
+    }
 
     intake = new Intake(hwMap, intakeMotorIds[0], intakeMotorIds[1], INTAKE_SERVO_ID);
 
-    lift = new Lift(hwMap, SLIDER_MOTOR_ID, SLIDER_RANGE_ID, LIFT_MAX_HEIGHT / 10, LIFT_MIN_HEIGHT / 10);
+    lift = new Lift(hwMap, SLIDER_MOTOR_ID, SLIDER_RANGE_ID, LIFT_MAX_HEIGHT / 10,
+        LIFT_MIN_HEIGHT / 10);
 
     backLeftServo = hwMap.get(Servo.class, BACK_LEFT_SERVO_ID);
     backLeftServo.scaleRange(BACK_LEFT_SERVO_MIN, BACK_LEFT_SERVO_MAX);
@@ -109,7 +114,9 @@ public class MainHardware {
 
   public void update() {
     drive.update();
-    imu.update();
+    if (ENABLE_IMU) {
+      imu.update();
+    }
   }
 
   public void dropSliderServo() {
@@ -126,6 +133,7 @@ public class MainHardware {
 
   public void lowerBackRightServo() {
     backRightServo.setPosition(0);
+//    backRightServo.setPosition(1);
   }
 
   public void raiseBackLeftServo() {
