@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
-import android.util.Log
-
 class SubsystemHandler {
-    private val subsystems = mutableListOf<Subsystem>();
+    private val subsystems = mutableListOf<Subsystem>()
 
     fun add(system: Subsystem) {
         subsystems.add(system)
