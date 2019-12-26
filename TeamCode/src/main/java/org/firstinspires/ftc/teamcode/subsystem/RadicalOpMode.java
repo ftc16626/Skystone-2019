@@ -1,65 +1,45 @@
 package org.firstinspires.ftc.teamcode.subsystem;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
-import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventType;
-import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
-import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
-import org.firstinspires.ftc.teamcode.hardware.MainHardware;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 
-public abstract class RadicalOpMode extends OpMode implements GamepadListener {
+public class RadicalOpMode extends LinearOpMode {
 
   protected SubsystemHandler subsystemHandler = new SubsystemHandler();
-  protected MainHardware robot;
+  protected Robot robot;
 
-  private boolean initRanOnce = false;
-  private boolean mountRanOnce = false;
+  protected void onInit() { }
 
-  public void extendedInit() {
-  }
+  protected void initLoop() { }
+
+  protected void onMount() { }
+
+  protected void update() { }
+
+  protected void onStop() { }
 
   @Override
-  public void init() {
-//    if (!initRanOnce) {
+  public void runOpMode() throws InterruptedException {
+    robot = new Robot(hardwareMap, this);
+    subsystemHandler.add(robot);
 
-//      initRanOnce = true;
-//    }
-
-    robot = new MainHardware(hardwareMap);
-
-//    subsystemHandler.initLoop();
-
-    extendedInit();
+    onInit();
     subsystemHandler.onInit();
-  }
 
-  @Override
-  public void init_loop() {
-    subsystemHandler.initLoop();
-  }
-
-  @Override
-  public void loop() {
-    if (!mountRanOnce) {
-      subsystemHandler.onMount();
-
-      mountRanOnce = true;
+    while(!isStarted() && !isStopRequested()) {
+      subsystemHandler.initLoop();
+      initLoop();
     }
 
-    subsystemHandler.update();
-  }
+    subsystemHandler.onMount();
+    onMount();
 
-  public void extendedLoop() {
-  }
+    while(opModeIsActive() && !isStopRequested()) {
+      subsystemHandler.update();
+      update();
+    }
 
-  @Override
-  public void stop() {
     subsystemHandler.onStop();
-  }
-
-  @Override
-  public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
-      GamepadType gamepadType) {
-
+    onStop();
   }
 }
