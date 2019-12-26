@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.roadrunner;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 /*
@@ -32,7 +33,7 @@ import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 @Config
 public abstract class SampleMecanumDriveBase extends MecanumDrive {
   public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-  public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+  public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.1, 0, 0);
 
   private static final double IN_TO_MM = 0.394;
 

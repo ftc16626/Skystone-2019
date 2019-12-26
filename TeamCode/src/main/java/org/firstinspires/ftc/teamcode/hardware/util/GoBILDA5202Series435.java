@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.util;
 
 import com.qualcomm.robotcore.hardware.configuration.DistributorInfo;
 import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties;
