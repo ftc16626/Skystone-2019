@@ -4,6 +4,8 @@ import com.ftc16626.missioncontrol.util.profiles.PilotProfile;
 import com.ftc16626.missioncontrol.util.profiles.StickControl;
 import com.ftc16626.missioncontrol.util.profiles.StickResponseCurve;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import java.util.ArrayList;
+import java.util.List;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventType;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
@@ -28,7 +30,8 @@ public class GamepadExtended {
       false
   );
 
-  private GamepadListener listener = null;
+  private List<GamepadListener> listeners = new ArrayList<>();
+
   private final int BUTTONS_TO_COUNT = 15;
   private boolean[] buttonPastValues = new boolean[BUTTONS_TO_COUNT];
   private boolean[] buttonValues = new boolean[BUTTONS_TO_COUNT];
@@ -58,7 +61,7 @@ public class GamepadExtended {
       stickX *= -1;
     }
 
-    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
+    if (profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickX = (float) Math.pow(stickX, 3);
     }
 
@@ -73,7 +76,7 @@ public class GamepadExtended {
       stickY *= -1;
     }
 
-    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
+    if (profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickY = (float) Math.pow(stickY, 3);
     }
 
@@ -88,7 +91,7 @@ public class GamepadExtended {
       stickX *= -1;
     }
 
-    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
+    if (profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickX = (float) Math.pow(stickX, 3);
     }
 
@@ -103,7 +106,7 @@ public class GamepadExtended {
       stickY *= -1;
     }
 
-    if(profile.stickResponseCurve == StickResponseCurve.CUBED) {
+    if (profile.stickResponseCurve == StickResponseCurve.CUBED) {
       stickY = (float) Math.pow(stickY, 3);
     }
 
@@ -111,19 +114,23 @@ public class GamepadExtended {
   }
 
   public void setProfile(PilotProfile profile) {
-    if(profile != null) this.profile = profile;
+    if (profile != null) {
+      this.profile = profile;
+    }
   }
 
   public PilotProfile getProfile() {
     return this.profile;
   }
 
-  public void setListener(GamepadListener listener) {
-    this.listener = listener;
+  public void addListener(GamepadListener listener) {
+    listeners.add(listener);
   }
 
   public void update() {
-    if(listener == null) return;
+    if (listeners.size() == 0) {
+      return;
+    }
 
     buttonValues[0] = gamepad.dpad_up;
     buttonValues[1] = gamepad.dpad_down;
@@ -141,13 +148,17 @@ public class GamepadExtended {
     buttonValues[13] = gamepad.left_stick_button;
     buttonValues[14] = gamepad.right_stick_button;
 
-    for(int i = 0; i < BUTTONS_TO_COUNT; i++) {
-      if(buttonValues[i] && !buttonPastValues[i]) {
-        listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, type);
+    for (int i = 0; i < BUTTONS_TO_COUNT; i++) {
+      if (buttonValues[i] && !buttonPastValues[i]) {
+        for(GamepadListener listener : listeners) {
+          listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, type);
+        }
 
         buttonPastValues[i] = true;
-      } else if(!buttonValues[i] && buttonPastValues[i]) {
-        listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_RELEASED, type);
+      } else if (!buttonValues[i] && buttonPastValues[i]) {
+        for(GamepadListener listener : listeners) {
+          listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, type);
+        }
 
         buttonPastValues[i] = false;
       }

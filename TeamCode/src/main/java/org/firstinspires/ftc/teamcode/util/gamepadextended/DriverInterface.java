@@ -17,13 +17,18 @@ public class DriverInterface {
     this.driver = new GamepadExtended(driver, GamepadType.DRIVER);
     this.aid = new GamepadExtended(aid, GamepadType.AID);
 
-    this.driver.setListener(listener);
-    this.aid.setListener(listener);
+    this.driver.addListener(listener);
+    this.aid.addListener(listener);
   }
 
   public void update() {
     this.driver.update();
     this.aid.update();
+  }
+
+  public void addListener(GamepadListener listener) {
+    this.driver.addListener(listener);
+    this.aid.addListener(listener);
   }
 
   public void switchGamepads() {
