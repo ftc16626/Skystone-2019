@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
-import org.firstinspires.ftc.teamcode.hardware.MainHardware
-
-abstract class Subsystem(val robot: MainHardware, val opMode: RadicalOpMode) {
+abstract class Subsystem {
     var on = true
 
     val subsystemHandler = SubsystemHandler()
