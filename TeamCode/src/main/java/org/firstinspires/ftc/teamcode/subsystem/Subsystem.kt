@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.subsystem
 abstract class Subsystem {
     var on = true
 
+    private var alreadyMovedToUpdate = false
+
     val subsystemHandler = SubsystemHandler()
 
     // Subsystem lifecycle
@@ -26,6 +28,8 @@ abstract class Subsystem {
 
     fun privateOnMount() {
         onMount()
+
+        alreadyMovedToUpdate = true
 
         subsystemHandler.onMount()
     }
@@ -52,11 +56,19 @@ abstract class Subsystem {
 
     fun turnOn(): Subsystem {
         on = true
+        onInit()
+
+        if(alreadyMovedToUpdate) onMount()
+
         return this
     }
 
     fun turnOff(): Subsystem {
         on = false
+        onStop()
+
+        alreadyMovedToUpdate = false
+
         return this
     }
 }
