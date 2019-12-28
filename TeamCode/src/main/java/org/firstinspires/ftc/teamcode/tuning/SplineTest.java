@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.tuning;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
-import org.firstinspires.ftc.teamcode.hardware.MainHardware;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
 
 @Autonomous(name="Tuning - Spline Test", group = "tuning")
 public class SplineTest extends LinearOpMode {

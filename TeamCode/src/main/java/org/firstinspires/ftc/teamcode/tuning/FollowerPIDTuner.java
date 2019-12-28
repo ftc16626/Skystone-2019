@@ -4,12 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
 
 @Config
 @Autonomous(name="Tuning - Follower PID", group = "tuning")
 public class FollowerPIDTuner extends LinearOpMode {
-  public static double DISTANCE = 1219.2;
+  public static double DISTANCE = 700;
 
   @Override
   public void runOpMode() throws InterruptedException {

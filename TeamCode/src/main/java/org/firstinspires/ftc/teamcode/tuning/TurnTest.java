@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.tuning;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
 
 @Config
 @Autonomous(name="Tuning - Turn Test", group = "tuning")
