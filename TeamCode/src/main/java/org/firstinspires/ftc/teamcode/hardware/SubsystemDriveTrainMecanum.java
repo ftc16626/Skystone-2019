@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import java.util.ArrayList;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.hardware.util.DcMotorCached;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
+import org.openftc.revextensions2.ExpansionHubMotor;
 
 public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
@@ -27,10 +32,10 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
   public SubsystemDriveTrainMecanum(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
 
-    motorFrontLeft = new DcMotorCached(robot.hwMap.dcMotor.get(motorIds[0]));
-    motorFrontRight = new DcMotorCached(robot.hwMap.dcMotor.get(motorIds[1]));
-    motorBackLeft = new DcMotorCached(robot.hwMap.dcMotor.get(motorIds[2]));
-    motorBackRight = new DcMotorCached(robot.hwMap.dcMotor.get(motorIds[3]));
+    motorFrontLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[0]));
+    motorFrontRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]));
+    motorBackLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[2]));
+    motorBackRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[3]));
 
     motorFrontLeft.getMotor().setDirection(Direction.REVERSE);
     motorBackLeft.getMotor().setDirection(Direction.REVERSE);
@@ -59,7 +64,7 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
   @Override
   public void update() {
-    if(dirty) {
+    if (dirty) {
       refreshMotors();
     }
   }
@@ -110,5 +115,23 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
     motorBackRight.setPower(motorPowerBackRight);
 
     this.dirty = false;
+  }
+
+  public PIDCoefficients getPIDCoefficients(DcMotor.RunMode mode) {
+    PIDFCoefficients coeff = motorFrontLeft.getMotor().getPIDFCoefficients(mode);
+    return new PIDCoefficients(coeff.p, coeff.i, coeff.d);
+  }
+
+  public void setPIDCoefficients(DcMotor.RunMode runMode, PIDCoefficients coeff) {
+    for (DcMotorCached motor : motorList) {
+      motor.getMotor()
+          .setPIDFCoefficients(runMode, new PIDFCoefficients(coeff.kP, coeff.kI, coeff.kD,
+              DriveConstants.getMotorVelocityF()));
+    }
+  }
+
+  public ExpansionHubMotor[] getMotors() {
+    return new ExpansionHubMotor[]{motorFrontLeft.getMotor(), motorFrontRight.getMotor(),
+        motorBackLeft.getMotor(), motorBackRight.getMotor()};
   }
 }
