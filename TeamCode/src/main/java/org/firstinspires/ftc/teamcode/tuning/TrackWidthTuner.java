@@ -7,10 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.MovingStatistics;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 
-@Autonomous(name="Tuning - Track Width Tuner", group="Tuning")
+@Autonomous(name="Tuning - Track Width Tuner", group="tuning")
 public class TrackWidthTuner extends LinearOpMode {
 
   public static double ANGLE = 180; // deg

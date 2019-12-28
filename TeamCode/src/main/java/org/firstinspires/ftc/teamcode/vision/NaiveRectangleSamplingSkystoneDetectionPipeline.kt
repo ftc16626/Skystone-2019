@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.vision
 
+import android.util.Log
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
-import kotlin.math.max
 
 class NaiveRectangleSamplingSkystoneDetectionPipeline : Init3BlockDetection() {
     private val matYCrCb = Mat()
     private val matCb = Mat()
-
-    private val skystone = Point()
 
     private val samplingRectWidth = 15
     private val samplingRectHeight = 15
@@ -26,17 +24,21 @@ class NaiveRectangleSamplingSkystoneDetectionPipeline : Init3BlockDetection() {
     private val samplePoints = samplePointPercentages.map {
         arrayOf(
             Point(
-                it[0] * cols - samplingRectWidth / 2,
-                it[1] * rows - samplingRectHeight / 2
+                it[0] * width - samplingRectWidth / 2,
+                it[1] * height - samplingRectHeight / 2
             ),
             Point(
-                it[0] * cols + samplingRectWidth / 2,
-                it[1] * rows + samplingRectHeight / 2
+                it[0] * width + samplingRectWidth / 2,
+                it[1] * height + samplingRectHeight / 2
             )
         )
     }
 
     override fun processFrame(input: Mat): Mat {
+        samplePoints.forEach {
+            Log.i("YOOOO", "x: ${it[0].x}, ${it[0].y}  y: ${it[1].x}, ${it[1].y}")
+        }
+
         // Convert the image from RGB to YCrCb
         Imgproc.cvtColor(input, matYCrCb, Imgproc.COLOR_RGB2YCrCb)
 

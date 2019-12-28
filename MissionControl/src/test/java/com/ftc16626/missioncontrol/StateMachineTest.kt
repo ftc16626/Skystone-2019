@@ -5,6 +5,13 @@ import com.ftc16626.missioncontrol.util.statemachine.StateMachine
 import org.junit.Test
 
 class StateMachineTest {
+    private var callbackCounter = 0
+    private var callbackValue: MyState? = null
+    private val callbackTest: (from: MyState) -> Unit = {
+        callbackCounter++
+        callbackValue = it
+    }
+
     @Test
     fun stateMachine_initWorks() {
         val stateMachine = buildStateMachine()
@@ -36,14 +43,25 @@ class StateMachineTest {
         assert(stateMachine.currentState == MyState.DONE)
     }
 
-    private fun buildStateMachine(): StateMachine {
-        val machine = StateMachine()
+    @Test
+    fun stateMachine_callbackWorks() {
+        val stateMachine = buildStateMachine()
+
+        stateMachine.transition()
+
+        assert(callbackCounter == 1)
+        assert(callbackValue == MyState.INIT)
+    }
+
+    private fun buildStateMachine(): StateMachine<MyState, Transition> {
+        val machine = StateMachine<MyState, Transition>()
 
         machine
             .state(State(MyState.INIT))
-            .state(State(MyState.WAITING))
+            .state(State<MyState, Transition>(MyState.WAITING)
+                .onTransition(callbackTest))
             .state(
-                State(MyState.SAMPLING)
+                State<MyState, Transition>(MyState.SAMPLING)
                     .on(Transition.RESTART_SAMPLING, MyState.WAITING)
                     .on(Transition.FINISH, MyState.DONE)
             )

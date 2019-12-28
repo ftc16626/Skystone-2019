@@ -19,8 +19,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 
 import java.util.List;
-import org.firstinspires.ftc.teamcode.hardware.DriveBaseMecanum;
-import org.firstinspires.ftc.teamcode.hardware.DriveConstants;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-
@@ -36,7 +36,7 @@ import org.firstinspires.ftc.teamcode.hardware.DriveConstants;
 @Config
 @Autonomous(name="Tuning - Drive Velocity PID", group = "tuning")
 public class DriveVelocityPIDTuner extends LinearOpMode {
-  public static double DISTANCE = 72;
+  public static double DISTANCE = 1500;
 
   private static final String PID_VAR_NAME = "VELO_PID";
 

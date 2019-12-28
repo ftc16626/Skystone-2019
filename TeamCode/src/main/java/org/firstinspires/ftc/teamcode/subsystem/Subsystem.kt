@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
-import org.firstinspires.ftc.teamcode.hardware.MainHardware
-
-abstract class Subsystem(val robot: MainHardware, val opMode: RadicalOpMode) {
+abstract class Subsystem {
     var on = true
+
+    private var alreadyMovedToUpdate = false
 
     val subsystemHandler = SubsystemHandler()
 
@@ -28,6 +28,8 @@ abstract class Subsystem(val robot: MainHardware, val opMode: RadicalOpMode) {
 
     fun privateOnMount() {
         onMount()
+
+        alreadyMovedToUpdate = true
 
         subsystemHandler.onMount()
     }
@@ -54,11 +56,19 @@ abstract class Subsystem(val robot: MainHardware, val opMode: RadicalOpMode) {
 
     fun turnOn(): Subsystem {
         on = true
+        onInit()
+
+        if(alreadyMovedToUpdate) onMount()
+
         return this
     }
 
     fun turnOff(): Subsystem {
         on = false
+        onStop()
+
+        alreadyMovedToUpdate = false
+
         return this
     }
 }
