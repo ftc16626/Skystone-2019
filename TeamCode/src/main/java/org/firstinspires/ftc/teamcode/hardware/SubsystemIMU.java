@@ -24,7 +24,7 @@ public class SubsystemIMU extends HardwareSubsystem {
     super(robot, opMode);
 
     parameters.mode = BNO055IMU.SensorMode.IMU;
-    parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+    parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
     parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
     parameters.calibrationDataFile = "RadicalIMUCalibration.json";
 
@@ -43,13 +43,18 @@ public class SubsystemIMU extends HardwareSubsystem {
     double headingNow = getHeading();
     double deltaAngle = headingNow - lastHeading;
 
-    if(deltaAngle < -180)
-      deltaAngle += 360.0;
-    else if(deltaAngle > 180)
-      deltaAngle -= 360.0;
+    if(deltaAngle < Math.toRadians(-180))
+      deltaAngle += Math.toRadians(360.0);
+    else if(deltaAngle > Math.toRadians(180))
+      deltaAngle -= Math.toRadians(360.0);
 
     globalHeading += deltaAngle;
     lastHeading = headingNow;
+  }
+
+  @Override
+  public void onStop() {
+    imu.close();
   }
 
   public double getHeading() {
