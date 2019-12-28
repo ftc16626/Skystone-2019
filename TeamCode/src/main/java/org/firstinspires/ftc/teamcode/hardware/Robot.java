@@ -45,7 +45,8 @@ public class Robot extends Subsystem {
 
   @Override
   public void update() {
-
+    bulkDataUpdatedThisCycleMother = false;
+    bulkDataUpdatedThisCycleDaughter = false;
   }
 
   public RevBulkData getBulkDataMother() {
