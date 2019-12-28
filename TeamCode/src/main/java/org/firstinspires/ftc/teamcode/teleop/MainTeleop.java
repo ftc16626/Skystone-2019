@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 public class MainTeleop extends RadicalOpMode implements GamepadListener {
   private final SubsystemTeleDrive subsystemTeleDrive;
   private final SubsystemTeleIntake subsystemTeleIntake;
+  private final SubsystemTeleFoundationGrabber subsystemTeleFoundationGrabber;
 
   private DriverInterface driverInterface;
 
@@ -28,10 +29,12 @@ public class MainTeleop extends RadicalOpMode implements GamepadListener {
     Robot robot = new Robot(hardwareMap, this);
     subsystemTeleDrive = new SubsystemTeleDrive(robot, driverInterface);
     subsystemTeleIntake = new SubsystemTeleIntake(robot, driverInterface);
+    subsystemTeleFoundationGrabber = new SubsystemTeleFoundationGrabber(robot, driverInterface);
 
     subsystemHandler.add(robot);
     subsystemHandler.add(subsystemTeleDrive);
     subsystemHandler.add(subsystemTeleIntake);
+    subsystemHandler.add(subsystemTeleFoundationGrabber);
   }
 
   @Override
