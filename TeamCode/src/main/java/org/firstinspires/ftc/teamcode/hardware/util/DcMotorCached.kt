@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware.util
 
-import com.qualcomm.robotcore.hardware.DcMotor
+import org.openftc.revextensions2.ExpansionHubMotor
 
-class DcMotorCached @JvmOverloads constructor(val motor: DcMotor, @JvmField val CACHE_THRESHOLD: Double = 0.02) {
+class DcMotorCached @JvmOverloads constructor(val motor: ExpansionHubMotor, @JvmField val CACHE_THRESHOLD: Double = 0.02) {
     private var lastRead = 0.0
 
     fun setPower(power: Double) {
