@@ -39,8 +39,6 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : MecanumDrive(
         var HEADING_PID = PIDCoefficients(0.0, 0.0, 0.0)
     }
 
-    private val IN_TO_MM = 0.393701
-
     private enum class Mode {
         IDLE,
         TURN,
@@ -210,8 +208,8 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : MecanumDrive(
 
                     fieldOverlay?.setStroke("#3F51B5")
                     fieldOverlay?.fillCircle(
-                        currentPose.x * IN_TO_MM,
-                        currentPose.y * IN_TO_MM,
+                        currentPose.x,
+                        currentPose.y,
                         3.0
                     )
 

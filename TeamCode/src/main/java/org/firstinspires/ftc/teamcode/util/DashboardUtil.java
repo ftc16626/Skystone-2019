@@ -6,8 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
 
 public class DashboardUtil {
-  private static final double IN_TO_MM = 0.0394;
-  private static final double DEFAULT_RESOLUTION = 2.0 * IN_TO_MM; // distance units; presumed inches
+  private static final double DEFAULT_RESOLUTION = 2.0; // distance units; presumed inches
   private static final double ROBOT_RADIUS = 9; // in
 
 
@@ -19,8 +18,8 @@ public class DashboardUtil {
     for (int i = 0; i < samples; i++) {
       double displacement = i * dx;
       Pose2d pose = path.get(displacement);
-      xPoints[i] = pose.getX() * IN_TO_MM;
-      yPoints[i] = pose.getY() * IN_TO_MM;
+      xPoints[i] = pose.getX();
+      yPoints[i] = pose.getY();
     }
     canvas.strokePolyline(xPoints, yPoints);
   }
@@ -30,12 +29,12 @@ public class DashboardUtil {
   }
 
   public static void drawRobot(Canvas canvas, Pose2d pose) {
-    canvas.strokeCircle(pose.getX() * IN_TO_MM, pose.getY() * IN_TO_MM, ROBOT_RADIUS);
+    canvas.strokeCircle(pose.getX(), pose.getY(), ROBOT_RADIUS);
     Vector2d v = pose.headingVec().times(ROBOT_RADIUS);
     double x1 = (pose.getX()) + (v.getX() / 2);
     double y1 = (pose.getY()) + (v.getY() / 2);
     double x2 = (pose.getX()) + (v.getX());
     double y2 = (pose.getY()) + (v.getY());
-    canvas.strokeLine(x1 * IN_TO_MM, y1 * IN_TO_MM, x2 * IN_TO_MM, y2 * IN_TO_MM);
+    canvas.strokeLine(x1, y1, x2, y2);
   }
 }
