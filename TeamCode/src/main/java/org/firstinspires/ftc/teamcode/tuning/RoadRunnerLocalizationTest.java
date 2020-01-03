@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanumOld;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.SampleMecanumDriveBase;
 
 @Config
@@ -20,7 +20,7 @@ public class RoadRunnerLocalizationTest extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
     telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-    SampleMecanumDriveBase drive = new DriveBaseMecanum(hardwareMap);
+    SampleMecanumDriveBase drive = new DriveBaseMecanumOld(hardwareMap);
 
     waitForStart();
 

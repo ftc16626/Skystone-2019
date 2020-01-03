@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.tuning;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanumOld;
 
 @Autonomous(name="Tuning - Spline Test", group = "tuning")
 public class SplineTest extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
-    DriveBaseMecanum drive = new DriveBaseMecanum(hardwareMap);
+    DriveBaseMecanumOld drive = new DriveBaseMecanumOld(hardwareMap);
 
     waitForStart();
 

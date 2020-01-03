@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.MovingStatistics;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanumOld;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 
 @Autonomous(name="Tuning - Track Width Tuner", group="tuning")
@@ -19,7 +19,7 @@ public class TrackWidthTuner extends LinearOpMode {
 
   @Override
   public void runOpMode() throws InterruptedException {
-    DriveBaseMecanum drive = new DriveBaseMecanum(hardwareMap);
+    DriveBaseMecanumOld drive = new DriveBaseMecanumOld(hardwareMap);
 
     telemetry.addLine("Press play to begin the track width tuner routine");
     telemetry.addLine("Make sure your robot has enough clearance to turn smoothly");

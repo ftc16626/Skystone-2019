@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.tuning;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanumOld;
 
 @Config
 @Autonomous(name="Tuning - Turn Test", group = "tuning")
@@ -12,7 +12,7 @@ public class TurnTest extends LinearOpMode {
 
   @Override
   public void runOpMode() throws InterruptedException {
-    DriveBaseMecanum drive = new DriveBaseMecanum(hardwareMap);
+    DriveBaseMecanumOld drive = new DriveBaseMecanumOld(hardwareMap);
 
     waitForStart();
 

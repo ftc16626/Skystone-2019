@@ -14,13 +14,13 @@ import org.openftc.revextensions2.ExpansionHubEx;
 import org.openftc.revextensions2.ExpansionHubMotor;
 import org.openftc.revextensions2.RevBulkData;
 
-public class DriveBaseMecanum extends SampleMecanumDriveBase {
+public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
   private ExpansionHubEx hub;
   private ExpansionHubMotor leftFront, leftRear, rightRear, rightFront;
   private List<ExpansionHubMotor> motors;
   private BNO055IMU imu;
 
-  public DriveBaseMecanum(HardwareMap hardwareMap) {
+  public DriveBaseMecanumOld(HardwareMap hardwareMap) {
     super();
 
     // TODO: adjust the names of the following hardware devices to match your configuration
