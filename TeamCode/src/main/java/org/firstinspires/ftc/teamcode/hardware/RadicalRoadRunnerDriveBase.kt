@@ -95,7 +95,7 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : MecanumDrive(
     }
 
     fun trajectoryBuilder(): TrajectoryBuilder {
-        return TrajectoryBuilder(poseEstimate, constraints)
+        return TrajectoryBuilder(poseEstimate, poseEstimate.heading, constraints)
     }
 
     fun turn(angle: Double) {
