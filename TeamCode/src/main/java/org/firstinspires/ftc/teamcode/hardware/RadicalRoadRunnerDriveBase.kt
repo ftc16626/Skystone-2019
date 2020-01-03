@@ -61,9 +61,9 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : MecanumDrive(
     private var lastTimestamp = 0.0
 
     init {
-        if (CompetitionStatus.IN_COMPETITION) {
+        if (!CompetitionStatus.IN_COMPETITION) {
             dashboard = FtcDashboard.getInstance()
-            dashboard?.telemetryTransmissionInterval = 1
+            dashboard?.telemetryTransmissionInterval = 10
         }
 
         clock = NanoClock.system()
