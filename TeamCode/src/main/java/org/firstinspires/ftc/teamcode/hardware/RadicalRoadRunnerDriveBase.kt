@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.util.CompetitionStatus
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants
 import org.firstinspires.ftc.teamcode.util.DashboardUtil
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.RadicalMecanumLocalizer
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.RadicalTrackingWheelLocalizer
 
 class RadicalRoadRunnerDriveBase(val robot: Robot) : MecanumDrive(
     DriveConstants.kV,
@@ -85,11 +86,12 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : MecanumDrive(
             PIDConstants.HEADING_PID
         )
 
-        localizer =
-            RadicalMecanumLocalizer(
-                this,
-                true
-            )
+//        localizer =
+//            RadicalMecanumLocalizer(
+//                this,
+//                true
+//            )
+        localizer = RadicalTrackingWheelLocalizer(robot)
     }
 
     fun trajectoryBuilder(): TrajectoryBuilder {
