@@ -13,46 +13,67 @@ import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 
 public class SubsystemTeleIntake extends Subsystem implements GamepadListener {
   private final Robot robot;
+  private final DriverInterface driverInterface;
 
   private StateMachine<MyState, Transition> stateMachine = buildStateMachine();
 
+  private boolean lastSetZero = false;
+
   public SubsystemTeleIntake(Robot robot, DriverInterface driverInterface) {
     driverInterface.addListener(this);
+    this.driverInterface = driverInterface;
 
     this.robot = robot;
   }
 
   @Override
+  public void update() {
+    float rightTrigger = driverInterface.driver.gamepad.right_trigger;
+    float leftTrigger = driverInterface.driver.gamepad.left_trigger;
+
+    if(leftTrigger > 0.05) {
+      robot.subsystemIntake.setDirect(-leftTrigger, -leftTrigger);
+      lastSetZero = false;
+    } else if(rightTrigger > 0.05) {
+      robot.subsystemIntake.setDirect(rightTrigger, rightTrigger);
+      lastSetZero = false;
+    } else if(!lastSetZero) {
+      lastSetZero = true;
+      robot.subsystemIntake.setDirect(0, 0);
+    }
+  }
+
+  @Override
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
-    if (gamepadType == GamepadType.AID && eventType == GamepadEventType.BUTTON_PRESSED) {
-      switch (eventName) {
-        case LEFT_BUMPER:
-          switch (Objects.requireNonNull(stateMachine.getCurrentState())) {
-            case OFF:
-            case SPINNING_OUT:
-              stateMachine.transition(Transition.SPIN_IN);
-              break;
-            case SPINNING_IN:
-              stateMachine.transition(Transition.TURN_OFF);
-              break;
-          }
-          break;
-        case RIGHT_BUMPER:
-          switch (Objects.requireNonNull(stateMachine.getCurrentState())) {
-            case OFF:
-            case SPINNING_IN:
-              stateMachine.transition(Transition.SPIN_OUT);
-              break;
-            case SPINNING_OUT:
-              stateMachine.transition(Transition.TURN_OFF);
-              break;
-          }
-          break;
-      }
-
-      setMotorPowers();
-    }
+//    if (gamepadType == GamepadType.DRIVER && eventType == GamepadEventType.BUTTON_PRESSED) {
+//      switch (eventName) {
+//        case LEFT_BUMPER:
+//          switch (Objects.requireNonNull(stateMachine.getCurrentState())) {
+//            case OFF:
+//            case SPINNING_OUT:
+//              stateMachine.transition(Transition.SPIN_IN);
+//              break;
+//            case SPINNING_IN:
+//              stateMachine.transition(Transition.TURN_OFF);
+//              break;
+//          }
+//          break;
+//        case RIGHT_BUMPER:
+//          switch (Objects.requireNonNull(stateMachine.getCurrentState())) {
+//            case OFF:
+//            case SPINNING_IN:
+//              stateMachine.transition(Transition.SPIN_OUT);
+//              break;
+//            case SPINNING_OUT:
+//              stateMachine.transition(Transition.TURN_OFF);
+//              break;
+//          }
+//          break;
+//      }
+//
+//      setMotorPowers();
+//    }
   }
 
   private void setMotorPowers() {
@@ -61,12 +82,12 @@ public class SubsystemTeleIntake extends Subsystem implements GamepadListener {
         robot.subsystemIntake.setMotorOn(false);
         break;
       case SPINNING_IN:
-        robot.subsystemIntake.setMotorOn(true);
         robot.subsystemIntake.setReversed(false);
+        robot.subsystemIntake.setMotorOn(true);
         break;
       case SPINNING_OUT:
-        robot.subsystemIntake.setMotorOn(true);
         robot.subsystemIntake.setReversed(true);
+        robot.subsystemIntake.setMotorOn(true);
         break;
     }
   }
