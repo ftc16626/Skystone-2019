@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware.roadrunner;
+package org.firstinspires.ftc.teamcode.tuning;
 
 import android.support.annotation.NonNull;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.SampleMecanumDriveBase;
 import org.openftc.revextensions2.ExpansionHubEx;
 import org.openftc.revextensions2.ExpansionHubMotor;
 import org.openftc.revextensions2.RevBulkData;
@@ -26,7 +28,7 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
     // TODO: adjust the names of the following hardware devices to match your configuration
     // for simplicity, we assume that the desired IMU and drive motors are on the same hub
     // if your motors are split between hubs, **you will need to add another bulk read**
-    hub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 9");
+    hub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 2");
 
     imu = hardwareMap.get(BNO055IMU.class, "imu");
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -61,7 +63,8 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
 
     // TODO: if desired, use setLocalizer() to change the localization method
     // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-    setLocalizer(new RadicalMecanumLocalizer(this, true));
+//    setLocalizer(new RadicalMecanumLocalizer(this, true));
+    setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
   }
 
   @Override
