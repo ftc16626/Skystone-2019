@@ -14,6 +14,11 @@ public class SubsystemTeleDrive extends Subsystem {
   }
 
   @Override
+  public void onInit() {
+    robot.subsystemDriveTrainMecanum.setRunWithoutEncoders();
+  }
+
+  @Override
   public void update() {
     double magnitude = 0;
     double angle = 0;
@@ -46,6 +51,18 @@ public class SubsystemTeleDrive extends Subsystem {
       }
       if (turn != 0) {
         turn *= 2;
+      }
+    }
+
+    if(driverInterface.aid.gamepad.b) {
+      turn = 0;
+
+      if(driverInterface.aid.gamepad.left_trigger > 0) {
+        magnitude = driverInterface.aid.gamepad.left_trigger * 0.5;
+        angle = Math.toRadians(45);
+      } else {
+        magnitude = driverInterface.aid.gamepad.right_trigger * 0.5;
+        angle = Math.toRadians(135);
       }
     }
 
