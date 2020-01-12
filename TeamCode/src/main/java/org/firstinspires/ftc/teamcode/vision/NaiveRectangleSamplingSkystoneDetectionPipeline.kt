@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.vision
 
-import android.util.Log
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 
@@ -35,10 +34,6 @@ class NaiveRectangleSamplingSkystoneDetectionPipeline : Init3BlockDetection() {
     }
 
     override fun processFrame(input: Mat): Mat {
-        samplePoints.forEach {
-            Log.i("YOOOO", "x: ${it[0].x}, ${it[0].y}  y: ${it[1].x}, ${it[1].y}")
-        }
-
         // Convert the image from RGB to YCrCb
         Imgproc.cvtColor(input, matYCrCb, Imgproc.COLOR_RGB2YCrCb)
 
