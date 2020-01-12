@@ -21,7 +21,7 @@ public class SubsystemTeleFoundationGrabber extends Subsystem implements Gamepad
   @Override
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
-    if(gamepadType == GamepadType.AID && eventType == GamepadEventType.BUTTON_PRESSED) {
+    if(gamepadType == GamepadType.DRIVER && eventType == GamepadEventType.BUTTON_PRESSED) {
       if(eventName == GamepadEventName.Y) {
         isGrabberUp = !isGrabberUp;
 
