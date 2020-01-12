@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import android.util.Log;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -29,16 +30,18 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
   private boolean dirty = false;
 
+  private double CACHE_THRESHOLD = 0.01;
+
   public SubsystemDriveTrainMecanum(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
 
-    motorFrontLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[0]));
-    motorFrontRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]));
-    motorBackLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[2]));
-    motorBackRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[3]));
+    motorFrontLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[0]), CACHE_THRESHOLD);
+    motorFrontRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]), CACHE_THRESHOLD);
+    motorBackLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[2]), CACHE_THRESHOLD);
+    motorBackRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[3]), CACHE_THRESHOLD);
 
-    motorFrontLeft.getMotor().setDirection(Direction.REVERSE);
-    motorBackLeft.getMotor().setDirection(Direction.REVERSE);
+    motorFrontRight.getMotor().setDirection(Direction.REVERSE);
+    motorBackRight.getMotor().setDirection(Direction.REVERSE);
 
     motorList.add(motorFrontLeft);
     motorList.add(motorFrontRight);
@@ -48,10 +51,6 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
     stopMotors();
 
     for (DcMotorCached motor : motorList) {
-      motor.getMotor().setMode(RunMode.RUN_USING_ENCODER);
-    }
-
-    for (DcMotorCached motor : motorList) {
       motor.getMotor().setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
     }
   }
@@ -59,6 +58,18 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
   public void stopMotors() {
     for (DcMotorCached motor : motorList) {
       motor.setPower(0);
+    }
+  }
+
+  public void setRunUsingEncoders() {
+    for (DcMotorCached motor : motorList) {
+      motor.getMotor().setMode(RunMode.RUN_USING_ENCODER);
+    }
+  }
+
+  public void setRunWithoutEncoders() {
+    for (DcMotorCached motor : motorList) {
+      motor.getMotor().setMode(RunMode.RUN_WITHOUT_ENCODER);
     }
   }
 
