@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import android.util.Log;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
@@ -7,31 +8,39 @@ import org.openftc.revextensions2.ExpansionHubEx;
 import org.openftc.revextensions2.RevBulkData;
 
 public class Robot extends Subsystem {
-  ExpansionHubEx expansionHubMother;
-  ExpansionHubEx expansionHubDaughter;
+  ExpansionHubEx expansionHubRight;
+  ExpansionHubEx expansionHubLeft;
 
-  RevBulkData bulkDataMother = null;
-  RevBulkData bulkDataDaughter = null;
+  private RevBulkData bulkDataRight = null;
+  private RevBulkData bulkDataLeft = null;
 
-  private boolean bulkDataUpdatedThisCycleMother = false;
-  private boolean bulkDataUpdatedThisCycleDaughter = false;
+  private boolean bulkDataUpdatedThisCycleRight = false;
+  private boolean bulkDataUpdatedThisCycleLeft = false;
 
   public HardwareMap hwMap;
 
-  public SubsystemDriveTrainMecanum subsystemDriveTrainMecanum;
-  public SubsystemIntake subsystemIntake;
-  public SubsystemFoundationGrabber subsystemFoundationGrabber;
-  public SubsystemIMU subsystemIMU;
+  public final SubsystemDriveTrainMecanum subsystemDriveTrainMecanum;
+  public final SubsystemIntake subsystemIntake;
+  public final SubsystemFoundationGrabber subsystemFoundationGrabber;
+  public final SubsystemVirtual4Bar subsystemVirtual4Bar;
+  public final SubsystemLift subsystemLift;
+  public final SubsystemAutoIntakeGrabber subsystemAutoIntakeGrabber;
+  public final SubsystemIMU subsystemIMU;
+
+  private double lastTime = 0.0;
 
   public Robot(HardwareMap hwMap, RadicalOpMode opMode) {
     this.hwMap = hwMap;
 
-    expansionHubMother = hwMap.get(ExpansionHubEx.class, "Expansion Hub 9");
-    expansionHubDaughter = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
+    expansionHubRight = hwMap.get(ExpansionHubEx.class, "Expansion Hub 1");
+    expansionHubLeft = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
 
     subsystemDriveTrainMecanum = new SubsystemDriveTrainMecanum(this, opMode);
     subsystemIntake = new SubsystemIntake(this, opMode);
     subsystemFoundationGrabber = new SubsystemFoundationGrabber(this, opMode);
+    subsystemVirtual4Bar = new SubsystemVirtual4Bar(this, opMode);
+    subsystemLift = new SubsystemLift(this, opMode);
+    subsystemAutoIntakeGrabber = new SubsystemAutoIntakeGrabber(this, opMode);
     subsystemIMU = new SubsystemIMU(this, opMode);
 
     // Keep the IMU off by default to avoid 'problem with imu' errors
@@ -40,30 +49,42 @@ public class Robot extends Subsystem {
     getSubsystemHandler().add(subsystemDriveTrainMecanum);
     getSubsystemHandler().add(subsystemIntake);
     getSubsystemHandler().add(subsystemFoundationGrabber);
+    getSubsystemHandler().add(subsystemVirtual4Bar);
+    getSubsystemHandler().add(subsystemLift);
     getSubsystemHandler().add(subsystemIMU);
   }
 
   @Override
   public void update() {
-    bulkDataUpdatedThisCycleMother = false;
-    bulkDataUpdatedThisCycleDaughter = false;
+//    if(lastTime == 0.0) {
+//      lastTime = System.currentTimeMillis();
+//    } else {
+//      double now = System.currentTimeMillis();
+
+//      Log.i("looptime", Double.toString(now - lastTime));
+//
+//      lastTime = now;
+//    }
+
+    bulkDataUpdatedThisCycleRight = false;
+    bulkDataUpdatedThisCycleLeft = false;
   }
 
-  public RevBulkData getBulkDataMother() {
-    if(!bulkDataUpdatedThisCycleMother) {
-      bulkDataMother = expansionHubMother.getBulkInputData();
-      bulkDataUpdatedThisCycleMother = true;
+  public RevBulkData getBulkDataRight() {
+    if(!bulkDataUpdatedThisCycleRight) {
+      bulkDataRight = expansionHubRight.getBulkInputData();
+      bulkDataUpdatedThisCycleRight = true;
     }
 
-    return bulkDataMother;
+    return bulkDataRight;
   }
 
-  public RevBulkData getBulkDataDaughter() {
-    if(!bulkDataUpdatedThisCycleDaughter) {
-      bulkDataDaughter = expansionHubDaughter.getBulkInputData();
-      bulkDataUpdatedThisCycleDaughter = true;
+  public RevBulkData getBulkDataLeft() {
+    if(!bulkDataUpdatedThisCycleLeft) {
+      bulkDataLeft = expansionHubLeft.getBulkInputData();
+      bulkDataUpdatedThisCycleLeft = true;
     }
 
-    return bulkDataDaughter;
+    return bulkDataLeft;
   }
 }
