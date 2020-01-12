@@ -22,4 +22,9 @@ public class RoadRunnerBaseOpmode extends RadicalOpMode {
 
     drive = subsystemRoadRunner.drive;
   }
+
+  @Override
+  public void onInit() {
+    robot.subsystemDriveTrainMecanum.setRunUsingEncoders();
+  }
 }
