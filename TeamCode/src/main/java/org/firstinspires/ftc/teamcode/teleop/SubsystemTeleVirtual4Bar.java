@@ -42,6 +42,10 @@ public class SubsystemTeleVirtual4Bar extends Subsystem implements GamepadListen
       } else if(eventName == GamepadEventName.LEFT_BUMPER) {
         robot.subsystemVirtual4Bar.release();
       }
+
+      if(eventName == GamepadEventName.B) {
+        robot.subsystemVirtual4Bar.flipSide();
+      }
     }
   }
 }
