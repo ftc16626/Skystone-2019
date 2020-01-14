@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import android.util.Log;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -59,7 +60,7 @@ public class SubsystemLift extends HardwareSubsystem {
 
   @Override
   public void update() {
-    RevBulkData bulkData = getRobot().expansionHubRight.getBulkInputData();
+    RevBulkData bulkData = getRobot().getBulkDataRight();
 
     int currentPosRaw = getRobot().getBulkDataRight()
         .getMotorCurrentPosition(motorBottom.getMotor());
@@ -73,13 +74,15 @@ public class SubsystemLift extends HardwareSubsystem {
         motorBottom.setPower(power);
         motorTop.setPower(-power);
 
-        if ((bulkData.getDigitalInputState(switchLeft) ||
-            bulkData.getDigitalInputState(switchRight)) && targetPos == 0) {
+        if ((!bulkData.getDigitalInputState(switchLeft) ||
+            !bulkData.getDigitalInputState(switchRight)) && targetPos == 0) {
           motorBottom.setPower(0);
           motorTop.setPower(0);
 
           zeroPos = currentPosRaw;
         }
+
+        Log.i("LIFT", Boolean.toString(bulkData.getDigitalInputState(switchLeft)));
         break;
       case RESETTING:
         if (bulkData.getDigitalInputState(switchLeft) ||
