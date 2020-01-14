@@ -57,8 +57,6 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
     currentPosition = pos;
     leftServo.setPosition(pos + LEFT_MIDDLE_OFFSET);
     rightServo.setPosition(pos + RIGHT_MIDDLE_OFFSET);
-
-    Log.i("SERVOPOS", Double.toString(currentPosition));
   }
 
   public void move(double speed) {
@@ -68,21 +66,21 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
     setPosition(currentPosition);
   }
 
-  public void move_out(double speed) {
-    currentPosition += speed;
-    currentPosition = Range.clip(currentPosition, 0, 1);
-  }
-
-  public void move_in(double speed) {
-    currentPosition -= speed;
-    currentPosition = Range.clip(currentPosition, 0, 1);
-  }
-
   public void clamp() {
     grabberServo.setPosition(0);
   }
 
   public void release() {
     grabberServo.setPosition(1);
+  }
+
+  public void flipSide() {
+    if(currentPosition < 0.5) {
+      currentPosition = 1;
+    } else {
+      currentPosition = 0;
+    }
+
+    setPosition(currentPosition);
   }
 }
