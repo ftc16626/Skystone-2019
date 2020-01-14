@@ -25,6 +25,7 @@ public class Robot extends Subsystem {
   public final SubsystemVirtual4Bar subsystemVirtual4Bar;
   public final SubsystemLift subsystemLift;
   public final SubsystemAutoIntakeGrabber subsystemAutoIntakeGrabber;
+  public final SubsystemStoneGuide subsystemStoneGuide;
   public final SubsystemIMU subsystemIMU;
 
   private double lastTime = 0.0;
@@ -41,6 +42,7 @@ public class Robot extends Subsystem {
     subsystemVirtual4Bar = new SubsystemVirtual4Bar(this, opMode);
     subsystemLift = new SubsystemLift(this, opMode);
     subsystemAutoIntakeGrabber = new SubsystemAutoIntakeGrabber(this, opMode);
+    subsystemStoneGuide = new SubsystemStoneGuide(this, opMode);
     subsystemIMU = new SubsystemIMU(this, opMode);
 
     // Keep the IMU off by default to avoid 'problem with imu' errors
@@ -51,6 +53,8 @@ public class Robot extends Subsystem {
     getSubsystemHandler().add(subsystemFoundationGrabber);
     getSubsystemHandler().add(subsystemVirtual4Bar);
     getSubsystemHandler().add(subsystemLift);
+    getSubsystemHandler().add(subsystemAutoIntakeGrabber);
+    getSubsystemHandler().add(subsystemStoneGuide);
     getSubsystemHandler().add(subsystemIMU);
   }
 
