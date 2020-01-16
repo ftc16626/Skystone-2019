@@ -20,13 +20,16 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
   private final double RIGHT_MAX = 0.97;
   private final double RIGHT_MIDDLE_OFFSET = 0;
 
-  private final double GRABBER_MIN = 0.4;
+  private final double GRABBER_MIN = 0.45;
   private final double GRABBER_MAX = 0.6;
 
   public static final double DOWN_IN = 0;
   public static final double DOWN_OUT = 1;
 
   private double currentPosition = 0;
+
+  private final double clampPoint = 0.5;
+  private final double clampPointThreshold = 0.08;
 
   public SubsystemVirtual4Bar(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
@@ -55,8 +58,13 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
 
   public void setPosition(double pos) {
     currentPosition = pos;
+
     leftServo.setPosition(pos + LEFT_MIDDLE_OFFSET);
     rightServo.setPosition(pos + RIGHT_MIDDLE_OFFSET);
+
+    if(Math.abs(currentPosition - clampPoint) < clampPointThreshold) {
+      clamp();
+    }
   }
 
   public void move(double speed) {
