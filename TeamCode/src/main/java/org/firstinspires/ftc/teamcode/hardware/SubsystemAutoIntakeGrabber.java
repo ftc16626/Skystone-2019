@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import android.util.Log;
 import com.ftc16626.missioncontrol.util.statemachine.State;
 import com.ftc16626.missioncontrol.util.statemachine.StateMachine;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -22,6 +21,9 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   ElapsedTime grabbedBlockTime = new ElapsedTime();
 
   private final double IDLE_GRABBLOCK_TRANSITION_TIME = 0.3;
+  private final double ENDGAME_TRANSITION_TIME = 0.7;
+  private boolean ENDGAME_TOGGLED = false;
+
   private final double LIFTED_POSITION = 0.2;
 
   public SubsystemAutoIntakeGrabber(Robot robot, RadicalOpMode opMode) {
@@ -35,11 +37,10 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   public void update() {
     RevBulkData bulkData = getRobot().getBulkDataRight();
 
-    Log.i("SWITCH", Boolean.toString(bulkData.getDigitalInputState(frontBeamBreak)));
-
     switch (Objects.requireNonNull(stateMachine.getCurrentState())) {
       case IDLE:
         if (!bulkData.getDigitalInputState(backSwitch)) {
+//          getRobot().subsystemAutoCapstone.lower();
           stateMachine.transition();
           grabbedBlockTime.reset();
         }
@@ -47,6 +48,7 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
       case GRABBED_BLOCK:
         getRobot().subsystemVirtual4Bar.clamp();
         if (grabbedBlockTime.seconds() > IDLE_GRABBLOCK_TRANSITION_TIME) {
+//        if (grabbedBlockTime.seconds() > (ENDGAME_TOGGLED ? ENDGAME_TRANSITION_TIME : IDLE_GRABBLOCK_TRANSITION_TIME)) {
           stateMachine.transition();
         }
         break;
@@ -58,17 +60,22 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
     }
   }
 
+  public void reset() {
+    if (stateMachine.getCurrentState() == MyState.TO_BE_RESET)
+      stateMachine.transition(Transition.RESET);
+  }
+
   private StateMachine<MyState, Transition> buildStateMachine() {
     StateMachine<MyState, Transition> stateMachine = new StateMachine<>();
 
     stateMachine
         .state(new State<>(MyState.IDLE))
         .state(new State<>(MyState.GRABBED_BLOCK))
+        .state(new State<>(MyState.LIFTED_BLOCK))
         .state(
-            new State<MyState, Transition>(MyState.LIFTED_BLOCK)
-//                .on(Transition.RESET, MyState.IDLE)
-        )
-        .state(new State<>(MyState.AFTER));
+            new State<MyState, Transition>(MyState.TO_BE_RESET)
+                .on(Transition.RESET, MyState.IDLE)
+        );
 
     return stateMachine;
   }
@@ -77,7 +84,7 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
     IDLE,
     GRABBED_BLOCK,
     LIFTED_BLOCK,
-    AFTER
+    TO_BE_RESET
   }
 
   enum Transition {
