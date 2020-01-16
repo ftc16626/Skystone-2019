@@ -21,7 +21,7 @@ public class SubsystemLift extends HardwareSubsystem {
 
   private StateMachine<MyState, Transition> stateMachine = buildStateMachine();
 
-  public static int MAX_HEIGHT = 1500;
+  public static int MAX_HEIGHT = 1475;
 
   public static double kP = 0.01;
   public static double kI = 0;
@@ -81,8 +81,6 @@ public class SubsystemLift extends HardwareSubsystem {
 
           zeroPos = currentPosRaw;
         }
-
-        Log.i("LIFT", Boolean.toString(bulkData.getDigitalInputState(switchLeft)));
         break;
       case RESETTING:
         if (bulkData.getDigitalInputState(switchLeft) ||
@@ -115,6 +113,10 @@ public class SubsystemLift extends HardwareSubsystem {
 
   public void setPosition(int position) {
     this.targetPos = position;
+  }
+
+  public void adjustZeroOffset(int offset) {
+    zeroPos += offset;
   }
 
   private StateMachine<MyState, Transition> buildStateMachine() {
