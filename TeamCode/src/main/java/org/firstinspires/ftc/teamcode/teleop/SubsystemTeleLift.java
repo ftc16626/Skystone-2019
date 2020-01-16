@@ -14,9 +14,12 @@ public class SubsystemTeleLift extends Subsystem implements GamepadListener {
   private final Robot robot;
   private final DriverInterface driverInterface;
 
-  private double speed = 80;
+  private double speed = 20;
   private double downSpeed = 20;
+
   private int position = 0;
+
+  private int blockEncoderCount = 200;
 
   public SubsystemTeleLift(Robot robot, DriverInterface driverInterface) {
     this.driverInterface = driverInterface;
@@ -41,6 +44,18 @@ public class SubsystemTeleLift extends Subsystem implements GamepadListener {
   @Override
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
+    if(gamepadType == GamepadType.AID && eventType == GamepadEventType.BUTTON_PRESSED) {
+      if(eventName == GamepadEventName.DPAD_UP) {
+        position = Range.clip(position + blockEncoderCount, 0, SubsystemLift.MAX_HEIGHT);
+      } else if(eventName == GamepadEventName.DPAD_DOWN) {
+        position = Range.clip(position - blockEncoderCount, 0, SubsystemLift.MAX_HEIGHT);
+      }
 
+      if(eventName == GamepadEventName.DPAD_LEFT) {
+        robot.subsystemLift.adjustZeroOffset(-20);
+      } else if(eventName == GamepadEventName.DPAD_RIGHT) {
+        robot.subsystemLift.adjustZeroOffset(20);
+      }
+    }
   }
 }
