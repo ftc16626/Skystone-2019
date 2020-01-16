@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tuning;
 
 import android.support.annotation.NonNull;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
@@ -58,13 +59,11 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
     }
 
     // TODO: reverse any motors using DcMotor.setDirection()
-    leftFront.setDirection(Direction.REVERSE);
-    leftRear.setDirection(Direction.REVERSE);
+    rightFront.setDirection(Direction.REVERSE);
+    rightRear.setDirection(Direction.REVERSE);
 
     // TODO: if desired, use setLocalizer() to change the localization method
     // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-//    setLocalizer(new RadicalMecanumLocalizer(this, true));
-    setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
   }
 
   @Override
