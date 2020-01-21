@@ -19,6 +19,8 @@ public class MainTeleop extends RadicalOpMode implements GamepadListener {
   private SubsystemTeleFoundationGrabber subsystemTeleFoundationGrabber;
   private SubsystemTeleVirtual4Bar subsystemTeleVirtual4Bar;
   private SubsystemTeleLift subsystemTeleLift;
+  private SubsystemTeleStoneGuide subsystemTeleStoneGuide;
+  private SubsystemTeleCapstone subsystemTeleCapstone;
 
   private DriverInterface driverInterface;
 
@@ -36,14 +38,18 @@ public class MainTeleop extends RadicalOpMode implements GamepadListener {
     subsystemTeleIntake = new SubsystemTeleIntake(robot, driverInterface);
     subsystemTeleFoundationGrabber = new SubsystemTeleFoundationGrabber(robot, driverInterface);
     subsystemTeleVirtual4Bar = new SubsystemTeleVirtual4Bar(robot, driverInterface);
+    subsystemTeleStoneGuide = new SubsystemTeleStoneGuide(robot, driverInterface);
     subsystemTeleLift = new SubsystemTeleLift(robot, driverInterface);
+    subsystemTeleCapstone = new SubsystemTeleCapstone(robot, driverInterface);
 
     subsystemHandler.add(robot);
     subsystemHandler.add(subsystemTeleDrive);
     subsystemHandler.add(subsystemTeleIntake);
     subsystemHandler.add(subsystemTeleFoundationGrabber);
     subsystemHandler.add(subsystemTeleVirtual4Bar);
+    subsystemHandler.add(subsystemTeleStoneGuide);
     subsystemHandler.add(subsystemTeleLift);
+    subsystemHandler.add(subsystemTeleCapstone);
   }
 
   @Override

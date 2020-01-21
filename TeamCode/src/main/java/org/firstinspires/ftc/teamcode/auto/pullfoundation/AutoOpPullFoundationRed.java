@@ -12,11 +12,11 @@ public class AutoOpPullFoundationRed extends RoadRunnerBaseOpmode {
   private Trajectory trajectoryBeforeTurn;
   private Trajectory trajectoryAfterTurn;
 
-  private final double DISTANCE_LEFT1 = 300;
-  private final double DISTANCE_FORWARD1 = 500;
+  private final double DISTANCE_LEFT1 = 10;
+  private final double DISTANCE_FORWARD1 = 10;
 
-  private final double DISTANCE_FORWARD2 = 200;
-  private final double DISTANCE_BACKWARD2 = 200;
+  private final double DISTANCE_FORWARD2 = 10;
+  private final double DISTANCE_BACKWARD2 = 10;
 
   private StateMachine<MyState, Transition> stateMachine =
       new StateMachine<MyState, Transition>()
@@ -39,7 +39,7 @@ public class AutoOpPullFoundationRed extends RoadRunnerBaseOpmode {
               }));
 
   @Override
-  public void onInit() {
+  public void onMount() {
     trajectoryBeforeTurn = drive.trajectoryBuilder()
         .addMarker(() -> {
           stateMachine.transition();
@@ -59,11 +59,9 @@ public class AutoOpPullFoundationRed extends RoadRunnerBaseOpmode {
         .forward(DISTANCE_FORWARD2)
         .back(DISTANCE_BACKWARD2)
         .build();
-  }
 
-  @Override
-  public void onMount() {
     drive.followTrajectory(trajectoryBeforeTurn);
+
   }
 
   private void hackyTransitionCall() {

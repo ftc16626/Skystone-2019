@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import android.util.Log;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;

@@ -17,7 +17,7 @@ class NaiveRectangleSamplingSkystoneDetectionPipeline : Init3BlockDetection() {
     private val samplingCircleThickness = -1
 
     private val samplePointPercentages = arrayOf(
-        arrayOf(.25, .5), arrayOf(.5, .5), arrayOf(.75, .5)
+        arrayOf(.15, .5), arrayOf(.5, .5), arrayOf(.85, .5)
     )
 
     private val samplePoints = samplePointPercentages.map {

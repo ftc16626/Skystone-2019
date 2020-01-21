@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.Drive;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
+import org.firstinspires.ftc.teamcode.hardware.roadrunner.RadicalTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.SampleMecanumDriveBase;
 import org.openftc.revextensions2.ExpansionHubEx;
 import org.openftc.revextensions2.ExpansionHubMotor;
@@ -64,6 +66,7 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
 
     // TODO: if desired, use setLocalizer() to change the localization method
     // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+    setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
   }
 
   @Override
@@ -74,6 +77,7 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
 
   @Override
   public void setPIDCoefficients(DcMotor.RunMode runMode, PIDCoefficients coefficients) {
+    Log.i("PID", "YEE HAW");
     for (ExpansionHubMotor motor : motors) {
       motor.setPIDFCoefficients(runMode, new PIDFCoefficients(
           coefficients.kP, coefficients.kI, coefficients.kD, DriveConstants.getMotorVelocityF()

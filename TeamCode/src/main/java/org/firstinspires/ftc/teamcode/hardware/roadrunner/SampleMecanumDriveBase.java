@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
@@ -32,10 +33,9 @@ import org.firstinspires.ftc.teamcode.util.DashboardUtil;
  */
 @Config
 public abstract class SampleMecanumDriveBase extends MecanumDrive {
-  public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-  public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.1, 0, 0);
 
-  private static final double IN_TO_MM = 0.394;
+  public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+  public static PIDCoefficients HEADING_PID = new PIDCoefficients(3.5, 0, 0);
 
   public enum Mode {
     IDLE,
@@ -59,7 +59,8 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
   private double lastTimestamp;
 
   public SampleMecanumDriveBase() {
-    super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH);
+    super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH,
+        DriveConstants.TRACK_WIDTH, 0.863930885);
 
     dashboard = FtcDashboard.getInstance();
     dashboard.setTelemetryTransmissionInterval(1);
@@ -71,7 +72,8 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     turnController = new PIDFController(HEADING_PID);
     turnController.setInputBounds(0, 2 * Math.PI);
 
-    constraints = new MecanumConstraints(DriveConstants.BASE_CONSTRAINTS, DriveConstants.TRACK_WIDTH);
+    constraints = new MecanumConstraints(DriveConstants.BASE_CONSTRAINTS,
+        DriveConstants.TRACK_WIDTH);
     follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID);
   }
 
@@ -133,6 +135,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     packet.put("x", currentPose.getX());
     packet.put("y", currentPose.getY());
     packet.put("heading", currentPose.getHeading());
+    packet.put("headingDeg", Math.toDegrees(currentPose.getHeading()));
 
     packet.put("xError", lastError.getX());
     packet.put("yError", lastError.getY());
@@ -180,7 +183,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
         DashboardUtil.drawRobot(fieldOverlay, trajectory.get(t));
 
         fieldOverlay.setStroke("#3F51B5");
-        fieldOverlay.fillCircle(currentPose.getX() * IN_TO_MM, currentPose.getY() * IN_TO_MM, 3);
+        fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);
 
         if (!follower.isFollowing()) {
           mode = Mode.IDLE;
@@ -208,7 +211,8 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     List<Double> positions = getWheelPositions();
     double currentTimestamp = clock.seconds();
 
-    List<Double> velocities = new ArrayList<>(positions.size());;
+    List<Double> velocities = new ArrayList<>(positions.size());
+    ;
     if (lastWheelPositions != null) {
       double dt = currentTimestamp - lastTimestamp;
       for (int i = 0; i < positions.size(); i++) {

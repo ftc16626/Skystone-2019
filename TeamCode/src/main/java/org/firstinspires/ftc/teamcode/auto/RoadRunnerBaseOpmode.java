@@ -4,27 +4,32 @@ import org.firstinspires.ftc.teamcode.hardware.RadicalRoadRunnerDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.hardware.SubsystemRoadRunner;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
+import org.firstinspires.ftc.teamcode.tuning.DriveBaseMecanumOld;
 
 public class RoadRunnerBaseOpmode extends RadicalOpMode {
+
   private SubsystemRoadRunner subsystemRoadRunner;
   public RadicalRoadRunnerDriveBase drive;
+//  public DriveBaseMecanumOld drive;
 
   protected Robot robot;
 
-  public RoadRunnerBaseOpmode() {
+  @Override
+  public void onInit() {
+    baseInit();
+  }
+
+  public void baseInit() {
     robot = new Robot(hardwareMap, this);
-    robot.subsystemIMU.turnOn();
 
     subsystemRoadRunner = new SubsystemRoadRunner(robot);
+    subsystemRoadRunner.turnOff();
 
     subsystemHandler.add(robot);
     subsystemHandler.add(subsystemRoadRunner);
 
     drive = subsystemRoadRunner.drive;
-  }
 
-  @Override
-  public void onInit() {
     robot.subsystemDriveTrainMecanum.setRunUsingEncoders();
   }
 }

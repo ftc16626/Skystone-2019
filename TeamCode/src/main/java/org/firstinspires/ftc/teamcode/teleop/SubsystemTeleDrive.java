@@ -28,7 +28,7 @@ public class SubsystemTeleDrive extends Subsystem {
     double realAngle = driverInterface.driver.getStrafeStickAngle();
     double realTurn = driverInterface.driver.getTurnStickX() / 2;
 
-    if (driverInterface.driver.gamepad.right_trigger > 0.7) {
+    if (driverInterface.driver.gamepad.right_bumper) {
       turn = realTurn;
       magnitude = realMag;
       angle = realAngle;
@@ -39,11 +39,11 @@ public class SubsystemTeleDrive extends Subsystem {
       angle = realAngle;
     }
 
-    if (driverInterface.driver.gamepad.left_trigger > 0.7) {
-      double deg = Math.toDegrees(realAngle);
-      double rounded = Math.round(deg / 45) * 45;
-      angle = Math.toRadians(rounded);
-    }
+//    if (driverInterface.driver.gamepad.left_trigger > 0.7) {
+//      double deg = Math.toDegrees(realAngle);
+//      double rounded = Math.round(deg / 45) * 45;
+//      angle = Math.toRadians(rounded);
+//    }
 
     if (driverInterface.driver.gamepad.left_bumper) {
       if (magnitude != 0) {
@@ -54,17 +54,17 @@ public class SubsystemTeleDrive extends Subsystem {
       }
     }
 
-    if(driverInterface.aid.gamepad.b) {
-      turn = 0;
-
-      if(driverInterface.aid.gamepad.left_trigger > 0) {
-        magnitude = driverInterface.aid.gamepad.left_trigger * 0.5;
-        angle = Math.toRadians(45);
-      } else {
-        magnitude = driverInterface.aid.gamepad.right_trigger * 0.5;
-        angle = Math.toRadians(135);
-      }
-    }
+//    if(driverInterface.aid.gamepad.b) {
+//      turn = 0;
+//
+//      if(driverInterface.aid.gamepad.left_trigger > 0) {
+//        magnitude = driverInterface.aid.gamepad.left_trigger * 0.5;
+//        angle = Math.toRadians(45);
+//      } else {
+//        magnitude = driverInterface.aid.gamepad.right_trigger * 0.5;
+//        angle = Math.toRadians(135);
+//      }
+//    }
 
 //    if (driverInterface.driver.getProfile().enableFieldCentric) {
 //    if(USE_FIELD_CENTRIC) {
