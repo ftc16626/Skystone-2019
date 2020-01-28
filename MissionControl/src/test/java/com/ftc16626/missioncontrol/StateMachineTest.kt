@@ -53,6 +53,18 @@ class StateMachineTest {
         assert(callbackValue == MyState.INIT)
     }
 
+    @Test
+    fun stateMachine_manualSetState() {
+        val stateMachine = buildStateMachine()
+
+        stateMachine.transition()
+        stateMachine.transition(Transition.FINISH)
+
+        stateMachine.manualSet(MyState.INIT)
+
+        assert(stateMachine.currentState == MyState.INIT)
+    }
+
     private fun buildStateMachine(): StateMachine<MyState, Transition> {
         val machine = StateMachine<MyState, Transition>()
 
