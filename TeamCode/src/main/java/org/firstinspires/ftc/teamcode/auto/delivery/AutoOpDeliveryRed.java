@@ -62,22 +62,25 @@ public class AutoOpDeliveryRed extends RoadRunnerBaseOpmode {
     // so you don't have multiple paths clashing
     if(pathSet) return;
 
-    this.drive.setPoseEstimate(new Pose2d(startX, startY, startHeading));
+//    this.drive.setPoseEstimate(new Pose2d(startX, startY, startHeading));
 
-    switch(subsystemVision.pipeline.getDetectedSkystonePosition()) {
-      case 0:
-        pathLeft.turnOn();
-        pathLeft.onMount();
-        break;
-      case 1:
-        pathMiddle.turnOn();
-        pathMiddle.onMount();
-        break;
-      case 2:
-        pathRight.turnOn();
-        pathRight.onMount();
-        break;
-    }
+    pathRight.turnOn();
+    pathRight.onMount();
+
+//    switch(subsystemVision.pipeline.getDetectedSkystonePosition()) {
+//      case 0:
+//        pathLeft.turnOn();
+//        pathLeft.onMount();
+//        break;
+//      case 1:
+//        pathMiddle.turnOn();
+//        pathMiddle.onMount();
+//        break;
+//      case 2:
+//        pathRight.turnOn();
+//        pathRight.onMount();
+//        break;
+//    }
 
     pathSet = true;
   }
