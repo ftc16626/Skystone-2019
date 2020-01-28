@@ -83,6 +83,8 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
   }
 
   public void flipSide() {
+    clamp();
+
     if(currentPosition < 0.5) {
       currentPosition = 1;
     } else {
