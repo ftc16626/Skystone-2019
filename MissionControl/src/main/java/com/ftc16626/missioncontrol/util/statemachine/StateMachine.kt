@@ -35,8 +35,8 @@ class StateMachine<StateEnum, TransitionEnum> {
 
         (stateMap[stateList[currentPosition].value] as State<StateEnum, TransitionEnum>)
             .transitionCallbackList.forEach {
-                it(lastState!!)
-            }
+            it(lastState!!)
+        }
     }
 
     fun transition(event: TransitionEnum) {
@@ -51,6 +51,21 @@ class StateMachine<StateEnum, TransitionEnum> {
         val lastState = currentState
 
         currentPosition = position
+        currentState = stateList[currentPosition].value
+
+        (stateMap[stateList[currentPosition].value] as State<StateEnum, TransitionEnum>)
+            .transitionCallbackList.forEach {
+            it(lastState!!)
+        }
+    }
+
+    fun manualSet(state: StateEnum) {
+        val targetState = stateMap[state]
+        val targetIndex = stateList.indexOf(targetState)
+
+        val lastState = currentState
+
+        currentPosition = targetIndex
         currentState = stateList[currentPosition].value
 
         (stateMap[stateList[currentPosition].value] as State<StateEnum, TransitionEnum>)
