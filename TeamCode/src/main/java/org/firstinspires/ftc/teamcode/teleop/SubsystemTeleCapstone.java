@@ -31,12 +31,12 @@ public class SubsystemTeleCapstone extends Subsystem implements GamepadListener 
         capstoneActivated = !capstoneActivated;
 
         if(capstoneActivated) {
-          Log.i("CAPSTONE", "yo");
-//          robot.subsystemAutoIntakeGrabber.toggleEndgame(true);
+          robot.subsystemAutoIntakeGrabber.setEndgame(true);
+
           robot.subsystemVirtual4Bar.setPosition(0);
+          robot.subsystemLighting.setCapstone(true);
         } else {
-          Log.i("CAPSTONE", "yo");
-//          robot.subsystemAutoIntakeGrabber.toggleEndgame(false);
+          robot.subsystemLighting.setCapstone(false);
         }
       }
     }
