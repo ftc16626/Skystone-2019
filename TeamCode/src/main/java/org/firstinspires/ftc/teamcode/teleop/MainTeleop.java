@@ -4,7 +4,6 @@ import com.ftc16626.missioncontrol.util.profiles.PilotProfile;
 import com.ftc16626.missioncontrol.util.profiles.StickControl;
 import com.ftc16626.missioncontrol.util.profiles.StickResponseCurve;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.DriverInterface;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;
@@ -33,7 +32,6 @@ public class MainTeleop extends RadicalOpMode implements GamepadListener {
     driverInterface = new DriverInterface(gamepad1, gamepad2, this);
     driverInterface.driver.setProfile(enzoProfile);
 
-    Robot robot = new Robot(hardwareMap, this);
     subsystemTeleDrive = new SubsystemTeleDrive(robot, driverInterface);
     subsystemTeleIntake = new SubsystemTeleIntake(robot, driverInterface);
     subsystemTeleFoundationGrabber = new SubsystemTeleFoundationGrabber(robot, driverInterface);
