@@ -62,7 +62,9 @@ public class SubsystemLift extends HardwareSubsystem {
   public void update() {
     RevBulkData bulkData = getRobot().getBulkDataRight();
 
-    int currentPosRaw = getRobot().getBulkDataRight()
+    if(bulkData == null) return;
+
+    int currentPosRaw = bulkData
         .getMotorCurrentPosition(motorBottom.getMotor());
 
     int currentPos = currentPosRaw - zeroPos;
@@ -108,7 +110,12 @@ public class SubsystemLift extends HardwareSubsystem {
 
   @Override
   public void onMount() {
-    zeroPos = getRobot().getBulkDataRight().getMotorCurrentPosition(motorBottom.getMotor());
+    RevBulkData bulkData = getRobot().getBulkDataRight();
+
+    if(bulkData == null) return;
+
+
+    zeroPos = bulkData.getMotorCurrentPosition(motorBottom.getMotor());
   }
 
   public void setPosition(int position) {
