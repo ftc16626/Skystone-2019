@@ -30,15 +30,19 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
   private boolean dirty = false;
 
-  private double CACHE_THRESHOLD = 0.01;
+  private double CACHE_THRESHOLD = 0.0;
 
   public SubsystemDriveTrainMecanum(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
 
-    motorFrontLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[0]), CACHE_THRESHOLD);
-    motorFrontRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]), CACHE_THRESHOLD);
-    motorBackLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[2]), CACHE_THRESHOLD);
-    motorBackRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[3]), CACHE_THRESHOLD);
+    motorFrontLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[0]),
+        CACHE_THRESHOLD);
+    motorFrontRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]),
+        CACHE_THRESHOLD);
+    motorBackLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[2]),
+        CACHE_THRESHOLD);
+    motorBackRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[3]),
+        CACHE_THRESHOLD);
 
     motorFrontRight.getMotor().setDirection(Direction.REVERSE);
     motorBackRight.getMotor().setDirection(Direction.REVERSE);
@@ -70,6 +74,18 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
   public void setRunWithoutEncoders() {
     for (DcMotorCached motor : motorList) {
       motor.getMotor().setMode(RunMode.RUN_WITHOUT_ENCODER);
+    }
+  }
+
+  public void setBrakeMode() {
+    for (DcMotorCached motor : motorList) {
+      motor.getMotor().setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+    }
+  }
+
+  public void setFloatMode() {
+    for (DcMotorCached motor : motorList) {
+      motor.getMotor().setZeroPowerBehavior(ZeroPowerBehavior.FLOAT);
     }
   }
 
