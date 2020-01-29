@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import android.util.Log;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import java.util.ArrayList;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.hardware.util.DcMotorCached;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
@@ -30,7 +31,7 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
   private boolean dirty = false;
 
-  private double CACHE_THRESHOLD = 0.0;
+  private double CACHE_THRESHOLD = 0.01;
 
   public SubsystemDriveTrainMecanum(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);

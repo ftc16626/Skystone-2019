@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import android.util.Log;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Servo.Direction;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.teleop.subsystem;
 
 import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEvent
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListener;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 
-public class SubsystemTeleStoneGuide extends Subsystem implements GamepadListener {
+public class SubsystemTeleFoundationGrabber extends Subsystem implements GamepadListener {
   private final Robot robot;
 
-  private boolean isGuideUp = true;
+  private boolean isGrabberUp = true;
 
-  public SubsystemTeleStoneGuide(Robot robot, DriverInterface driverInterface) {
+  public SubsystemTeleFoundationGrabber(Robot robot, DriverInterface driverInterface) {
     this.robot = robot;
     driverInterface.addListener(this);
   }
@@ -22,13 +22,13 @@ public class SubsystemTeleStoneGuide extends Subsystem implements GamepadListene
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
     if(gamepadType == GamepadType.DRIVER && eventType == GamepadEventType.BUTTON_PRESSED) {
-      if(eventName == GamepadEventName.B) {
-        isGuideUp = !isGuideUp;
+      if(eventName == GamepadEventName.Y) {
+        isGrabberUp = !isGrabberUp;
 
-        if(isGuideUp) {
-          robot.subsystemStoneGuide.raise();
+        if(isGrabberUp) {
+          robot.subsystemFoundationGrabber.raise();
         } else {
-          robot.subsystemStoneGuide.drop();
+          robot.subsystemFoundationGrabber.drop();
         }
       }
     }

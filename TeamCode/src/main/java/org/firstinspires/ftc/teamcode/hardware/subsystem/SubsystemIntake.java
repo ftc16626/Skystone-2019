@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.hardware.util.DcMotorCached;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;

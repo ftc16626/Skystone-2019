@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import android.util.Log;
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -10,6 +10,7 @@ import com.ftc16626.missioncontrol.util.statemachine.StateMachine;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import java.util.Objects;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.hardware.util.DcMotorCached;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;

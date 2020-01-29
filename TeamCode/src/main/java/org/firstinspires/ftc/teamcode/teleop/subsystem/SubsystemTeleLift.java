@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.teleop.subsystem;
 
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.hardware.Robot;
-import org.firstinspires.ftc.teamcode.hardware.SubsystemLift;
+import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemLift;
 import org.firstinspires.ftc.teamcode.subsystem.Subsystem;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.DriverInterface;
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadEventName;

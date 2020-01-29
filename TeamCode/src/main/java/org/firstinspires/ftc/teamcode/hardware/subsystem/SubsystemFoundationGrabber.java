@@ -1,30 +1,29 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Servo.Direction;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 
-public class SubsystemStoneGuide extends HardwareSubsystem {
+public class SubsystemFoundationGrabber extends HardwareSubsystem {
 
   private final Servo leftServo, rightServo;
-  private final String[] servoIds = new String[]{"servoStoneGuideLeft", "servoStoneGuideRight"};
+  private final String[] servoIds = new String[] { "servoFoundationLeft", "servoFoundationRight" };
 
-  private final double LEFT_MIN = 0;
-  private final double LEFT_MAX = 0.5;
+  private final double LEFT_MIN = 0.4;
+  private final double LEFT_MAX = 0.985;
 
-  private final double RIGHT_MIN = 0.5;
-  private final double RIGHT_MAX = 1;
+  private final double RIGHT_MIN = 0.1;
+  private final double RIGHT_MAX = 0.9;
 
-  private boolean guidesDown = false;
-
-  public SubsystemStoneGuide(Robot robot, RadicalOpMode opMode) {
+  public SubsystemFoundationGrabber(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
 
     leftServo = robot.hwMap.get(Servo.class, servoIds[0]);
     rightServo = robot.hwMap.get(Servo.class, servoIds[1]);
 
-    rightServo.setDirection(Direction.REVERSE);
+    leftServo.setDirection(Direction.REVERSE);
 
     leftServo.scaleRange(LEFT_MIN, LEFT_MAX);
     rightServo.scaleRange(RIGHT_MIN, RIGHT_MAX);
