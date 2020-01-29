@@ -8,8 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import kotlin.Unit;
 import org.firstinspires.ftc.teamcode.auto.RoadRunnerBaseOpmode;
 
-@Autonomous(name="Pull Foundation - Blue")
+@Autonomous(name = "Pull Foundation - Blue")
 public class AutoOpPullFoundationBlue extends RoadRunnerBaseOpmode {
+
   private Trajectory trajectoryBeforeTurn;
   private Trajectory trajectoryAfterTurn;
 
@@ -21,39 +22,31 @@ public class AutoOpPullFoundationBlue extends RoadRunnerBaseOpmode {
 
   private StateMachine<MyState, Transition> stateMachine =
       new StateMachine<MyState, Transition>()
-        .state(new State<>(MyState.INIT))
-        .state(new State<>(MyState.FIRST_TRAJECTORY))
-        .state(new State<MyState, Transition>(MyState.TURNING)
-          .onTransition((MyState from) -> {
-            drive.turnSync(Math.toRadians(-90), () -> {
-              hackyTransitionCall();
+          .state(new State<>(MyState.INIT))
+          .state(new State<>(MyState.FIRST_TRAJECTORY))
+          .state(new State<MyState, Transition>(MyState.TURNING)
+              .onTransition((MyState from) -> {
+                drive.turnSync(Math.toRadians(-90), () -> {
+                  hackyTransitionCall();
 
-              return Unit.INSTANCE;
-            });
+                  return Unit.INSTANCE;
+                });
 
-            return Unit.INSTANCE;
-          }))
-        .state(new State<MyState, Transition>(MyState.SECOND_TRAJECTORY)
-          .onTransition((MyState from) -> {
-            drive.followTrajectory(trajectoryAfterTurn);
-            return Unit.INSTANCE;
-          }));
+                return Unit.INSTANCE;
+              }))
+          .state(new State<MyState, Transition>(MyState.SECOND_TRAJECTORY)
+              .onTransition((MyState from) -> {
+                drive.followTrajectory(trajectoryAfterTurn);
+                return Unit.INSTANCE;
+              }));
 
   @Override
   public void onMount() {
     trajectoryBeforeTurn = drive.trajectoryBuilder()
-        .addMarker(() -> {
-          stateMachine.transition();
-
-          return Unit.INSTANCE;
-        })
+        .addDisplacementMarker(() -> stateMachine.transition())
         .strafeLeft(DISTANCE_RIGHT1)
         .forward(DISTANCE_FORWARD1)
-        .addMarker(() -> {
-          stateMachine.transition();
-
-          return Unit.INSTANCE;
-        })
+        .addDisplacementMarker(() -> stateMachine.transition())
         .build();
 
     trajectoryAfterTurn = drive.trajectoryBuilder()

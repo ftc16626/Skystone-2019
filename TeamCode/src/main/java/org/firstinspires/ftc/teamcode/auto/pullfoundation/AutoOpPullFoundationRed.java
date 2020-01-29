@@ -7,8 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import kotlin.Unit;
 import org.firstinspires.ftc.teamcode.auto.RoadRunnerBaseOpmode;
 
-@Autonomous(name="Pull Foundation - Red")
+@Autonomous(name = "Pull Foundation - Red")
 public class AutoOpPullFoundationRed extends RoadRunnerBaseOpmode {
+
   private Trajectory trajectoryBeforeTurn;
   private Trajectory trajectoryAfterTurn;
 
@@ -41,18 +42,10 @@ public class AutoOpPullFoundationRed extends RoadRunnerBaseOpmode {
   @Override
   public void onMount() {
     trajectoryBeforeTurn = drive.trajectoryBuilder()
-        .addMarker(() -> {
-          stateMachine.transition();
-
-          return Unit.INSTANCE;
-        })
+        .addDisplacementMarker(() -> stateMachine.transition())
         .strafeLeft(DISTANCE_LEFT1)
         .forward(DISTANCE_FORWARD1)
-        .addMarker(() -> {
-          stateMachine.transition();
-
-          return Unit.INSTANCE;
-        })
+        .addDisplacementMarker(() -> stateMachine.transition())
         .build();
 
     trajectoryAfterTurn = drive.trajectoryBuilder()
