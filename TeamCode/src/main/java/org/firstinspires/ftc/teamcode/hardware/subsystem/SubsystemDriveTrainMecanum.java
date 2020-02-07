@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
-import android.util.Log;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -144,6 +143,15 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
     this.dirty = false;
   }
+
+  public void setManualPower(double frontLeft, double frontRight, double backLeft, double backRight) {
+    motorFrontLeft.setPower(frontLeft);
+    motorFrontRight.setPower(frontRight);
+    motorBackLeft.setPower(backLeft);
+    motorBackRight.setPower(backRight);
+  }
+
+
 
   public PIDCoefficients getPIDCoefficients(DcMotor.RunMode mode) {
     PIDFCoefficients coeff = motorFrontLeft.getMotor().getPIDFCoefficients(mode);
