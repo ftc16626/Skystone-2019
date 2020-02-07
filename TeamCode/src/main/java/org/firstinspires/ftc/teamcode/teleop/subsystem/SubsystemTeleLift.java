@@ -14,8 +14,8 @@ public class SubsystemTeleLift extends Subsystem implements GamepadListener {
   private final Robot robot;
   private final DriverInterface driverInterface;
 
-  private double speed = 20;
-  private double downSpeed = 20;
+  private double speed = 40;
+  private double downSpeed = 60;
 
   private int position = 0;
 
