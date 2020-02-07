@@ -157,7 +157,7 @@ public class GamepadExtended {
         buttonPastValues[i] = true;
       } else if (!buttonValues[i] && buttonPastValues[i]) {
         for(GamepadListener listener : listeners) {
-          listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_PRESSED, type);
+          listener.actionPerformed(eventNameList[i], GamepadEventType.BUTTON_RELEASED, type);
         }
 
         buttonPastValues[i] = false;

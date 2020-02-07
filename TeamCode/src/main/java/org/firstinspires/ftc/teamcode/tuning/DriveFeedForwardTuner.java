@@ -11,7 +11,6 @@ import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveBaseMecanum;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 
@@ -30,7 +29,7 @@ public class DriveFeedForwardTuner extends LinearOpMode {
 
 //    telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-    DriveBaseMecanum drive = new DriveBaseMecanum(hardwareMap);
+    DriveBaseMecanumOld drive = new DriveBaseMecanumOld(hardwareMap);
 
     NanoClock clock = NanoClock.system();
 
