@@ -24,7 +24,7 @@ public class SubsystemLift extends HardwareSubsystem {
 
   public static int MAX_HEIGHT = 1475;
 
-  public static double kP = 0.01;
+  public static double kP = 0.015;
   public static double kI = 0;
   public static double kD = 0;
   public static double kG = 0;
