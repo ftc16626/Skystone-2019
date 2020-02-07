@@ -11,10 +11,6 @@ import org.openftc.revextensions2.ExpansionHubMotor
 class RadicalRoadRunnerDriveBase(val robot: Robot) : SampleMecanumDriveBase() {
     init {
         localizer = RadicalTrackingWheelLocalizer(robot)
-
-        val motors = robot.subsystemDriveTrainMecanum.motors
-        motors[0].direction = DcMotorSimple.Direction.REVERSE
-        motors[1].direction = DcMotorSimple.Direction.REVERSE
     }
 
     fun turnSync(angle: Double, callback: () -> Unit) {
@@ -29,11 +25,7 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : SampleMecanumDriveBase() {
         rearRight: Double,
         frontRight: Double
     ) {
-        val motors = robot.subsystemDriveTrainMecanum.motors
-        motors[0].power = frontLeft
-        motors[1].power = frontRight
-        motors[2].power = rearLeft
-        motors[3].power = rearRight
+        robot.subsystemDriveTrainMecanum.setManualPower(frontLeft, frontRight, rearLeft, rearRight)
     }
 
     override val rawExternalHeading: Double
