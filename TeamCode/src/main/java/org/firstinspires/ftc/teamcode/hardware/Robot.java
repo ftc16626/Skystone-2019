@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemFoundationGrab
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemIntake;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemLift;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemLighting;
+import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemOdometry;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemStoneGuide;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemVirtual4Bar;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
@@ -36,6 +37,7 @@ public class Robot extends Subsystem {
   public final SubsystemStoneGuide subsystemStoneGuide;
   public final SubsystemAutoCapstone subsystemAutoCapstone;
   public final SubsystemLighting subsystemLighting;
+  public final SubsystemOdometry subsystemOdometry;
 //  public final SubsystemIMU subsystemIMU;
 
   private double lastTime = 0.0;
@@ -55,10 +57,12 @@ public class Robot extends Subsystem {
     subsystemStoneGuide = new SubsystemStoneGuide(this, opMode);
     subsystemAutoCapstone = new SubsystemAutoCapstone(this, opMode);
     subsystemLighting = new SubsystemLighting(this, opMode);
+    subsystemOdometry = new SubsystemOdometry(this, opMode);
 //    subsystemIMU = new SubsystemIMU(this, opMode);
 
     // Keep the IMU off by default to avoid 'problem with imu' errors
 //    subsystemIMU.turnOff();
+    subsystemOdometry.turnOff(); // Not needed in teleop
 
     getSubsystemHandler().add(subsystemDriveTrainMecanum);
     getSubsystemHandler().add(subsystemIntake);
@@ -69,6 +73,7 @@ public class Robot extends Subsystem {
     getSubsystemHandler().add(subsystemStoneGuide);
     getSubsystemHandler().add(subsystemAutoCapstone);
     getSubsystemHandler().add(subsystemLighting);
+    getSubsystemHandler().add(subsystemOdometry);
 //    getSubsystemHandler().add(subsystemIMU);
   }
 
