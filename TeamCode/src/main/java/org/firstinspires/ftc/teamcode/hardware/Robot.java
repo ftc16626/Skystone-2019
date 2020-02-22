@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemAutoCapstone;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemAutoIntakeGrabber;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemDriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemFoundationGrabber;
+import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemGhostServo;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemIntake;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemLift;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.SubsystemLighting;
@@ -17,14 +18,14 @@ import org.openftc.revextensions2.ExpansionHubEx;
 import org.openftc.revextensions2.RevBulkData;
 
 public class Robot extends Subsystem {
-  ExpansionHubEx expansionHubRight;
-  ExpansionHubEx expansionHubLeft;
+  ExpansionHubEx expansionHubOne;
+  ExpansionHubEx expansionHubTwo;
 
-  private RevBulkData bulkDataRight = null;
-  private RevBulkData bulkDataLeft = null;
+  private RevBulkData bulkDataOne = null;
+  private RevBulkData bulkDataTwo = null;
 
-  private boolean bulkDataUpdatedThisCycleRight = false;
-  private boolean bulkDataUpdatedThisCycleLeft = false;
+  private boolean bulkDataUpdatedThisCycleOne = false;
+  private boolean bulkDataUpdatedThisCycleTwo = false;
 
   public HardwareMap hwMap;
 
@@ -38,6 +39,7 @@ public class Robot extends Subsystem {
   public final SubsystemAutoCapstone subsystemAutoCapstone;
   public final SubsystemLighting subsystemLighting;
   public final SubsystemOdometry subsystemOdometry;
+  public final SubsystemGhostServo subsystemGhostServo;
 //  public final SubsystemIMU subsystemIMU;
 
   private double lastTime = 0.0;
@@ -45,10 +47,11 @@ public class Robot extends Subsystem {
   public Robot(HardwareMap hwMap, RadicalOpMode opMode) {
     this.hwMap = hwMap;
 
-    expansionHubRight = hwMap.get(ExpansionHubEx.class, "Expansion Hub 1");
-    expansionHubLeft = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
+    expansionHubOne = hwMap.get(ExpansionHubEx.class, "Expansion Hub 4");
+    expansionHubTwo = hwMap.get(ExpansionHubEx.class, "Expansion Hub 2");
 
     subsystemDriveTrainMecanum = new SubsystemDriveTrainMecanum(this, opMode);
+    subsystemGhostServo = new SubsystemGhostServo(this, opMode);
     subsystemIntake = new SubsystemIntake(this, opMode);
     subsystemFoundationGrabber = new SubsystemFoundationGrabber(this, opMode);
     subsystemVirtual4Bar = new SubsystemVirtual4Bar(this, opMode);
@@ -65,6 +68,7 @@ public class Robot extends Subsystem {
     subsystemOdometry.turnOff(); // Not needed in teleop
 
     getSubsystemHandler().add(subsystemDriveTrainMecanum);
+    getSubsystemHandler().add(subsystemGhostServo);
     getSubsystemHandler().add(subsystemIntake);
     getSubsystemHandler().add(subsystemFoundationGrabber);
     getSubsystemHandler().add(subsystemVirtual4Bar);
@@ -89,25 +93,25 @@ public class Robot extends Subsystem {
 //      lastTime = now;
 //    }
 
-    bulkDataUpdatedThisCycleRight = false;
-    bulkDataUpdatedThisCycleLeft = false;
+    bulkDataUpdatedThisCycleOne = false;
+    bulkDataUpdatedThisCycleTwo = false;
   }
 
-  public RevBulkData getBulkDataRight() {
-    if(!bulkDataUpdatedThisCycleRight) {
-      bulkDataRight = expansionHubRight.getBulkInputData();
-      bulkDataUpdatedThisCycleRight = true;
+  public RevBulkData getBulkDataOne() {
+    if(!bulkDataUpdatedThisCycleOne) {
+      bulkDataOne = expansionHubOne.getBulkInputData();
+      bulkDataUpdatedThisCycleOne = true;
     }
 
-    return bulkDataRight;
+    return bulkDataOne;
   }
 
-  public RevBulkData getBulkDataLeft() {
-    if(!bulkDataUpdatedThisCycleLeft) {
-      bulkDataLeft = expansionHubLeft.getBulkInputData();
-      bulkDataUpdatedThisCycleLeft = true;
+  public RevBulkData getBulkDataTwo() {
+    if(!bulkDataUpdatedThisCycleTwo) {
+      bulkDataTwo = expansionHubTwo.getBulkInputData();
+      bulkDataUpdatedThisCycleTwo = true;
     }
 
-    return bulkDataLeft;
+    return bulkDataTwo;
   }
 }

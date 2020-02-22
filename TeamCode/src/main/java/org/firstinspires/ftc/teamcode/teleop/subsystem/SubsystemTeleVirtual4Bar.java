@@ -14,7 +14,9 @@ public class SubsystemTeleVirtual4Bar extends Subsystem implements GamepadListen
   private final DriverInterface driverInterface;
 
   private final double SPEED = 60;
-  private final double SPEED_SLOW = 120;
+  private final double SPEED_SLOW = 200;
+
+  private final double HOLDING_POSITION = 0.5;
 
   public SubsystemTeleVirtual4Bar(Robot robot, DriverInterface driverInterface) {
     this.robot = robot;
@@ -45,15 +47,27 @@ public class SubsystemTeleVirtual4Bar extends Subsystem implements GamepadListen
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
     if (gamepadType == GamepadType.AID && eventType == GamepadEventType.BUTTON_PRESSED) {
-      if (eventName == GamepadEventName.RIGHT_BUMPER) {
-        robot.subsystemVirtual4Bar.clamp();
-      } else if (eventName == GamepadEventName.LEFT_BUMPER) {
-        robot.subsystemVirtual4Bar.release();
-        robot.subsystemAutoIntakeGrabber.reset();
+//      if (eventName == GamepadEventName.RIGHT_BUMPER) {
+//        robot.subsystemVirtual4Bar.clamp();
+//      } else if (eventName == GamepadEventName.LEFT_BUMPER) {
+//        robot.subsystemVirtual4Bar.release();
+//        robot.subsystemAutoIntakeGrabber.reset();
+//      }
+
+      if(eventName == GamepadEventName.LEFT_BUMPER) {
+        robot.subsystemVirtual4Bar.toggleClamp();
+
+        if(!robot.subsystemVirtual4Bar.isClamped) {
+          robot.subsystemAutoIntakeGrabber.reset();
+        }
       }
 
       if (eventName == GamepadEventName.A) {
         robot.subsystemVirtual4Bar.flipSide();
+      }
+
+      if(eventName == GamepadEventName.RIGHT_STICK_BUTTON) {
+        robot.subsystemVirtual4Bar.setPosition(HOLDING_POSITION);
       }
     }
   }

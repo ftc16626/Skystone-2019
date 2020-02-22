@@ -22,7 +22,7 @@ public class SubsystemLift extends HardwareSubsystem {
 
   private StateMachine<MyState, Transition> stateMachine = buildStateMachine();
 
-  public static int MAX_HEIGHT = 1475;
+  public static int MAX_HEIGHT = 1600;
 
   public static double kP = 0.015;
   public static double kI = 0;
@@ -37,14 +37,12 @@ public class SubsystemLift extends HardwareSubsystem {
   public static int targetPos = 0;
 
   private final DcMotorCached motorBottom, motorTop;
-  private final DigitalChannel switchLeft, switchRight;
+  private final DigitalChannel switchRight;
 
   private final String[] motorIds = new String[]{
       "motorLiftBottom", "motorLiftTopAndEncoderMiddle"
   };
-  private final String[] liftSwitchIds = new String[]{
-      "liftSensorLeft", "liftSensorRight"
-  };
+  private final String[] liftSwitchIds = new String[]{"liftSensorRight"};
 
   public SubsystemLift(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
@@ -53,41 +51,44 @@ public class SubsystemLift extends HardwareSubsystem {
     motorTop = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]));
     motorBottom.getMotor().setDirection(Direction.REVERSE);
 
-    switchLeft = robot.hwMap.digitalChannel.get(liftSwitchIds[0]);
-    switchRight = robot.hwMap.digitalChannel.get(liftSwitchIds[1]);
+    switchRight = robot.hwMap.digitalChannel.get(liftSwitchIds[0]);
 
     controller.setBounds(-1, 1);
   }
 
   @Override
   public void update() {
-    RevBulkData bulkData = getRobot().getBulkDataRight();
+    RevBulkData bulkData = getRobot().getBulkDataOne();
 
-    if(bulkData == null) return;
+    if (bulkData == null) {
+      return;
+    }
 
     int currentPosRaw = bulkData
         .getMotorCurrentPosition(motorBottom.getMotor());
 
     int currentPos = currentPosRaw - zeroPos;
 
+    controller.setKP(kP);
+    controller.setKD(kD);
+    controller.setKG(kGFunction(kG, currentPos / MAX_HEIGHT));
+
     double power = controller.update(targetPos - currentPos);
 
     switch (Objects.requireNonNull(stateMachine.getCurrentState())) {
       case IDLE:
-        motorBottom.setPower(power);
-        motorTop.setPower(-power);
-
-        if ((!bulkData.getDigitalInputState(switchLeft) ||
-            !bulkData.getDigitalInputState(switchRight)) && targetPos == 0) {
+        if ((!bulkData.getDigitalInputState(switchRight)) && targetPos - currentPos < 0) {
           motorBottom.setPower(0);
           motorTop.setPower(0);
 
           zeroPos = currentPosRaw;
+        } else {
+          motorBottom.setPower(power);
+          motorTop.setPower(-power);
         }
         break;
       case RESETTING:
-        if (bulkData.getDigitalInputState(switchLeft) ||
-            bulkData.getDigitalInputState(switchRight)) {
+        if (bulkData.getDigitalInputState(switchRight)) {
           motorBottom.setPower(0);
           zeroPos = currentPos;
           stateMachine.transition(Transition.IDLE);
@@ -96,10 +97,6 @@ public class SubsystemLift extends HardwareSubsystem {
         }
         break;
     }
-
-    controller.setKP(kP);
-    controller.setKD(kD);
-    controller.setKG(kG);
 
     TelemetryPacket telemetryPacket = new TelemetryPacket();
     telemetryPacket.put("currentHeight", currentPos);
@@ -111,10 +108,11 @@ public class SubsystemLift extends HardwareSubsystem {
 
   @Override
   public void onMount() {
-    RevBulkData bulkData = getRobot().getBulkDataRight();
+    RevBulkData bulkData = getRobot().getBulkDataOne();
 
-    if(bulkData == null) return;
-
+    if (bulkData == null) {
+      return;
+    }
 
     zeroPos = bulkData.getMotorCurrentPosition(motorBottom.getMotor());
   }
@@ -125,6 +123,14 @@ public class SubsystemLift extends HardwareSubsystem {
 
   public void adjustZeroOffset(int offset) {
     zeroPos += offset;
+  }
+
+  private double kGFunction(double kG, double percent) {
+    return lerp(0, kG, percent);
+  }
+
+  private double lerp(double start, double end, double t) {
+    return start * (1 - t) + end * t;
   }
 
   private StateMachine<MyState, Transition> buildStateMachine() {

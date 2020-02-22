@@ -47,7 +47,7 @@ class RadicalTrackingWheelLocalizer(val robot: Robot) :
     }
 
     override fun getWheelPositions(): List<Double> {
-        val bulkData = robot.bulkDataRight ?: return listOf(0.0, 0.0, 0.0)
+        val bulkData = robot.bulkDataOne ?: return listOf(0.0, 0.0, 0.0)
 
         return listOf(
             encoderTicksToInches(bulkData.getMotorCurrentPosition(leftEncoder)) * MULTIPLIER_X,

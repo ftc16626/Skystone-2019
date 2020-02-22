@@ -8,16 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import org.firstinspires.ftc.teamcode.auto.RoadRunnerBaseOpmode;
 import org.firstinspires.ftc.teamcode.hardware.RadicalRoadRunnerDriveBase;
 import org.firstinspires.ftc.teamcode.hardware.Robot;
-import org.firstinspires.ftc.teamcode.hardware.util.DcMotorCached;
 import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.tuning.DriveBaseMecanumOld;
-import org.openftc.revextensions2.ExpansionHubMotor;
 
 public class DeliveryPathRedRight extends HardwareSubsystem{
 
   Trajectory trajectory;
   RadicalRoadRunnerDriveBase drive;
-//  DriveBaseMecanumOld drive;
 
   private double startX = -32.5;
   private double startY = -62.5;
@@ -32,15 +29,16 @@ public class DeliveryPathRedRight extends HardwareSubsystem{
 
     this.robot = robot;
 
-//    drive = opmode.drive;
-//    drive.setPoseEstimate(new Pose2d(startX, startY, startHeading));
+    drive = opmode.drive;
+    drive.setPoseEstimate(new Pose2d(startX, startY, startHeading));
 
-    test = new DriveBaseMecanumOld(getRobot().hwMap);
+//    test = new DriveBaseMecanumOld(getRobot().hwMap);
   }
 
   @Override
   public void onInit() {
-    trajectory = test.trajectoryBuilder()
+    trajectory = drive.trajectoryBuilder()
+//    trajectory = test.trajectoryBuilder()
         .forward(15)
         .build();
 //        .splineTo(new Pose2d(-20.0, -30.0, Math.toRadians(120))).build();
@@ -48,12 +46,13 @@ public class DeliveryPathRedRight extends HardwareSubsystem{
 
   @Override
   public void onMount() {
-    test.followTrajectory(trajectory);
+    drive.followTrajectory(trajectory);
+//    test.followTrajectory(trajectory);
   }
 
   @Override
   public void update() {
-    test.update();
-//    drive.update();
+//    test.update();
+    drive.update();
   }
 }

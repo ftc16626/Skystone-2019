@@ -73,7 +73,7 @@ public class RoadRunnerLocalizationTest extends LinearOpMode {
       DashboardUtil.drawRobot(fieldOverlay,
           new Pose2d(estimate.getX(), estimate.getY(), estimate.getHeading()));
 
-      FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//      FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
     }
   }

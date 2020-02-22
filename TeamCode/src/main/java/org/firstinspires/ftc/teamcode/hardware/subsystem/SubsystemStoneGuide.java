@@ -11,11 +11,11 @@ public class SubsystemStoneGuide extends HardwareSubsystem {
   private final Servo leftServo, rightServo;
   private final String[] servoIds = new String[]{"servoStoneGuideLeft", "servoStoneGuideRight"};
 
-  private final double LEFT_MIN = 0;
+  private final double LEFT_MIN = 0.05;
   private final double LEFT_MAX = 0.5;
 
   private final double RIGHT_MIN = 0.5;
-  private final double RIGHT_MAX = 1;
+  private final double RIGHT_MAX = 0.95;
 
   private boolean guidesDown = false;
 
