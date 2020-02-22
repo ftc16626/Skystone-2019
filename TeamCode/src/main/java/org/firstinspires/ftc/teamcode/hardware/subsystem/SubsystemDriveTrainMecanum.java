@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.subsystem.HardwareSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.RadicalOpMode;
 import org.openftc.revextensions2.ExpansionHubMotor;
 
+// DQ3MC9K9
+// DQ3BY2HT
 public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
 
   private final DcMotorCached motorFrontLeft, motorFrontRight, motorBackLeft, motorBackRight;
@@ -123,8 +125,9 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
     double motorPowerBackRight = Math.cos(angle);
 
     // Normalize values
-    double maxValue = Math.abs(Math.max(motorPowerFrontLeft,
-        Math.max(motorPowerFrontRight, Math.max(motorPowerBackLeft, motorPowerBackRight))));
+    double maxValue = Math.max(Math.abs(motorPowerFrontLeft),
+        Math.max(Math.abs(motorPowerFrontRight),
+            Math.max(Math.abs(motorPowerBackLeft), Math.abs(motorPowerBackRight))));
 
     motorPowerFrontLeft /= maxValue;
     motorPowerFrontRight /= maxValue;
@@ -144,13 +147,13 @@ public class SubsystemDriveTrainMecanum extends HardwareSubsystem {
     this.dirty = false;
   }
 
-  public void setManualPower(double frontLeft, double frontRight, double backLeft, double backRight) {
+  public void setManualPower(double frontLeft, double frontRight, double backLeft,
+      double backRight) {
     motorFrontLeft.setPower(frontLeft);
     motorFrontRight.setPower(frontRight);
     motorBackLeft.setPower(backLeft);
     motorBackRight.setPower(backRight);
   }
-
 
 
   public PIDCoefficients getPIDCoefficients(DcMotor.RunMode mode) {

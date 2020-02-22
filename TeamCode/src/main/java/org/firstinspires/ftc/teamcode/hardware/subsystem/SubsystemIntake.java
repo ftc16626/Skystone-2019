@@ -27,7 +27,7 @@ public class SubsystemIntake extends HardwareSubsystem {
     motorLeft = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[0]), 0.05);
     motorRight = new DcMotorCached(robot.hwMap.get(ExpansionHubMotor.class, motorIds[1]), 0.05);
 
-    motorRight.getMotor().setDirection(Direction.REVERSE);
+//    motorRight.getMotor().setDirection(Direction.REVERSE);
   }
 
   public void setMotorOn(boolean on) {

@@ -16,7 +16,8 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   private StateMachine<MyStateTeleop, TransitionTeleop> stateMachineTeleop = buildStateMachineTeleop();
   private StateMachine<MyStateEngame, TransitionEngame> stateMachineEndgame = buildStateMachineEndgame();
 
-  private final DigitalChannel frontBeamBreak, backSwitch;
+  private final DigitalChannel backSwitch;
+//  private final DigitalChannel frontBeamBreak, backSwitch;
   private final String[] switchIds = new String[]{
       "intakeBeamBreak", "intakeSwitch"
   };
@@ -29,7 +30,8 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   ElapsedTime capstoneElapsedTime = new ElapsedTime();
   ElapsedTime initialLiftElapsed = new ElapsedTime();
   ElapsedTime liftGrabElapsed = new ElapsedTime();
-  private boolean ENDGAME_TOGGLED = false;
+
+  private boolean endgameToggled = false;
   private final double ENDGAME_CAPSTONE_SET_TIME = 0.7;
   private final double ENDGAME_LIFT_WAIT = 0.5;
   private final double ENDGAME_LIFT_LOWER = 0.2;
@@ -38,14 +40,14 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   public SubsystemAutoIntakeGrabber(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
 
-    frontBeamBreak = robot.hwMap.digitalChannel.get(switchIds[0]);
+//    frontBeamBreak = robot.hwMap.digitalChannel.get(switchIds[0]);
     backSwitch = robot.hwMap.digitalChannel.get(switchIds[1]);
   }
 
   @Override
   public void update() {
 
-    if (!ENDGAME_TOGGLED) {
+    if (!endgameToggled) {
       handleTeleop();
     } else {
       handleEndgame();
@@ -53,7 +55,7 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   }
 
   private void handleTeleop() {
-    RevBulkData bulkData = getRobot().getBulkDataRight();
+    RevBulkData bulkData = getRobot().getBulkDataOne();
 
     if(bulkData == null) return;
 
@@ -78,7 +80,7 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   }
 
   private void handleEndgame() {
-    RevBulkData bulkData = getRobot().getBulkDataRight();
+    RevBulkData bulkData = getRobot().getBulkDataOne();
 
     if(bulkData == null) return;
 
@@ -123,11 +125,11 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
   }
 
   public void setEndgame(boolean set) {
-    ENDGAME_TOGGLED = set;
+    endgameToggled = set;
 
 //    Log.i("STATE6", Objects.requireNonNull(stateMachineEndgame.getCurrentState()).toString());
 
-//    if (ENDGAME_TOGGLED && stateMachineEndgame.getCurrentState() != MyStateEngame.IDLE) {
+//    if (endgameToggled && stateMachineEndgame.getCurrentState() != MyStateEngame.IDLE) {
 //      stateMachineEndgame.transition(TransitionEngame.RESET);
 //    }
     stateMachineEndgame.manualSet(MyStateEngame.IDLE);
@@ -138,6 +140,13 @@ public class SubsystemAutoIntakeGrabber extends HardwareSubsystem {
       stateMachineTeleop.transition(TransitionTeleop.RESET);
       stateMachineEndgame.transition(TransitionEngame.RESET);
     }
+  }
+
+  public boolean isIdle() {
+    if(!endgameToggled)
+      return stateMachineTeleop.getCurrentState() == MyStateTeleop.IDLE;
+    else
+      return stateMachineEndgame.getCurrentState() == MyStateEngame.IDLE;
   }
 
   private StateMachine<MyStateTeleop, TransitionTeleop> buildStateMachineTeleop() {

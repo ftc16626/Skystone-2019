@@ -32,7 +32,7 @@ public class MainTeleop extends RadicalOpMode implements GamepadListener {
 
   private PilotProfile enzoProfile = new PilotProfile("Enzo's Profile",
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK, false, false,
-      true, false, StickResponseCurve.CUBED, false);
+      true, false, StickResponseCurve.RAW, false);
 
   @Override
   public void onInit() {

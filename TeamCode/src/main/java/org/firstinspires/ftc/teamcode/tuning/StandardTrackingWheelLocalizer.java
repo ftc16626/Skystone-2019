@@ -45,7 +45,7 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
         new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90)) // front
     ));
 
-    hub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 1");
+    hub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 4 ");
 
     leftEncoder = hardwareMap.dcMotor.get("motorIntakeLeftAndEncoderLeft");
     rightEncoder = hardwareMap.dcMotor.get("motorIntakeRightAndEncoderRight");

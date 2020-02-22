@@ -26,7 +26,7 @@ public class GamepadExtended {
       StickControl.STRAFE_LEFT_TURN_RIGHT_STICK,
       true, false,
       true, false,
-      StickResponseCurve.CUBED,
+      StickResponseCurve.RAW,
       false
   );
 

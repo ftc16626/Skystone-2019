@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode.hardware
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.RadicalTrackingWheelLocalizer
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.SampleMecanumDriveBase
-import org.openftc.revextensions2.ExpansionHubMotor
 
 class RadicalRoadRunnerDriveBase(val robot: Robot) : SampleMecanumDriveBase() {
     init {
@@ -40,7 +38,7 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : SampleMecanumDriveBase() {
     }
 
     override fun getWheelPositions(): List<Double> {
-        val bulkData = robot.bulkDataLeft ?: return listOf(0.0, 0.0, 0.0, 0.0)
+        val bulkData = robot.bulkDataTwo ?: return listOf(0.0, 0.0, 0.0, 0.0)
 
         return robot.subsystemDriveTrainMecanum.motors.map {
             DriveConstants.encoderTicksToInches(
@@ -50,7 +48,7 @@ class RadicalRoadRunnerDriveBase(val robot: Robot) : SampleMecanumDriveBase() {
     }
 
     override fun getWheelVelocities(): List<Double> {
-        val bulkData = robot.bulkDataLeft ?: return listOf(0.0, 0.0, 0.0, 0.0)
+        val bulkData = robot.bulkDataTwo ?: return listOf(0.0, 0.0, 0.0, 0.0)
 
         return robot.subsystemDriveTrainMecanum.motors.map {
             DriveConstants.encoderTicksToInches(
