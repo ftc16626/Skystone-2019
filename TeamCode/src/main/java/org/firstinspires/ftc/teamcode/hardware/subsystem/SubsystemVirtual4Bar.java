@@ -41,6 +41,9 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
     leftServo = new GhostServo35kg(robot.hwMap.get(Servo.class, servoIds[0]), LEFT_MIN, LEFT_MAX, 2, true);
     rightServo = new GhostServo35kg(robot.hwMap.get(Servo.class, servoIds[1]), RIGHT_MIN, RIGHT_MAX, 2);
 
+    leftServo.setEstimate(V4B_MIN);
+    rightServo.setEstimate(V4B_MIN);
+
 //    leftServo.setDEBUG(true);
 
     grabberServo = new GhostServoGoBildaTorque(robot.hwMap.get(Servo.class, servoIds[2]), GRABBER_MIN, GRABBER_MAX, 1);
