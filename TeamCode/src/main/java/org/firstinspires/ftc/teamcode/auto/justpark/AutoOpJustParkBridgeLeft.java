@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.auto.RoadRunnerBaseOpmode;
 
-@Autonomous(name="Just Park Bridge Strafe - Left")
+@Autonomous(name = "Just Park Bridge Strafe - Left")
 public class AutoOpJustParkBridgeLeft extends RoadRunnerBaseOpmode {
+
   private Trajectory trajectory;
 
   private final double DISTANCE_BACK = 0;
@@ -21,9 +22,15 @@ public class AutoOpJustParkBridgeLeft extends RoadRunnerBaseOpmode {
   public void onMount() {
     TrajectoryBuilder builder = drive.trajectoryBuilder();
 
-    if(DISTANCE_BACK != 0) builder.back(DISTANCE_BACK);
+    if (DISTANCE_BACK != 0) {
+      builder.back(DISTANCE_BACK);
+    }
 
-    if(DISTANCE_LEFT != 0) builder.strafeLeft(DISTANCE_LEFT);
+    if (DISTANCE_LEFT != 0) {
+      builder.strafeLeft(DISTANCE_LEFT);
+    }
+
+    builder.addDisplacementMarker(() -> robot.subsystemFoundationGrabber.drop());
 
     trajectory = builder.build();
 
@@ -32,7 +39,7 @@ public class AutoOpJustParkBridgeLeft extends RoadRunnerBaseOpmode {
 
   @Override
   public void update() {
-    if(elapsedTime.seconds() - DELAY > 0 && !ran) {
+    if (elapsedTime.seconds() - DELAY > 0 && !ran) {
       drive.followTrajectory(trajectory);
       ran = true;
     }
