@@ -18,23 +18,29 @@ public class DriveConstants {
 
   public static final boolean RUN_USING_ENCODER = true;
 
-  public static double kP = 28.5;
-  public static double kI = 0;
-  public static double kD = 17.5;
+  public static double VELO_KP = 28.5; // 38, 47, 45
+  public static double VELO_KI = 0.2; // 0.5, 0.3
+  public static double VELO_KD = 9.1; // 18, 18, 17
 
-  public static final PIDCoefficients MOTOR_VELO_PID = new PIDCoefficients(kP, kI, kD);
+  public static final PIDCoefficients MOTOR_VELO_PID = new PIDCoefficients(VELO_KP, VELO_KI,
+      VELO_KD);
+
+  public static final PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0);
+  public static final PIDCoefficients AXIAL_PID = new PIDCoefficients(9, 0, 0);
+  public static final PIDCoefficients LATERAL_PID = new PIDCoefficients(9, 0, 0);
 
   public static double WHEEL_RADIUS = 1.9685 * 0.972 * 1.006944;
   // output (wheel) speed / input (motor) speed
   public static double GEAR_RATIO = 0.5;
   public static double TRACK_WIDTH = 15.06;
+  public static double WHEEL_BASE = 13.5;
 
   public static double kV = 1.0 / rpmToVelocity(getMaxRpm());
   public static double kA = 0;
   public static double kStatic = 0;
 
   public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(
-      30, 30, 0.0,
+      37, 38, 0.0,
       Math.toRadians(180.0), Math.toRadians(180.0), 0.0
   );
 
