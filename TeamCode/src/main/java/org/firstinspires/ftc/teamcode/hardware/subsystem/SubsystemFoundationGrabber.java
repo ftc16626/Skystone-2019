@@ -11,11 +11,11 @@ public class SubsystemFoundationGrabber extends HardwareSubsystem {
   private final Servo leftServo, rightServo;
   private final String[] servoIds = new String[] { "servoFoundationLeft", "servoFoundationRight" };
 
-  private final double LEFT_MIN = 0.4;
+  private final double LEFT_MIN = 0.45;
   private final double LEFT_MAX = 0.935;
 
-  private final double RIGHT_MIN = 0.15;
-  private final double RIGHT_MAX = 0.9;
+  private final double RIGHT_MIN = 0.35;
+  private final double RIGHT_MAX = 0.85;
 
   public SubsystemFoundationGrabber(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
