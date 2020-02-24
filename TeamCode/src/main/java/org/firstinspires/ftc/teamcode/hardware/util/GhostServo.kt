@@ -78,6 +78,10 @@ open class GhostServo
         return currentPosition
     }
 
+    fun setEstimate(pos: Double) {
+        currentPosition = pos
+    }
+
     fun isMoving(): Boolean {
         return currentMode == Modes.TRAVELING
     }
