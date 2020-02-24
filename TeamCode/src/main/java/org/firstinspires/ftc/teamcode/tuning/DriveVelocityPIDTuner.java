@@ -103,7 +103,6 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
       @Override
       public void set(Double value) {
         PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-        Log.i("PID", "CAL ME");
 
         drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
             new PIDCoefficients(coeffs.kP, coeffs.kI, value));
@@ -176,7 +175,6 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
         packet.put("velocity" + i, velocities.get(i));
         packet.put("error" + i, motionState.getV() - velocities.get(i));
       }
-      packet.put("x", drive.getPoseEstimate().getX());
       dashboard.sendTelemetryPacket(packet);
     }
 
