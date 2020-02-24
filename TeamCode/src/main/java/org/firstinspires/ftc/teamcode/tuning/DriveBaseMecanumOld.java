@@ -126,7 +126,7 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
 
   @Override
   public double getRawExternalHeading() {
-    return 0;
-//    return imu.getAngularOrientation().firstAngle;
+//    return 0;
+    return imu.getAngularOrientation().firstAngle;
   }
 }
