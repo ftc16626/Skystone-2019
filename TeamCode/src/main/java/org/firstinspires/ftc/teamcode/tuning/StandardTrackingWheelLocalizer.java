@@ -51,6 +51,8 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
     rightEncoder = hardwareMap.dcMotor.get("motorIntakeRightAndEncoderRight");
     frontEncoder = hardwareMap.dcMotor.get("motorLiftTopAndEncoderMiddle");
 
+    frontEncoder.setDirection(Direction.REVERSE);
+
     leftEncoder.setDirection(Direction.REVERSE);
   }
 
@@ -71,6 +73,14 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
     Log.i("rightenc", Double.toString(bulkData.getMotorCurrentPosition(rightEncoder)));
     Log.i("middleenc", Double.toString(bulkData.getMotorCurrentPosition(frontEncoder)));
     Log.i("enc", "----------------");
+
+    TelemetryPacket packet = new TelemetryPacket();
+
+    packet.put("left", Double.toString(bulkData.getMotorCurrentPosition(leftEncoder)));
+    packet.put("right", Double.toString(bulkData.getMotorCurrentPosition(rightEncoder)));
+    packet.put("middle", Double.toString(bulkData.getMotorCurrentPosition(frontEncoder)));
+
+//    FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
     return Arrays.asList(
         encoderTicksToInches(bulkData.getMotorCurrentPosition(leftEncoder)) * MULTIPLIER_X,
