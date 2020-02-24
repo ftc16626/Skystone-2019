@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.roadrunner;
 
+import android.util.Log;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
@@ -25,6 +26,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.ArrayList;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
+import org.firstinspires.ftc.teamcode.testing.HolonomicPIDVAFollowerEx;
+import org.firstinspires.ftc.teamcode.testing.TrajectoryFollowerEx;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 /*
@@ -33,9 +36,6 @@ import org.firstinspires.ftc.teamcode.util.DashboardUtil;
  */
 @Config
 public abstract class SampleMecanumDriveBase extends MecanumDrive {
-
-  public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-  public static PIDCoefficients HEADING_PID = new PIDCoefficients(3.5, 0, 0);
 
   public enum Mode {
     IDLE,
@@ -53,14 +53,18 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
   private double turnStart;
 
   private DriveConstraints constraints;
-  private TrajectoryFollower follower;
+  private TrajectoryFollowerEx follower;
 
   private List<Double> lastWheelPositions;
   private double lastTimestamp;
 
+  private double maxErrorX = 0;
+  private double maxErrorY = 0;
+  private double maxErrorHeading = 0;
+
   public SampleMecanumDriveBase() {
     super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH,
-        DriveConstants.TRACK_WIDTH, 0.863930885);
+        DriveConstants.WHEEL_BASE);
 
     dashboard = FtcDashboard.getInstance();
     dashboard.setTelemetryTransmissionInterval(1);
@@ -69,12 +73,13 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
 
     mode = Mode.IDLE;
 
-    turnController = new PIDFController(HEADING_PID);
+    turnController = new PIDFController(DriveConstants.HEADING_PID);
     turnController.setInputBounds(0, 2 * Math.PI);
 
     constraints = new MecanumConstraints(DriveConstants.BASE_CONSTRAINTS,
-        DriveConstants.TRACK_WIDTH);
-    follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID);
+        DriveConstants.TRACK_WIDTH, DriveConstants.WHEEL_BASE);
+    follower = new HolonomicPIDVAFollowerEx(DriveConstants.AXIAL_PID, DriveConstants.LATERAL_PID,
+        DriveConstants.HEADING_PID);
   }
 
   public TrajectoryBuilder trajectoryBuilder() {
@@ -127,6 +132,10 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     Pose2d currentPose = getPoseEstimate();
     Pose2d lastError = getLastError();
 
+    maxErrorX = Math.max(lastError.getX(), maxErrorX);
+    maxErrorY = Math.max(lastError.getY(), maxErrorY);
+    maxErrorHeading = Math.max(lastError.getHeading(), maxErrorHeading);
+
     TelemetryPacket packet = new TelemetryPacket();
     Canvas fieldOverlay = packet.fieldOverlay();
 
@@ -140,6 +149,10 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     packet.put("xError", lastError.getX());
     packet.put("yError", lastError.getY());
     packet.put("headingError", lastError.getHeading());
+
+    packet.put("maxXError", maxErrorX);
+    packet.put("maxYError", maxErrorY);
+    packet.put("maxHeadingError", maxErrorHeading);
 
     switch (mode) {
       case IDLE:
@@ -185,7 +198,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
         fieldOverlay.setStroke("#3F51B5");
         fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);
 
-        if (!follower.isFollowing()) {
+        if (follower.isDone()) {
           mode = Mode.IDLE;
           setDriveSignal(new DriveSignal());
         }
