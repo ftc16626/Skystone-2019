@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" filepath="$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Kao/Kao.iml" filepath="$PROJECT_DIR$/Kao/Kao.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MissionControl/MissionControl.iml" filepath="$PROJECT_DIR$/MissionControl/MissionControl.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Skystone-2019.iml" filepath="$PROJECT_DIR$/.idea/Skystone-2019.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TeamCode/TeamCode.iml" filepath="$PROJECT_DIR$/TeamCode/TeamCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" filepath="$PROJECT_DIR$/FtcRobotController/FtcRobotController.iml" group="Skystone-2019/FtcRobotController" />
+      <module fileurl="file://$PROJECT_DIR$/Kao/Kao.iml" filepath="$PROJECT_DIR$/Kao/Kao.iml" group="Skystone-2019/Kao" />
+      <module fileurl="file://$PROJECT_DIR$/MissionControl/MissionControl.iml" filepath="$PROJECT_DIR$/MissionControl/MissionControl.iml" group="Skystone-2019/MissionControl" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Skystone-2019.iml" filepath="$PROJECT_DIR$/.idea/Skystone-2019.iml" group="Skystone-2019" />
+      <module fileurl="file://$PROJECT_DIR$/TeamCode/TeamCode.iml" filepath="$PROJECT_DIR$/TeamCode/TeamCode.iml" group="Skystone-2019/TeamCode" />
     </modules>
   </component>
 </project>
