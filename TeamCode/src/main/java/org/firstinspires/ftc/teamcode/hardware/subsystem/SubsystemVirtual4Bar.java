@@ -30,23 +30,29 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
 
   private double currentPosition = 0;
 
-  private final double clampPoint = 0.45;
-  private final double clampPointThreshold = 0.08;
+  private final double bottomClampPoint = 0.45;
+  private final double bottomClampPointThreshold = 0.08;
+
+  private boolean transitionedToBottom = true;
+  private final double bottomReleaseThreshold = 0.1;
 
   public boolean isClamped = false;
 
   public SubsystemVirtual4Bar(Robot robot, RadicalOpMode opMode) {
     super(robot, opMode);
 
-    leftServo = new GhostServo35kg(robot.hwMap.get(Servo.class, servoIds[0]), LEFT_MIN, LEFT_MAX, 2, true);
-    rightServo = new GhostServo35kg(robot.hwMap.get(Servo.class, servoIds[1]), RIGHT_MIN, RIGHT_MAX, 2);
+    leftServo = new GhostServo35kg(robot.hwMap.get(Servo.class, servoIds[0]), LEFT_MIN, LEFT_MAX, 2,
+        true);
+    rightServo = new GhostServo35kg(robot.hwMap.get(Servo.class, servoIds[1]), RIGHT_MIN, RIGHT_MAX,
+        2);
 
     leftServo.setEstimate(V4B_MIN);
     rightServo.setEstimate(V4B_MIN);
 
 //    leftServo.setDEBUG(true);
 
-    grabberServo = new GhostServoGoBildaTorque(robot.hwMap.get(Servo.class, servoIds[2]), GRABBER_MIN, GRABBER_MAX, 1);
+    grabberServo = new GhostServoGoBildaTorque(robot.hwMap.get(Servo.class, servoIds[2]),
+        GRABBER_MIN, GRABBER_MAX, 1);
 
     getRobot().subsystemGhostServo.addServo(leftServo);
     getRobot().subsystemGhostServo.addServo(rightServo);
@@ -65,12 +71,18 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
 
   @Override
   public void update() {
-    if(Math.abs(leftServo.getEstimate() - clampPoint) < clampPointThreshold) {
+    if (Math.abs(leftServo.getEstimate() - bottomClampPoint) < bottomClampPointThreshold) {
       clamp();
     }
 
-    if(getRobot().subsystemAutoIntakeGrabber.isIdle() && leftServo.getEstimate() < 0.1 && isClamped) {
+    if (getRobot().subsystemAutoIntakeGrabber.isIdle() && leftServo.getEstimate() < bottomReleaseThreshold && isClamped
+        && !transitionedToBottom) {
       release();
+      transitionedToBottom = true;
+    }
+
+    if (transitionedToBottom && leftServo.getEstimate() > bottomReleaseThreshold) {
+      transitionedToBottom = false;
     }
   }
 
@@ -81,7 +93,7 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
     leftServo.setPosition(pos + LEFT_MIDDLE_OFFSET);
     rightServo.setPosition(pos + RIGHT_MIDDLE_OFFSET);
 
-//    if(Math.abs(currentPosition - clampPoint) < clampPointThreshold) {
+//    if(Math.abs(currentPosition - bottomClampPoint) < bottomClampPointThreshold) {
 //      clamp();
 //    }
   }
@@ -109,7 +121,7 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
   }
 
   private void setClamp() {
-    if(isClamped) {
+    if (isClamped) {
       grabberServo.setPosition(0);
     } else {
       grabberServo.setPosition(1);
@@ -117,7 +129,7 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
   }
 
   public void flipSide() {
-    if(currentPosition < 0.5) {
+    if (currentPosition < 0.5) {
       currentPosition = 1;
     } else {
       currentPosition = 0;
