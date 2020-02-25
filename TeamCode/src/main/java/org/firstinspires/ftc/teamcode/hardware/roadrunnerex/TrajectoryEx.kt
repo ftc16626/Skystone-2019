@@ -120,7 +120,7 @@ class TrajectoryEx(
 
         f()
 
-        lastPose = currentTrajectoryBuilder!!.currentPose!!
+//        lastPose = currentTrajectoryBuilder!!.currentPose!!
         lastHeading = lastPose.heading
 
         return this
