@@ -11,21 +11,17 @@ public class RoadRunnerBaseOpmode extends RadicalOpMode {
   public RadicalRoadRunnerDriveBase drive;
 //  public DriveBaseMecanumOld drive;
 
-  protected Robot robot;
-
   @Override
   public void onInit() {
     baseInit();
   }
 
   public void baseInit() {
-    robot = new Robot(hardwareMap, this);
+    subsystemRoadRunner = new SubsystemRoadRunner(robot);
 
-//    subsystemRoadRunner = new SubsystemRoadRunner(robot);
-    subsystemHandler.add(robot);
-//    subsystemHandler.add(subsystemRoadRunner);
+    subsystemHandler.add(subsystemRoadRunner);
 
-//    drive = subsystemRoadRunner.drive;
+    drive = subsystemRoadRunner.drive;
 
     robot.subsystemDriveTrainMecanum.setRunUsingEncoders();
     robot.subsystemDriveTrainMecanum.setBrakeMode();

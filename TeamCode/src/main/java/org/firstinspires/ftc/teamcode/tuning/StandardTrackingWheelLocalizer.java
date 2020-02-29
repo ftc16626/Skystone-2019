@@ -16,7 +16,7 @@ import org.openftc.revextensions2.ExpansionHubEx;
 import org.openftc.revextensions2.RevBulkData;
 
 @Config
-public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLocalizer {
+public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer  {
 
   public static double TICKS_PER_REV = 720;
   public static double WHEEL_RADIUS = 0.75; // in
@@ -27,7 +27,7 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
 //      * 1.0117341199218144 * (0.9872802886455438) * 0.9955892823350541; // in; distance between the left and right wheels
 //  public static double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
 
-  public static double LATERAL_DISTANCE = 16 * 0.989908320012592;
+  public static double LATERAL_DISTANCE = 16 * 0.989908320012592 * (365.0 / 360.0) * (362.0 / 360.0);
   public static double FORWARD_OFFSET = -3.25 * 0.98; // in; offset of the lateral wheel
 
 
@@ -38,11 +38,13 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
 
   private ExpansionHubEx hub;
 
+  private int lastLeft, lastRight;
+
   public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
     super(Arrays.asList(
         new Pose2d(0, LATERAL_DISTANCE / 2, 0), // left
         new Pose2d(0, -LATERAL_DISTANCE / 2, 0), // right
-        new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90)) // front
+        new Pose2d(FORWARD_OFFSET, -2.09, Math.toRadians(90)) // front
     ));
 
     hub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 4 ");
@@ -64,11 +66,12 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
   @Override
   public List<Double> getWheelPositions() {
     RevBulkData bulkData = hub.getBulkInputData();
+    if(bulkData == null) return Arrays.asList(0.0, 0.0, 0.0);
 
 //    TelemetryPacket packet = new TelemetryPacket();
 //    packet.put("left", bulkData.getMotorCurrentPosition(leftEncoder));
 //    FtcDashboard.getInstance().sendTelemetryPacket(packet);
-
+  
     Log.i("leftenc", Double.toString(bulkData.getMotorCurrentPosition(leftEncoder)));
     Log.i("rightenc", Double.toString(bulkData.getMotorCurrentPosition(rightEncoder)));
     Log.i("middleenc", Double.toString(bulkData.getMotorCurrentPosition(frontEncoder)));
@@ -79,6 +82,12 @@ public class StandardTrackingWheelLocalizer extends RadicalThreeTrackingWheelLoc
     packet.put("left", Double.toString(bulkData.getMotorCurrentPosition(leftEncoder)));
     packet.put("right", Double.toString(bulkData.getMotorCurrentPosition(rightEncoder)));
     packet.put("middle", Double.toString(bulkData.getMotorCurrentPosition(frontEncoder)));
+
+    packet.put("delta left", Double.toString(bulkData.getMotorCurrentPosition(leftEncoder) - lastLeft));
+    packet.put("delta right", Double.toString(bulkData.getMotorCurrentPosition(rightEncoder) - lastRight));
+
+    lastLeft = bulkData.getMotorCurrentPosition(leftEncoder);
+    lastRight = bulkData.getMotorCurrentPosition(rightEncoder);
 
 //    FtcDashboard.getInstance().sendTelemetryPacket(packet);
 

@@ -103,7 +103,7 @@ public class SubsystemLift extends HardwareSubsystem {
     telemetryPacket.put("targetPos", targetPos);
     telemetryPacket.put("motorPower", power);
 
-    FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+//    FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
   }
 
   @Override

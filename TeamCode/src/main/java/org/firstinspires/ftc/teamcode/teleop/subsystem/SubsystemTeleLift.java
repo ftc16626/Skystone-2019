@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadListe
 import org.firstinspires.ftc.teamcode.util.gamepadextended.listener.GamepadType;
 
 public class SubsystemTeleLift extends Subsystem implements GamepadListener {
+
   private final Robot robot;
   private final DriverInterface driverInterface;
 
@@ -40,9 +41,9 @@ public class SubsystemTeleLift extends Subsystem implements GamepadListener {
   @Override
   public void update() {
     double leftStick = -driverInterface.aid.gamepad.left_stick_y;
-    if(leftStick> 0) {
+    if (leftStick > 0) {
       position += leftStick * speed;
-    } else if(leftStick < 0) {
+    } else if (leftStick < 0) {
       position += leftStick * downSpeed;
     }
 
@@ -54,23 +55,23 @@ public class SubsystemTeleLift extends Subsystem implements GamepadListener {
     Log.i("stages", Integer.toString(stage));
 
     // Stage 1 is actually block 5 since you dont need to use the lift for the 5th block
-    if(stage == 1) {
+    if (stage == 1) {
       return 120;
-    } else if(stage == 2) {
+    } else if (stage == 2) {
       return 315;
-    } else if(stage == 3) {
+    } else if (stage == 3) {
       return 476;
-    } else if(stage == 4) {
-      return  659;
-    } else if(stage == 5) {
+    } else if (stage == 4) {
+      return 659;
+    } else if (stage == 5) {
       return 798;
-    } else if(stage == 6) {
+    } else if (stage == 6) {
       return 986;
-    } else if(stage == 7) {
+    } else if (stage == 7) {
       return 1131;
-    } else if(stage == 8) {
+    } else if (stage == 8) {
       return 1337;
-    } else if(stage == 9) {
+    } else if (stage == 9) {
       return 1558;
     }
 
@@ -81,32 +82,32 @@ public class SubsystemTeleLift extends Subsystem implements GamepadListener {
   @Override
   public void actionPerformed(GamepadEventName eventName, GamepadEventType eventType,
       GamepadType gamepadType) {
-    if(gamepadType == GamepadType.AID && eventType == GamepadEventType.BUTTON_PRESSED) {
+    if (gamepadType == GamepadType.AID && eventType == GamepadEventType.BUTTON_PRESSED) {
 //      if(eventName == GamepadEventName.DPAD_UP) {
 //        position = Range.clip(position + blockEncoderCount, 0, SubsystemLift.MAX_HEIGHT);
 //      } else if(eventName == GamepadEventName.DPAD_DOWN) {
 //        position = Range.clip(position - blockEncoderCount, 0, SubsystemLift.MAX_HEIGHT);
 //      }
 
-        if(eventName == GamepadEventName.DPAD_UP) {
-          targetStage++;
-          position = getStateTargetTick(targetStage);
-        } else if(eventName == GamepadEventName.DPAD_DOWN) {
-          targetStage--;
-          position = getStateTargetTick(targetStage);
-        }
-
+      if (eventName == GamepadEventName.DPAD_UP) {
+        targetStage++;
         targetStage = Range.clip(targetStage, 0, MAX_LEVEL);
+        position = getStateTargetTick(targetStage);
+      } else if (eventName == GamepadEventName.DPAD_DOWN) {
+        targetStage--;
+        targetStage = Range.clip(targetStage, 0, MAX_LEVEL);
+        position = getStateTargetTick(targetStage);
+      }
 
-        if(eventName == GamepadEventName.Y) {
-          position = getStateTargetTick(targetStage);
-        }
+      if (eventName == GamepadEventName.Y) {
+        position = getStateTargetTick(targetStage);
+      }
 
-      if(eventName == GamepadEventName.DPAD_LEFT) {
+      if (eventName == GamepadEventName.DPAD_LEFT) {
         robot.subsystemLift.adjustZeroOffset(-20);
       }
 
-      if(eventName == GamepadEventName.LEFT_STICK_BUTTON) {
+      if (eventName == GamepadEventName.LEFT_STICK_BUTTON) {
         position = 0;
       }
     }

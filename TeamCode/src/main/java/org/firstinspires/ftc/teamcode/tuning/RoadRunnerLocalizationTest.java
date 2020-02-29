@@ -67,13 +67,12 @@ public class RoadRunnerLocalizationTest extends LinearOpMode {
       packet.put("heading", Math.toDegrees(estimate.getHeading()));
       packet.put("imu", Math.toDegrees(drive.getRawExternalHeading()));
 
-
       Canvas fieldOverlay = packet.fieldOverlay();
       fieldOverlay.setStroke("#F44336");
       DashboardUtil.drawRobot(fieldOverlay,
           new Pose2d(estimate.getX(), estimate.getY(), estimate.getHeading()));
 
-//      FtcDashboard.getInstance().sendTelemetryPacket(packet);
+      FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
     }
   }

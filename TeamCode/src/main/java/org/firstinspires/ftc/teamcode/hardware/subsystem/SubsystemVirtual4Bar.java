@@ -22,7 +22,7 @@ public class SubsystemVirtual4Bar extends HardwareSubsystem {
   private final double RIGHT_MAX = 1;
   private final double RIGHT_MIDDLE_OFFSET = 0;
 
-  private final double V4B_MIN = 0.0326;
+  private final double V4B_MIN = 0.058;
   private final double V4B_MAX = 0.917;
 
   private final double GRABBER_MIN = 0.45;
