@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Config
 @Autonomous(name="Tuning - Follower PID", group = "tuning")
 public class FollowerPIDTuner extends LinearOpMode {
-  public static double DISTANCE = 85;
+  public static double DISTANCE = 40;
 
   @Override
   public void runOpMode() throws InterruptedException {

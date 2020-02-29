@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Config
 @Autonomous(name="Tuning - Straight Test", group = "tuning")
 public class StraightTest extends LinearOpMode {
-  public static double DISTANCE = 72;
+  public static double DISTANCE = 100;
 
   @Override
   public void runOpMode() throws InterruptedException {

@@ -25,9 +25,12 @@ public class DriveConstants {
   public static final PIDCoefficients MOTOR_VELO_PID = new PIDCoefficients(VELO_KP, VELO_KI,
       VELO_KD);
 
-  public static final PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0);
-  public static final PIDCoefficients AXIAL_PID = new PIDCoefficients(9, 0, 0);
-  public static final PIDCoefficients LATERAL_PID = new PIDCoefficients(9, 0, 0);
+//  public static final PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+  public static final PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+  public static final PIDCoefficients AXIAL_PID = new PIDCoefficients(0,  0, 0);
+//  public static final PIDCoefficients AXIAL_PID = new PIDCoefficients(9,  0, 0);
+  public static final PIDCoefficients LATERAL_PID = new PIDCoefficients(0, 0, 0);
+//  public static final PIDCoefficients LATERAL_PID = new PIDCoefficients(9, 0, 0);
 
   public static double WHEEL_RADIUS = 1.9685 * 0.972 * 1.006944;
   // output (wheel) speed / input (motor) speed

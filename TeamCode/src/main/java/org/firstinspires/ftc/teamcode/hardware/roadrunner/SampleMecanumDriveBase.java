@@ -26,8 +26,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.ArrayList;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.hardware.roadrunner.DriveConstants;
-import org.firstinspires.ftc.teamcode.testing.HolonomicPIDVAFollowerEx;
-import org.firstinspires.ftc.teamcode.testing.TrajectoryFollowerEx;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 /*
@@ -53,7 +51,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
   private double turnStart;
 
   private DriveConstraints constraints;
-  private TrajectoryFollowerEx follower;
+  private TrajectoryFollower follower;
 
   private List<Double> lastWheelPositions;
   private double lastTimestamp;
@@ -78,7 +76,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
 
     constraints = new MecanumConstraints(DriveConstants.BASE_CONSTRAINTS,
         DriveConstants.TRACK_WIDTH, DriveConstants.WHEEL_BASE);
-    follower = new HolonomicPIDVAFollowerEx(DriveConstants.AXIAL_PID, DriveConstants.LATERAL_PID,
+    follower = new HolonomicPIDVAFollower(DriveConstants.AXIAL_PID, DriveConstants.LATERAL_PID,
         DriveConstants.HEADING_PID);
   }
 
@@ -198,7 +196,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
         fieldOverlay.setStroke("#3F51B5");
         fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);
 
-        if (follower.isDone()) {
+        if (!follower.isFollowing()) {
           mode = Mode.IDLE;
           setDriveSignal(new DriveSignal());
         }

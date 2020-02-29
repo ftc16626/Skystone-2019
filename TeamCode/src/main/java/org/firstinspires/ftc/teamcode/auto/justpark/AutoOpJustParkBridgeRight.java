@@ -44,5 +44,7 @@ public class AutoOpJustParkBridgeRight extends RoadRunnerBaseOpmode {
       drive.followTrajectory(trajectory);
       ran = true;
     }
+
+//    drive.update();
   }
 }

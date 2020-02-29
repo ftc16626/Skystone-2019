@@ -15,6 +15,8 @@ public class HandTuning extends LinearOpMode {
   public void runOpMode() throws InterruptedException {
     DriveBaseMecanumOld drive = new DriveBaseMecanumOld(hardwareMap);
 
+    waitForStart();
+
     while (opModeIsActive()) {
       TelemetryPacket packet = new TelemetryPacket();
 
@@ -29,7 +31,7 @@ public class HandTuning extends LinearOpMode {
       DashboardUtil.drawRobot(fieldOverlay,
           new Pose2d(estimate.getX(), estimate.getY(), estimate.getHeading()));
 
-      FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//      FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
       drive.update();
     }

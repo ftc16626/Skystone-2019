@@ -33,7 +33,7 @@ public class DriveBaseMecanumOld extends SampleMecanumDriveBase {
     // if your motors are split between hubs, **you will need to add another bulk read**
     hub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 2");
 
-    imu = hardwareMap.get(BNO055IMU.class, "imu");
+    imu = hardwareMap.get(BNO055IMU.class, "imu 1");
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
     parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
 //    imu.initialize(parameters);
