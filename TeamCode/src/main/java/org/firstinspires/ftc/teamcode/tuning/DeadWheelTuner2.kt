@@ -32,7 +32,7 @@ class DeadWheelTuner2 : LinearOpMode() {
         telemetry.addLine("Running...")
         telemetry.update()
 
-        drive.turn(Math.toRadians(360 * NUM_TURNS + 270))
+        drive.turnAsync(Math.toRadians(360 * NUM_TURNS + 270))
 
         var imuHeadingAccumulator = 0.0
         var imuLastHeading = 0.0
